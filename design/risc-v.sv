@@ -24,7 +24,7 @@ module risc_v #(
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } FORWARDING_TYPE;
 
 typedef enum bit [6:0] { 
-        R_FORMAT = 7'b0111011,  // ??????
+        R_FORMAT = 7'b0110011,
         I_FORMAT = 7'b0010011,
         S_FORMAT = 7'b0100011,
         B_FORMAT = 7'b1100011,

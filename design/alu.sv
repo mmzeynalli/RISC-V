@@ -15,7 +15,6 @@ module moduleName #(
 wire [DATA_WIDTH-1:0] alu_result;
 
 always_comb begin : ALU
-
         case (operation)
                 AND: alu_result = left_operand & right_operand;
                 OR: alu_result = left_operand | right_operand;
