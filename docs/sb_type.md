@@ -3,7 +3,7 @@ Here is the list of S-type and B-type commands and their decomposotion:
 
 ### STORE
 
-|                 | instruction | description      | imm13 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | imm13 (11:7) | opcode (6:0) |
+| Implemented     | instruction | description      | imm13 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | imm13 (11:7) | opcode (6:0) |
 | --------------- | ----------- | ---------------- | ------------- | ----------- | ----------- | -------------- | ------------ | ------------ |
 | <li>- [ ] </li> | `sb`        | Store Byte       | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `010`          | `imm[4:0]`   | `0100011`    |
 | <li>- [ ] </li> | `sh`        | Store Halfword   | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `001`          | `imm[4:0]`   | `0100011`    |
@@ -12,7 +12,7 @@ Here is the list of S-type and B-type commands and their decomposotion:
 
 ### Branches
 
-|                 | instruction | description                               | imm12 (31:25)   | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | imm12 (11:7)   | opcode (6:0) |
+| Implemented     | instruction | description                               | imm12 (31:25)   | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | imm12 (11:7)   | opcode (6:0) |
 | --------------- | ----------- | ----------------------------------------- | --------------- | ----------- | ----------- | -------------- | -------------- | ------------ |
 | <li>- [ ] </li> | `beq`       | Branch if equal                           | `imm[12\|10:5]` | `rs2`       | `rs1`       | `000`          | `imm[4:1\|11]` | `1100011`    |
 | <li>- [ ] </li> | `bne`       | Branch if not equal                       | `imm[12\|10:5]` | `rs2`       | `rs1`       | `001`          | `imm[4:1\|11]` | `1100011`    |

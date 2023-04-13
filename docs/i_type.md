@@ -2,7 +2,7 @@ Here is the list of I-type commands and their decomposotion:
 
 ### Integer register-integer operations (RV32I):
 
-|                 | instruction | description | imm12 (31:20)  | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
+| Implemented     | instruction | description | imm12 (31:20)  | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | --------------- | ----------- | ----------- | -------------- | ----------- | -------------- | --------- | ------------ |
 | <li>- [ ] </li> | `slli`      |             | `imm[11:5]`    | `rs1[4:0]`  | `001`          | `rd[4:0]` | `0010011`    |
 | <li>- [ ] </li> | `srli`      |             | `imm[11:5]`    | `rs1[4:0]`  | `101`          | `rd[4:0]` | `0010011`    |
@@ -20,7 +20,7 @@ Here is the list of I-type commands and their decomposotion:
 | <li>- [ ] </li> | `ebreak`    |             | `000000000001` | `00000`     | `000`          | `00000`   | `1110011`    |
 
 ### Load Integer Operations
-|                 | instruction | description | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
+| Implemented     | instruction | description | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | --------------- | ----------- | ----------- | ------------- | ----------- | -------------- | --------- | ------------ |
 | <li>- [ ] </li> | `lb`        |             | `imm[11:0]`   | `rs1[4:0]`  | `000`          | `rd[4:0]` | `0000011`    |
 | <li>- [ ] </li> | `lh`        |             | `imm[11:0]`   | `rs1[4:0]`  | `001`          | `rd[4:0]` | `0000011`    |
@@ -32,6 +32,6 @@ Here is the list of I-type commands and their decomposotion:
 
 
 ### Single-precision floating-point register-integer operations (RV32F)
-|                 | instruction | description     | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
+| Implemented     | instruction | description     | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | --------------- | ----------- | --------------- | ------------- | ----------- | -------------- | --------- | ------------ |
 | <li>- [ ] </li> | `flw`       | Load float word | `imm[11:0]`   | `rs1[4:0]`  | `010`          | `rd[4:0]` | `0000111`    |
