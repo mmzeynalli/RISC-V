@@ -55,11 +55,11 @@ typedef enum bit[2:0] {
         U_TYPE,
         J_TYPE,
         SYS_TYPE
-} instruction_type;
+} instruction_op_type;
 
 class instruction_type;
         bit [31:0] instruction;
-        instruction_type optype;
+        instruction_op_type optype;
 
         function new(bit [31:0] instruction, bit is16bit = 0);
                 if is16bit == 1
