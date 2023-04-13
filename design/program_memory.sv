@@ -1,7 +1,7 @@
 import common::*;
 
 
-module moduleName #(
+module program_memory #(
         int ADDRESS_WIDTH = 6;
         int DATA_WIDTH = 32;
 ) (
