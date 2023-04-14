@@ -1,6 +1,15 @@
 # UJ-TYPE
 
 Here is the list of U-type and J-type commands and their decomposotion:
+(The rest:
+
+[R-Type](docs/r_type.md)
+
+[I-Type](docs/i_type.md)
+
+[SB-Type](docs/sb_type.md)
+
+)
 
 ### Upper immediates
 

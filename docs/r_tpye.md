@@ -1,4 +1,12 @@
 # R-TYPE
+(The rest:
+
+[I-Type](docs/i_type.md)
+
+[SB-Type](docs/sb_type.md)
+
+[UJ-Type](docs/uj_type.md)
+)
 
 Here is the list of R-type commands and their decomposotion:
 

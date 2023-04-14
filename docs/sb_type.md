@@ -1,7 +1,15 @@
 # SB-TYPE
 
 Here is the list of S-type and B-type commands and their decomposotion:
+(The rest:
 
+[R-Type](docs/r_type.md)
+
+[I-Type](docs/i_type.md)
+
+[UJ-Type](docs/uj_type.md)
+
+)
 
 ### STORE
 
