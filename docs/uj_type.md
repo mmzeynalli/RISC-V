@@ -1,7 +1,6 @@
 # UJ-TYPE
 
-Here is the list of U-type and J-type commands and their decomposotion:
-(The rest:
+Switch to:
 
 [R-Type](docs/r_type.md)
 
@@ -9,7 +8,10 @@ Here is the list of U-type and J-type commands and their decomposotion:
 
 [SB-Type](docs/sb_type.md)
 
-)
+
+---
+
+Here is the list of U-type and J-type commands and their decomposotion:
 
 ### Upper immediates
 

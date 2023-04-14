@@ -1,14 +1,14 @@
 # I-TYPE
 
-(The rest:
+Switch to:
 
 [R-Type](docs/r_type.md)
 
 [SB-Type](docs/sb_type.md)
 
 [UJ-Type](docs/uj_type.md)
-)
 
+---
 
 Here is the list of I-type commands and their decomposotion:
 
