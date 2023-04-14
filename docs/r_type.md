@@ -5,7 +5,7 @@ Switch to:
 
 [SB-Type](/docs/sb_type.md)
 
-[-Type](/docs/uj_type.md)
+[UJ-Type](/docs/uj_type.md)
 
 ---
 
