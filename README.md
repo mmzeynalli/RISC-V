@@ -4,7 +4,7 @@ A simple 32-bit 5-stage RISC-V processor in SystemVerilog based on the book Comp
 
 The list of commands that are (to be) implemented:
 
-[include](File:design/r_type.md)
-[include](File:design/i_type.md)
-[include](File:design/sb_type.md)
-[include](File:design/j_type.md)
+[R-Type](design/r_type.md)
+[I-Type](design/i_type.md)
+[SB-Type](design/sb_type.md)
+[UJ-Type](design/uj_type.md)
