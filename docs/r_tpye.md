@@ -1,11 +1,11 @@
 # R-TYPE
 Switch to:
 
-[I-Type](docs/i_type.md)
+[I-Type](/docs/i_type.md)
 
-[SB-Type](docs/sb_type.md)
+[SB-Type](/docs/sb_type.md)
 
-[-Type](docs/uj_type.md)
+[-Type](/docs/uj_type.md)
 
 ---
 
