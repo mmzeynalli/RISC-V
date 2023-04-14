@@ -42,5 +42,5 @@ endfunction
         always_comb begin : ram_read
             read_data = ram(address);
         end
-        
+
 endmodule
