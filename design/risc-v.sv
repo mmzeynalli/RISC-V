@@ -1,9 +1,9 @@
 import common::*;
 
 module risc_v #(
-        parameter DATA_ADDRESS_WIDTH = 6;
-        parameter CPU_DATA_WIDTH: natural = 32;
-        parameter REGISTER_FILE_ADDRESS_WIDTH = 5;
+        int DATA_ADDRESS_WIDTH = 6;
+        int CPU_DATA_WIDTH: natural = 32;
+        int REGISTER_FILE_ADDRESS_WIDTH = 5;
 ) (
         input clk;
         input rst;

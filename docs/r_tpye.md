@@ -1,3 +1,5 @@
+# R-TYPE
+
 Here is the list of R-type commands and their decomposotion:
 
 ### Integer register-register operations (RV32I):

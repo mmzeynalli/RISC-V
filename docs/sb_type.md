@@ -1,3 +1,5 @@
+# SB-TYPE
+
 Here is the list of S-type and B-type commands and their decomposotion:
 
 

@@ -48,12 +48,12 @@ class instruction_type;
         bit [31:0] instruction;
         instruction_op_type optype;
 
-        function new(bit [31:0] instruction, bit is16bit = 0);
-                if is16bit == 1
+        function new(bit [31:0] instruction);
+                if (instruction[0] == 1)
                         instruction = this.convert16to32(instruction(15:0))
 
                 this.instruction = instruction;
-                this.optype = this.set_optype()
+                this.optype = this.get_optype()
         endfunction
 
         function get_optype();

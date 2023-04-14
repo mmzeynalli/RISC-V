@@ -1,5 +1,6 @@
-Here is the list of U-type and J-type commands and their decomposotion:
+# UJ-TYPE
 
+Here is the list of U-type and J-type commands and their decomposotion:
 
 ### Upper immediates
 

@@ -1,3 +1,5 @@
+# I-TYPE
+
 Here is the list of I-type commands and their decomposotion:
 
 ### Integer register-integer operations (RV32I):
