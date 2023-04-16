@@ -92,17 +92,19 @@ class instruction_type;
         endfunction
 
         function funct3();
-                assert(this.optype != S_TYPE && this.optype != B_TYPE);
+                //assert(this.optype != S_TYPE && this.optype != B_TYPE);
+                assert(this.optype != U_TYPE);
                 return this.instruction(14:12);
         endfunction
 
         function rs1();
-                assert(this.optype != S_TYPE && this.optype != B_TYPE);
+                //assert(this.optype != S_TYPE && this.optype != B_TYPE);
+                assert(this.optype != U_TYPE);
                 return this.instruction(19:15);
         endfunction
 
         function rs2();
-                assert(this.optype != S_TYPE && this.optype != B_TYPE && this.optype != I_TYPE);
+                assert(this.optype != I_TYPE && this.optype != U_TYPE && this.optype != J_TYPE);
                 return this.instruction(24:20);
         endfunction
 
