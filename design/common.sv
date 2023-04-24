@@ -1,8 +1,8 @@
 package common;
 
 const logic     RESET                   = 1'b0;
-const int       INSTRUCTION_WIDTH       = 32;
-const int       PROGRAM_ADDRESS_WIDTH   = 6;
+localparam int       INSTRUCTION_WIDTH       = 32;
+localparam int       PROGRAM_ADDRESS_WIDTH   = 6;
 
 enum bit[3:0] { AND, OR, SADD, SSUB, UADD, USUB, SHIFT, MUL, DIV, REM } alu_operation_type;
 
@@ -24,11 +24,11 @@ typedef enum bit [6:0] {
         LOAD_FP =       7'b0000111, 
         // S-type
         STORE =         7'b0100011,
-        STORE_FP =      7'b0100111
+        STORE_FP =      7'b0100111,
         // the rest
         BRANCH =        7'b1100011,
         LUI =           7'b0110111,
-        JAL =           7'b1101111
+        JAL =           7'b1101111,
         SYSTEM =        7'b1110011
 } instruction_format_type;
 
@@ -50,10 +50,10 @@ class instruction_type;
 
         function new(bit [31:0] instruction);
                 if (instruction[0] == 1)
-                        instruction = this.convert16to32(instruction(15:0))
+                        instruction = this.convert16to32(instruction[15:0]);
 
                 this.instruction = instruction;
-                this.optype = this.get_optype()
+                this.optype = instruction_op_type'(this.get_optype());
         endfunction
 
         function get_optype();
@@ -73,6 +73,7 @@ class instruction_type;
                         SYSTEM:
                                 return SYS_TYPE;
                         default: 
+                                $error("Unknown opcode!");
                 endcase
                 
         endfunction
@@ -83,47 +84,47 @@ class instruction_type;
         endfunction
 
         function opcode();
-                return this.instruction(6:0);
+                return this.instruction[6:0];
         endfunction
 
         function rd();
                 assert(this.optype != S_TYPE && this.optype != B_TYPE);
-                return this.instruction(11:7);
+                return this.instruction[11:7];
         endfunction
 
         function funct3();
                 //assert(this.optype != S_TYPE && this.optype != B_TYPE);
                 assert(this.optype != U_TYPE);
-                return this.instruction(14:12);
+                return this.instruction[14:12];
         endfunction
 
         function rs1();
                 //assert(this.optype != S_TYPE && this.optype != B_TYPE);
                 assert(this.optype != U_TYPE);
-                return this.instruction(19:15);
+                return this.instruction[19:15];
         endfunction
 
         function rs2();
                 assert(this.optype != I_TYPE && this.optype != U_TYPE && this.optype != J_TYPE);
-                return this.instruction(24:20);
+                return this.instruction[24:20];
         endfunction
 
         function funct7();
                 assert(this.optype == R_TYPE);
-                return this.instruction(31:25);
+                return this.instruction[31:25];
         endfunction
 
         function imm();
                 assert(this.optype != R_TYPE);
                 
                 case (this.optype)
-                        I_TYPE: return this.instruction(31:20);
-                        S_TYPE: return {this.instruction(31:25), this.instruction(11:7)};
-                        B_TYPE: return {this.instruction(31), this.instruction(7), this.instruction(30:25), this.instruction(11:8), 1'b0};
-                        U_TYPE: return this.instruction(31:12);
-                        J_TYPE: return {this.instruction(31), this.instruction(19:12), this.instruction(30:21), 1'b0};
+                        I_TYPE: return this.instruction[31:20];
+                        S_TYPE: return {this.instruction[31:25], this.instruction[11:7]};
+                        B_TYPE: return {this.instruction[31], this.instruction[7], this.instruction[30:25], this.instruction[11:8], 1'b0};
+                        U_TYPE: return this.instruction[31:12];
+                        J_TYPE: return {this.instruction[31], this.instruction[19:12], this.instruction[30:21], 1'b0};
                         default: 
-                                $error("Unknown format!"); 
+                                $error("Unknown format!");
                 endcase
 
         endfunction

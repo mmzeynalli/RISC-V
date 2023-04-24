@@ -1,7 +1,8 @@
 import common::*;
 
 module instruction_decode (
-        input instruction_type instruction;
+        input clk,
+        input instruction_type instruction
         // output ?
 );
 

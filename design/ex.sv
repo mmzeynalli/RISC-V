@@ -1,7 +1,7 @@
-import commin::*;
+import common::*;
 
 module execute (
-        
+        input clk
 );
         
 endmodule
