@@ -1,5 +1,5 @@
-*
-!.gitignore
-!*.sv
-!*.md
-!*.mem
+design/_*
+design/work
+design/*.mpf
+design/*.mti
+design/transcript
