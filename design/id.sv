@@ -2,17 +2,20 @@ import common::*;
 
 module instruction_decode (
         input clk,
-        input [31:0] instruction
-        // output ?
+        input [31:0] instruction,
+
+        output logic [6:0] opcode,
+        instruction_op_type optype,
+        output logic [4:0] rd,
+        output logic [4:0] rs1,
+        output logic [4:0] rs2,
+        output logic [2:0] func3,
+        output logic [6:0] funct7,
+        output logic [20:0] imm,
+
+        output logic mem_write,
+        output logic mem_read
 );
-
-
-instruction_op_type optype;
-reg [6:0] opcode;
-reg [4:0] rd, rs1, rs2;
-reg [2:0] func3;
-reg [6:0] funct7;
-reg [20:0] imm;
 
 always_comb begin : decompose
         opcode = instruction[6:0];
@@ -21,7 +24,7 @@ always_comb begin : decompose
         rs1 = instruction[19:15]; // optype != U_TYPE
         rs2 = instruction[24:20]; // optype != I_TYPE && optype != U_TYPE && optype != J_TYPE
         funct7 = instruction[31:25]; // optype == R_TYPE
-        imm = generate_imm();
+        imm = generate_imm();    
 end
 
 always_comb begin : get_optype
