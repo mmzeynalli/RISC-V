@@ -4,7 +4,7 @@ const logic     RESET                   = 1'b0;
 localparam int       INSTRUCTION_WIDTH       = 32;
 localparam int       PROGRAM_ADDRESS_WIDTH   = 6;
 
-enum bit[3:0] { AND, OR, SADD, SSUB, UADD, USUB, SHIFT, MUL, DIV, REM } alu_operation_type;
+enum bit[4:0] { SLL, SLLI, SRL, SRLI, AND, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, BEQ, BNE, BLT, BGE, BLTU, BGEU, LW, SW} alu_operation_type;
 
 
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } FORWARDING_TYPE;
