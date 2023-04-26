@@ -13,6 +13,9 @@ module moduleName #(
 
 
 logic [DATA_WIDTH-1:0] alu_result;
+wire        sltResult;
+wire        sltuResult;
+wire        sraResult;
 
 always_comb begin : ALU
 
@@ -34,7 +37,27 @@ shamt = B[4:0];
                 ORI  :    alu_result = A | {B[31:0], {20{1'b0}}};
                 AND  :    alu_result = A & B;
                 ANDI :    alu_result = A & {B[31:0], {20{1'b0}}};
-                
+                SLT  :  begin
+                        if (A < B)
+                                sltResult = 1;
+                        else
+                                sltResult = 0;
+                        alu_result = { {32{sltResult}}, 1'b0 };
+                        end
+                SLTU :  begin
+                        if (unsigned(A) < unsigned(B))
+                                sltuResult = 1;
+                        else
+                                sltuResult = 0;
+                        alu_result = { {32{sltuResult}}, 1'b0 };
+                        end
+                SRA :   begin
+                        if (B[4:0] > 31)
+                                sraResult = { {32{A[31]}}, A[31:1] };
+                        else
+                                sraResult = { {B[4:0], A[31]} , A[31:B[4:0]+1] };
+                        alu_result = sraResult;
+                        end
                 default: 
                         $error("No such operation!!, %d\n", operation);
         endcase
