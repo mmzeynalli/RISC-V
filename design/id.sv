@@ -34,9 +34,9 @@ always_comb begin : get_optype
                         optype = S_TYPE;
                 BRANCH:
                         optype = B_TYPE;
-                LUI:
+                U_LUI:
                         optype = U_TYPE;
-                JAL:
+                J_JAL:
                         optype = J_TYPE;
                 SYSTEM:
                         optype = SYS_TYPE;

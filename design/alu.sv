@@ -1,6 +1,6 @@
 import common::*;
 
-module moduleName #(
+module alu #(
         int DATA_WIDTH = 32
 ) (
         input [3:0]             operation,
