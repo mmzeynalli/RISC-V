@@ -1,10 +1,10 @@
 package common;
 
 const logic     RESET                   = 1'b0;
-localparam int       INSTRUCTION_WIDTH       = 32;
-localparam int       PROGRAM_ADDRESS_WIDTH   = 6;
+localparam int  INSTRUCTION_WIDTH       = 32;
+localparam int  PROGRAM_ADDRESS_WIDTH   = 6;
 
-enum bit[4:0] { SLL, SLLI, SRL, SRLI, AND, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, BEQ, BNE, BLT, BGE, BLTU, BGEU, LW, SW} alu_operation_type;
+enum bit[4:0] { SLL, SLLI, SRL, SRLI, SRA, SRAI, ADD, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, BEQ, BNE, BLT, BGE, BLTU, BGEU, LW, SW} alu_operation_type;
 
 
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } FORWARDING_TYPE;
@@ -27,8 +27,9 @@ typedef enum bit [6:0] {
         STORE_FP =      7'b0100111,
         // the rest
         BRANCH =        7'b1100011,
-        LUI =           7'b0110111,
-        JAL =           7'b1101111,
+        U_AUIPC =       7'b0010111,
+        U_LUI =         7'b0110111,
+        J_JAL =         7'b1101111,
         SYSTEM =        7'b1110011
 } instruction_format_type;
 
