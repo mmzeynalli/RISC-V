@@ -1,6 +1,6 @@
 import common::*;
 
-module moduleName #(
+module ALU #(
         int DATA_WIDTH = 32
 ) (
         input [4:0] operation,
@@ -19,14 +19,13 @@ wire        sraResult;
 
 always_comb begin : ALU
 
-// shift amount for SLL, SLLI, SRL and SRLI defined by shamt
-shamt = B[4:0];
+
 
         case (operation)
-                SLL  :    alu_result = A << shamt;
-                SLLI :    alu_result = A << shamt;
-                SRL  :    alu_result = A >> shamt;
-                SRLI :    alu_result = A >> shamt;
+                SLL  :    alu_result = A << B;
+                SLLI :    alu_result = A << B;
+                SRL  :    alu_result = A >> B;
+                SRLI :    alu_result = A >> B;
                 ADD  :    alu_result = A + B;
                 ADDI :    alu_result = A + B;
                 SUB  :    alu_result = A - B;
