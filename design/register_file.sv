@@ -27,7 +27,7 @@ register_array registers;
                         for (int i = 0; i < $size(registers); i++)
                                 registers[i] = '{default:'0};
                 else
-                        if (write_en == 1)
+                        if (write_en == 'b1)
                                 registers[write_id] = write_data;
         end
         
