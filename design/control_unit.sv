@@ -25,8 +25,7 @@ module instruction_decode (
         output reg control_is_return,
         output reg control_branch_taken,
 
-        output reg control_is_signed_imm,
-
+        output reg control_is_signed_imm
 );
 
 always_comb begin : generate_signals
