@@ -13,9 +13,9 @@ module ALU #(
 
 
 logic [DATA_WIDTH-1:0] alu_result;
-wire        sltResult;
-wire        sltuResult;
-wire        sraResult;
+logic        sltResult;
+logic        sltuResult;
+logic        sraResult;
 
 always_comb begin : ALU
 
@@ -44,7 +44,7 @@ always_comb begin : ALU
                         alu_result = { {32{sltResult}}, 1'b0 };
                         end
                 SLTU :  begin
-                        if (unsigned(A) < unsigned(B))
+                        if (unsigned'(A) < unsigned'(B))
                                 sltuResult = 1;
                         else
                                 sltuResult = 0;
