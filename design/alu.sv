@@ -13,9 +13,9 @@ module ALU #(
 
 
 logic [DATA_WIDTH-1:0] alu_result;
-wire        sltResult;
-wire        sltuResult;
-wire        sraResult;
+logic        sltResult;
+logic        sltuResult;
+logic        sraResult;
 
 always_comb begin : ALU
 
