@@ -31,7 +31,7 @@ module instruction_decode (
 always_comb begin : generate_signals
         control_mem_read = (opcode == LOAD || opcode == LOAD_FP || opcode == U_LUI) ? 'b1 : 'b0;
         control_mem_write = (optype == S_TYPE) ? 'b1 : 'b0;
-        control_reg_wr_en = (optype == R_TYPE);
+        control_reg_wr_en = (optype == R_TYPE) ? 'b1 : 'b0;
 
         control_zero_flag = (rf1 == rf2) ? 'b1 : 'b0;
         control_lt_flag = (rf1 < rf2) ? 'b1 : 'b0;

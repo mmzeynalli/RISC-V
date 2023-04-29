@@ -13,22 +13,12 @@ module program_memory #(
 );
 
 localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
-typedef logic [MEMORY_DEPTH-1:0][DATA_WIDTH-1:0] ram_type;  // Try to make unpacked
+typedef logic [MEMORY_DEPTH-1:0] ram_type [DATA_WIDTH-1:0];  // Try to make unpacked
 ram_type ram;
 
 
-function init_RAM(string filename);
-        static int fd = $fopen(filename, "r");
-        static ram_type _ram;
-
-        for (int i = 0; i < $size(_ram) && !$feof(fd); i++)
-                $fscanf(fd, "%b", _ram[i]);
-
-        return _ram;
-endfunction
-
         initial begin
-                ram = init_RAM("instruction_mem.mem");        
+                ram = readmemb("instruction_mem.mem");
         end
         
         // TODO: Fix address?
