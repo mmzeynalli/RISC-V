@@ -5,7 +5,7 @@ module instruction_decode (
         input [31:0] instruction,
 
         output logic [6:0] opcode,
-        instruction_op_type optype,
+        output instruction_op_type optype,
         output logic [4:0] rd,
         output logic [4:0] rs1,
         output logic [4:0] rs2,
@@ -24,7 +24,7 @@ always_comb begin : decompose
         rs1 = instruction[19:15]; // optype != U_TYPE
         rs2 = instruction[24:20]; // optype != I_TYPE && optype != U_TYPE && optype != J_TYPE
         funct7 = instruction[31:25]; // optype == R_TYPE
-        imm = generate_imm();    
+        imm = generate_imm();
 end
 
 always_comb begin : get_optype

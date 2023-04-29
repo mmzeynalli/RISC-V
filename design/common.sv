@@ -4,7 +4,7 @@ const logic     RESET                   = 1'b0;
 localparam int  INSTRUCTION_WIDTH       = 32;
 localparam int  PROGRAM_ADDRESS_WIDTH   = 6;
 
-enum bit[4:0] { SLL, SLLI, SRL, SRLI, SRA, SRAI, ADD, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, BEQ, BNE, BLT, BGE, BLTU, BGEU, LW, SW} alu_operation_type;
+enum bit[4:0] { SLL, SLLI, SRL, SRLI, SRA, SRAI, ADD, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, LW, SW} alu_operation_type;
 
 
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } FORWARDING_TYPE;
@@ -33,6 +33,14 @@ typedef enum bit [6:0] {
         SYSTEM =        7'b1110011
 } instruction_format_type;
 
+typedef enum bit [2:0] {  
+        BEQ     = 3'b000,
+        BNE     = 3'b001,
+        BLT     = 3'b100,
+        BGE     = 3'b101,
+        BLTU    = 3'b110,
+        BGEU    = 3'b111
+} branch_type;
 
 typedef enum bit[2:0] { 
         R_TYPE,
