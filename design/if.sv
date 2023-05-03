@@ -29,7 +29,7 @@ always @(*) begin
         else if ((optype == B_type) && (control_branch_taken)) begin // conditional branch
                 pc_next = pc_in + sign_extended_imm; 
         end
-        else if ((optype == UJ_type) && (control_jump_taken)) begin // unconditional jump
+        else if ((optype == J_type) && (control_jump_taken)) begin // unconditional jump
                 pc_next = sign_extended_imm;
         end
         else if (stall) begin // Stall condition
