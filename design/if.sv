@@ -3,7 +3,7 @@ import common::*;
 module instruction_fetch
 (
         input logic clk,
-        input   logic rst,
+        input  logic rst,
         input  logic stall,
         input  logic [20:0] imm,
         input  instruction_op_type optype
