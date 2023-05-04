@@ -2,58 +2,60 @@ import common::*;
 
 module instruction_fetch
 (
-        input clk,
-        input rst,
-        input stall,
-        input [11:0] SB_type,
-        input [11:0] UJ_type,
-        
-        input [PROGRAM_ADDRESS_WIDTH - 1:0] pc_in,
-        input [PROGRAM_ADDRESS_WIDTH - 1:0] pc_out,
-        output [31:0] instruction
+        input logic clk,
+        input  logic rst,
+        input  logic stall,
+        input  logic [20:0] imm,
+        input  instruction_op_type optype
+        input  logic control_branch_taken,
+        input  logic control_jump_taken,//we do need this signal right ?
+        input  logic [DATA_WIDTH-1:0] read_data,
+        input  logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_in,
+        output logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_out,
+        output logic [31:0] instruction
 );
 
-reg [PROGRAM_ADDRESS_WIDTH-1:0] pc;
-reg [PROGRAM_ADDRESS_WIDTH-1:0] pc_next;
-reg [31:0] inst_reg;
+// Sign-extend immediate value to 32 bits.
+logic [31:0] sign_extended_imm;
+assign sign_extended_imm = {{11{imm[20]}}, imm};
 
+
+// Combinational logic to determine next PC
+logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next; 
+always @(*) begin
+        if (rst) begin
+                pc_next = 32'd0; // reset
+        end
+        else if ((optype == B_type) && (control_branch_taken)) begin // conditional branch
+                pc_next = pc_in + sign_extended_imm; 
+        end
+        else if ((optype == J_type) && (control_jump_taken)) begin // unconditional jump
+                pc_next = sign_extended_imm;
+        end
+        else if (stall) begin // Stall condition
+                pc_next = pc_in; 
+        end
+        else begin // all other instructions
+                pc_next = pc_in + 4;
+        end
+end
+
+// Registers to store PC and instruction values
+logic [PROGRAM_ADDRESS_WIDTH-1:0] pc;
+logic [31:0] inst_reg;
 always @(posedge clk) begin
         if(!rst) begin
-                pc <= 0;
-                inst_reg <= 0;
+                pc <= 32'd0;
+                inst_reg <= 32'd0;
         end
         else begin
-                if(stall) begin
-                        pc <= pc; // Stalling at the same pc
-                end
-                else begin
-                        pc <= pc_next;
-                end
-                inst_reg <= inst_reg;// no changes in the instruction 
+                pc <= pc_next;
+                inst_reg <= read_data; // no changes in the instruction
         end
 end
-        
-always @(*) begin
-        pc_next = pc + 4;
-end
 
-// fetch instruction from memory based on PC value 
+// Output PC and instructions 
 assign instruction = inst_reg;
-
-// Handling different type of instructions like SB, UJ JALR types 
-always @(*) begin
-        case(inst_reg[6:0])
-        7'h63: begin // SB-type (branch)
-                pc_next = (pc_reg + {{pc_reg[31], instr_reg[7], instr_reg[30:25], instr_reg[11:8], 2'b0}}) - 4;
-            end
-        7'h6F: begin // UJ-type (unconditional jump)
-                pc_next = (pc_reg + {{pc_reg[31], instr_reg[20], instr_reg[10:1], instr_reg[11], 1'b0}}) - 4;
-            end
-        7'h67: begin // JALR-type (jump and link register)
-                pc_next = pc_reg + instr_reg[19:15];
-            end
-            default: begin // all other instructions
-                pc_next = pc_reg + 4;
-
+assign pc_out = pc;
 
 endmodule
