@@ -1,8 +1,10 @@
 package common;
 
-const logic     RESET                   = 1'b0;
-localparam int  INSTRUCTION_WIDTH       = 32;
-localparam int  PROGRAM_ADDRESS_WIDTH   = 6;
+const logic             RESET                   = 1'b0;
+localparam const int    INSTRUCTION_WIDTH       = 32;
+localparam const int    OPERAND_WIDTH           = 32;
+localparam const int    DATA_WIDTH              = 32;
+localparam const int    PROGRAM_ADDRESS_WIDTH   = 6;
 
 enum bit[4:0] { SLL, SLLI, SRL, SRLI, SRA, SRAI, ADD, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, LW, SW} alu_operation_type;
 
