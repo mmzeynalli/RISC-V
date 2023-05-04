@@ -12,7 +12,6 @@ module instruction_decode (
         output logic [2:0] func3,
         output logic [6:0] funct7,
         output logic [20:0] imm,
-
         output logic mem_write,
         output logic mem_read
 );
