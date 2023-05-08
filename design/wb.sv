@@ -12,7 +12,7 @@ module write_back (
 
 always @(*) begin
 
-    if ((control_reg_write == 1) && (control_mem_reg == 1)) begi
+    if ((control_reg_write == 1) && (control_mem_reg == 1)) 
         wb_data_o = mem_data_i;
     else
         wb_data_o = alu_result;
