@@ -17,7 +17,6 @@ typedef logic [MEMORY_DEPTH-1:0] ram_type [DATA_WIDTH-1:0];
 
 ram_type ram = '{default:'0};
 
-        // TODO: Fix address?
         always @(posedge clk) begin
                 if (write_en == 1)
                         ram[address] = write_data;           

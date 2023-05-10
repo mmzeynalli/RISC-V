@@ -1,6 +1,6 @@
 import common::*;
 
-module alu_ctrl (
+module alu_ctrl import common::*; (
         input [2:0]                     func3,
         input [6:0]                     func7,
         input instruction_op_type       optype,

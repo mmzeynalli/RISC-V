@@ -1,13 +1,16 @@
 package common;
 
-const logic     RESET                   = 1'b0;
-localparam int  INSTRUCTION_WIDTH       = 32;
-localparam int  PROGRAM_ADDRESS_WIDTH   = 6;
+const logic       RESET                   = 1'b0;
+localparam int    INSTRUCTION_WIDTH       = 32;
+localparam int    OPERAND_WIDTH           = 32;
+localparam int    DATA_WIDTH              = 32;
+localparam int    PROGRAM_ADDRESS_WIDTH   = 6;
 
-enum bit[4:0] { SLL, SLLI, SRL, SRLI, SRA, SRAI, ADD, ADDI, SUB, LUI, XOR, XORI, OR, ORI, AND, ANDI, SLT, SLTI, SLTU, SLTIU, LW, SW} alu_operation_type;
+typedef enum bit[3:0] 
+{ SLL, SRL, SRA, ADD, SUB, LUI, XOR, OR, AND, SLT, SLTU, LW, SW} alu_operation_type;
 
 
-typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } FORWARDING_TYPE;
+typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } forwarding_type;
 
 typedef enum bit [6:0] { 
         // R-type
