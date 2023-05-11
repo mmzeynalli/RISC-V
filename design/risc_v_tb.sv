@@ -34,7 +34,7 @@ module risc_v_tb;
 
   // Test cases
   initial begin
-    // Test case 1
+    // Test cases
 
   end
 
