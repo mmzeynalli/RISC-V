@@ -6,9 +6,8 @@ module instruction_fetch import common::*;
         input   logic rst,
         input   logic stall,
         input   logic [20:0] imm,
-        input   instruction_op_type optype,
-        input   logic control_branch_taken,
-        input   logic control_jump_taken,
+        input   logic ctrl_branch_taken,
+        input   logic ctrl_jump_taken,
         input   logic [DATA_WIDTH-1:0] read_data,
         input   logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_in,
         output  logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_out,
@@ -27,10 +26,10 @@ always @(*) begin
         if (rst) begin
                 pc_next = 32'd0; // reset
         end
-        else if (control_branch_taken) begin // conditional branch
+        else if (ctrl_branch_taken) begin // conditional branch
                 pc_next = pc_in + sign_extended_imm; 
         end
-        else if (control_jump_taken) begin // unconditional jump
+        else if (ctrl_jump_taken) begin // unconditional jump
                 pc_next = sign_extended_imm;
         end
         else if (stall) begin // Stall condition

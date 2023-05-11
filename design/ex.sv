@@ -1,22 +1,23 @@
 import common::*;
 
 module execute import common::*; (
-        input [OPERAND_WIDTH-1:0] from_ex,
-        input [OPERAND_WIDTH-1:0] from_wb,
-        input [OPERAND_WIDTH-1:0] imm,
-        input alu_operation_type alu_op,
-        
-        // Inputs just for next stage
-        input [DATA_WIDTH-1:0] i_rf_data2,
-        input [4:0] i_rd,
+        // input [OPERAND_WIDTH-1:0] from_ex,
+        // input [OPERAND_WIDTH-1:0] from_wb,
+        input [2:0] funct3,
+        input [6:0] funct7,
 
-        output [OPERAND_WIDTH-1:0] alu_result,
-        output [DATA_WIDTH-1:0] o_rf_data2,
-        output [4:0] o_rd
+        input [OPERAND_WIDTH-1:0] imm,
+        input [DATA_WIDTH-1:0] rs2_data,
+
+        // Controls
+        input ctrl_alu_src,
+        input ctrl_is_signed_imm,
+
+        output [OPERAND_WIDTH-1:0] alu_result
 );
 
-wire [OPERAND_WIDTH-1:0] operand_A;
-wire [OPERAND_WIDTH-1:0] operand_B;
+logic [OPERAND_WIDTH-1:0] operand_A;
+logic [OPERAND_WIDTH-1:0] operand_B;
 
 
 always_comb begin : execution
