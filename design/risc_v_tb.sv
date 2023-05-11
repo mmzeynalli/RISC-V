@@ -1,3 +1,4 @@
+`timescale 1ns / 1ns
 `include "risc_v.sv"
 
 module risc_v_tb;
@@ -7,11 +8,11 @@ module risc_v_tb;
   parameter int CPU_DATA_WIDTH = 32;
   parameter int REGISTER_FILE_ADDRESS_WIDTH = 5;
 
-  // Clock and Reset
+  // Inputs
   logic clk;
   logic rst;
 
-  // Instantiate RISC-V module
+  // Instantiate DUT
   risc_v #(
     .DATA_ADDRESS_WIDTH(DATA_ADDRESS_WIDTH),
     .CPU_DATA_WIDTH(CPU_DATA_WIDTH),
@@ -21,21 +22,27 @@ module risc_v_tb;
     .rst(rst)
   );
 
-  // Clock generator
+  // Generate clock
   always #5 clk = ~clk;
 
-  // Reset generator
+  // Reset
   initial begin
     rst = 1;
-    #10;
-    rst = 0;
-    #10;
+    #10 rst = 0;
   end
 
-  // Test cases
+  // Load instruction memory file
   initial begin
-    // Test cases
+    $readmemh("instruction_mem.mem", dut.if_stage.instruction.mem, 0, 1023);
+  end
 
+  // Wait for simulation to finish
+  initial begin
+    #10000;
+    $finish;
   end
 
 endmodule
+
+
+
