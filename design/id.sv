@@ -12,8 +12,6 @@ module instruction_decode (
         output logic [6:0] funct7,
         output logic [20:0] imm,
 
-        output logic mem_write,
-        output logic mem_read
 );
 
 always_comb begin : decompose
