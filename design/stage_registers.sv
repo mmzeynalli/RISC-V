@@ -41,7 +41,6 @@ module id_ex (
     input i_ctrl_mem_to_reg,
     input i_ctrl_reg_wr_en,
     input i_ctrl_alu_src,
-    input i_ctrl_is_signed_imm,
 
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_rs_data1,
@@ -59,7 +58,6 @@ module id_ex (
     output logic o_ctrl_mem_to_reg,
     output logic o_ctrl_reg_wr_en,
     output logic o_ctrl_alu_src,
-    output logic o_ctrl_is_signed_imm
 );
 
 always_ff @( posedge clk, posedge rst ) begin
@@ -80,7 +78,6 @@ always_ff @( posedge clk, posedge rst ) begin
         o_ctrl_mem_to_reg <= '0;
         o_ctrl_reg_wr_en <= '0;
         o_ctrl_alu_src <= '0;
-        o_ctrl_is_signed_imm <= '0;
     end
     else
     begin
@@ -99,7 +96,6 @@ always_ff @( posedge clk, posedge rst ) begin
         o_ctrl_mem_to_reg <= i_ctrl_mem_to_reg;
         o_ctrl_reg_wr_en <= i_ctrl_reg_wr_en;
         o_ctrl_alu_src <= i_ctrl_alu_src;
-        o_ctrl_is_signed_imm <= i_ctrl_is_signed_imm;
     end
 end
     

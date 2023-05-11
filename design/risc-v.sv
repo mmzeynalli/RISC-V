@@ -30,8 +30,8 @@ logic [6:0] id_funct7, id_ex_funct7;
 logic [4:0] id_rd_sel, id_ex_rd_sel;
 
 
-logic id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem_to_reg, id_ctrl_reg_wr_en, id_ctrl_alu_src, id_ctrl_is_signed_imm;
-logic id_ex_ctrl_mem_write, id_ex_ctrl_mem_read, id_ex_ctrl_mem_to_reg, id_ex_ctrl_reg_wr_en, id_ex_ctrl_alu_src, id_ex_ctrl_is_signed_imm;
+logic id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem_to_reg, id_ctrl_reg_wr_en, id_ctrl_alu_src;
+logic id_ex_ctrl_mem_write, id_ex_ctrl_mem_read, id_ex_ctrl_mem_to_reg, id_ex_ctrl_reg_wr_en, id_ex_ctrl_alu_src;
 
 instruction_decode id_stage(
         // Input
@@ -62,7 +62,6 @@ id_ex id_ex_reg(
         .i_ctrl_mem_to_reg(id_ctrl_mem_to_reg),
         .i_ctrl_reg_wr_en(id_ctrl_reg_wr_en),
         .i_ctrl_alu_src(id_ctrl_alu_src),
-        .i_ctrl_is_signed_imm(id_ctrl_is_signed_imm),
 
         // OUT SIGNALS
         .o_rs_data1(id_ex_rs1_data),
@@ -79,7 +78,6 @@ id_ex id_ex_reg(
         .o_ctrl_mem_to_reg(id_ex_ctrl_mem_to_reg),
         .o_ctrl_reg_wr_en(id_ex_ctrl_reg_wr_en),
         .o_ctrl_alu_src(id_ex_ctrl_alu_src),
-        .o_ctrl_is_signed_imm(id_ex_ctrl_is_signed_imm)
 );
 
 
@@ -98,7 +96,6 @@ execute ex_stage(
 
         // Controls
         .ctrl_alu_src(id_ex_ctrl_alu_src),
-        .ctrl_is_signed_imm(id_ex_ctrl_is_signed_imm),
 
         .alu_result(ex_alu_result)
 );

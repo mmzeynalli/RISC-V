@@ -19,7 +19,6 @@ module ctrl_unit import common::*; (
         output logic ctrl_gteu_flag,
 
         output logic ctrl_alu_src,
-        output logic ctrl_is_signed_imm,
 
         output logic ctrl_is_branch,
         output logic ctrl_is_jump,
@@ -39,7 +38,6 @@ initial begin
         ctrl_is_return <= '0;
         ctrl_branch_taken <= '0;
         ctrl_jump_taken <= '0;
-        ctrl_is_signed_imm <= '0;
 end
 
 always @(*) begin : generate_signals

@@ -4,7 +4,7 @@ module alu_ctrl import common::*; (
         input [2:0]                     func3,
         input [6:0]                     func7,
         input instruction_op_type       optype,
-        output logic [4:0]              op
+        output alu_operation_type       op
 );
 
 always_comb begin : get_alu_op
