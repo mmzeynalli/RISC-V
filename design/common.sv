@@ -1,6 +1,7 @@
 package common;
 
 const logic       RESET                   = 1'b0;
+localparam int    IMM_WIDTH               = 21;
 localparam int    INSTRUCTION_WIDTH       = 32;
 localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;

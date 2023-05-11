@@ -2,61 +2,54 @@ import common::*;
 
 module instruction_fetch import common::*;
 (
-        input   logic clk,
-        input   logic rst,
-        input   logic stall,
-        input   logic [20:0] imm,
-        input   logic ctrl_branch_taken,
-        input   logic ctrl_jump_taken,
-        input   logic [DATA_WIDTH-1:0] read_data,
-        input   logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_in,
-        output  logic [PROGRAM_ADDRESS_WIDTH - 1:0] pc_out,
-        output  logic [31:0] instruction
+        input clk,  
+        input rst,  
+        input stall,
+        input [IMM_WIDTH-1:0] imm,
+        input ctrl_branch_taken,
+        input ctrl_jump_taken,
+
+        // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 
+        // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_4, 
+        output  logic [INSTRUCTION_WIDTH-1:0] instruction
 );
 
-// Sign-extend immediate value to 32 bits.
-logic [31:0] sign_extended_imm;
-assign sign_extended_imm = {{11{imm[20]}}, imm};
-
-
 // Combinational logic to determine next PC
-logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next; 
+logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next, pc;
 
-always @(*) begin
-        if (rst) begin
-                pc_next = 32'd0; // reset
+always @(posedge clk, posedge rst ) begin
+        if (rst == RESET)
+        begin
+                pc <= '0;
+                // o_pc <= '0;
+                instruction <= '0;
         end
-        else if (ctrl_branch_taken) begin // conditional branch
-                pc_next = pc_in + sign_extended_imm; 
-        end
-        else if (ctrl_jump_taken) begin // unconditional jump
-                pc_next = sign_extended_imm;
-        end
-        else if (stall) begin // Stall condition
-                pc_next = pc_in; 
-        end
-        else begin // all other instructions
-                pc_next = pc_in + 4;
-        end
-end
-
-// Registers to store PC and instruction values
-logic [PROGRAM_ADDRESS_WIDTH-1:0] pc;
-logic [31:0] inst_reg;
-
-always @(posedge clk) begin
-        if(rst == RESET) begin
-                pc <= 32'd0;
-                inst_reg <= 32'd0;
-        end
-        else begin
+        else
+        begin
                 pc <= pc_next;
-                inst_reg <= read_data; // no changes in the instruction
+                // o_pc <= pc;
         end
 end
 
-// Output PC and instructions 
-assign instruction = inst_reg;
-assign pc_out = pc;
+always_comb begin : next_pc_selection
+        pc_next = pc + 4;
+
+        if (ctrl_branch_taken) // conditional branch
+                pc_next = pc - 4 + 32'(signed'(imm)); 
+        else if (ctrl_jump_taken) // unconditional jump
+                pc_next = imm;
+        else if (stall) // Stall condition
+                pc_next = pc;
+
+end
+
+instruction_memory instruction_memory(
+        .clk(clk),
+        .write_en(1'b0),
+        .write_data(32'b0),
+        .address(pc),
+        .read_data(instruction)
+);
+
 
 endmodule

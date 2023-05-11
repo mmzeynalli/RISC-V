@@ -1,7 +1,7 @@
 import common::*;
 
 module decompose (
-        input [31:0] instruction,
+        input [INSTRUCTION_WIDTH-1:0] instruction,
 
         output logic [6:0] opcode,
         output instruction_op_type optype,
@@ -10,8 +10,7 @@ module decompose (
         output logic [4:0] rs2,
         output logic [2:0] funct3,
         output logic [6:0] funct7,
-        output logic [20:0] imm,
-
+        output logic [IMM_WIDTH-1:0] imm
 );
 
 always_comb begin : decompose
@@ -49,12 +48,12 @@ end
 function generate_imm();
         
         case (optype)
-                R_TYPE: return 0;
-                I_TYPE: return {20{instruction[31]}, instruction[31:20]};
-                S_TYPE: return {20'b0, instruction[31:25], instruction[11:7]};
-                B_TYPE: return {19'b0, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0};
-                U_TYPE: return {12'b0, instruction[31:12]};
-                J_TYPE: return {12'b0, instruction[31], instruction[19:12], instruction[30:21], 1'b0};
+                R_TYPE: return 21'b0;
+                I_TYPE: return 21'(signed'(instruction[31:20]));
+                S_TYPE: return 21'(signed'({instruction[31:25], instruction[11:7]}));
+                B_TYPE: return 21'(signed'({instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0}));
+                U_TYPE: return 21'({instruction[31:12]});
+                J_TYPE: return 21'(signed'({instruction[31], instruction[19:12], instruction[30:21], 1'b0}));
                 default: 
                         $error("Unknown format!");
         endcase

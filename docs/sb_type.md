@@ -1,6 +1,5 @@
 # SB-TYPE
 
-
 Switch to:
 
 [R-Type](/docs/r_type.md)
@@ -8,7 +7,6 @@ Switch to:
 [I-Type](/docs/i_type.md)
 
 [UJ-Type](/docs/uj_type.md)
-
 
 ---
 

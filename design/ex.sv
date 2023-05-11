@@ -7,7 +7,7 @@ module execute import common::*; (
         input [2:0] funct3,
         input [6:0] funct7,
 
-        input [OPERAND_WIDTH-1:0] imm,
+        input [IMM_WIDTH-1:0] imm,
         input [DATA_WIDTH-1:0] rs1_data,
         input [DATA_WIDTH-1:0] rs2_data,
 
@@ -36,11 +36,11 @@ ALU alu(
         .operation(alu_op),
         .zero(is_zero),
         .result(alu_result)
-)
+);
 
 always_comb begin : select_operands
         operand_A <= rs1_data;  // Later from_mem and from_wb
-        operand_B <= (ctrl_alu_src == 0) ? rs2_data : imm;
+        operand_B <= (ctrl_alu_src == 0) ? rs2_data : 32'(signed'(imm));
 end
         
 endmodule

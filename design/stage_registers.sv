@@ -4,8 +4,8 @@ module if_id (
     input clk,
     input rst,
 
-    input [31:0] i_instruction,
-    output logic [31:0] o_instruction
+    input [INSTRUCTION_WIDTH-1:0] i_instruction,
+    output logic [INSTRUCTION_WIDTH-1:0] o_instruction
 );
 
 always_ff @( posedge clk, posedge rst ) begin
@@ -28,7 +28,7 @@ module id_ex (
     // IN SIGNALS
     input [OPERAND_WIDTH-1:0] i_rs1_data,
     input [OPERAND_WIDTH-1:0] i_rs2_data,
-    input [OPERAND_WIDTH-1:0] i_imm,
+    input [IMM_WIDTH-1:0] i_imm,
 
     input [2:0] i_funct3,
     input [6:0] i_funct7,
@@ -45,7 +45,7 @@ module id_ex (
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_rs1_data,
     output logic [OPERAND_WIDTH-1:0] o_rs2_data,
-    output logic [OPERAND_WIDTH-1:0] o_imm,
+    output logic [IMM_WIDTH-1:0] o_imm,
 
     output logic [2:0] o_funct3,
     output logic [6:0] o_funct7,
@@ -57,7 +57,7 @@ module id_ex (
     output logic o_ctrl_mem_read,
     output logic o_ctrl_mem_to_reg,
     output logic o_ctrl_reg_wr_en,
-    output logic o_ctrl_alu_src,
+    output logic o_ctrl_alu_src
 );
 
 always_ff @( posedge clk, posedge rst ) begin
