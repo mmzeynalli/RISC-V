@@ -26,8 +26,8 @@ module id_ex (
     input rst,
 
     // IN SIGNALS
-    input [OPERAND_WIDTH-1:0] i_rs_data1,
-    input [OPERAND_WIDTH-1:0] i_rs_data2,
+    input [OPERAND_WIDTH-1:0] i_rs1_data,
+    input [OPERAND_WIDTH-1:0] i_rs2_data,
     input [OPERAND_WIDTH-1:0] i_imm,
 
     input [2:0] i_funct3,
@@ -43,8 +43,8 @@ module id_ex (
     input i_ctrl_alu_src,
 
     // OUT SIGNALS
-    output logic [OPERAND_WIDTH-1:0] o_rs_data1,
-    output logic [OPERAND_WIDTH-1:0] o_rs_data2,
+    output logic [OPERAND_WIDTH-1:0] o_rs1_data,
+    output logic [OPERAND_WIDTH-1:0] o_rs2_data,
     output logic [OPERAND_WIDTH-1:0] o_imm,
 
     output logic [2:0] o_funct3,
@@ -63,8 +63,8 @@ module id_ex (
 always_ff @( posedge clk, posedge rst ) begin
     if (rst == RESET)
     begin
-        o_rs_data1 <= '0;
-        o_rs_data2 <= '0;
+        o_rs1_data <= '0;
+        o_rs2_data <= '0;
         o_imm <= '0;
 
         o_funct3 <= '0;
@@ -81,8 +81,8 @@ always_ff @( posedge clk, posedge rst ) begin
     end
     else
     begin
-        o_rs_data1 <= i_rs_data1;
-        o_rs_data2 <= i_rs_data2;
+        o_rs1_data <= i_rs1_data;
+        o_rs2_data <= i_rs2_data;
         o_imm <= i_imm;
 
         o_funct3 <= i_funct3;
@@ -107,7 +107,7 @@ module ex_mem (
 
     // IN SIGNALS
     input [OPERAND_WIDTH-1:0] i_alu_result,
-    input [OPERAND_WIDTH-1:0] i_rs_data2,
+    input [OPERAND_WIDTH-1:0] i_rs2_data,
     input [4:0] i_rd_sel,
 
     //Controls
@@ -118,7 +118,7 @@ module ex_mem (
 
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_alu_result,
-    output logic [OPERAND_WIDTH-1:0] o_rs_data2,
+    output logic [OPERAND_WIDTH-1:0] o_rs2_data,
     output logic [4:0] o_rd_sel,
 
     // Controls
@@ -132,7 +132,7 @@ always_ff @( posedge clk, posedge rst ) begin
     if (rst == RESET)
     begin
         o_alu_result <= '0;
-        o_rs_data2 <= '0;       
+        o_rs2_data <= '0;       
         o_rd_sel <= '0;
 
         // Controls
@@ -144,7 +144,7 @@ always_ff @( posedge clk, posedge rst ) begin
     else
     begin
         o_alu_result <= i_alu_result;
-        o_rs_data2 <= i_rs_data2;       
+        o_rs2_data <= i_rs2_data;       
         o_rd_sel <= i_rd_sel;
 
         // Controls

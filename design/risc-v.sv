@@ -38,8 +38,60 @@ instruction_decode id_stage(
         .instruction(if_id_instruction)
 
         // Output
-
+        .opcode(),
+        .optype(),
+        .rd(),
+        .rs1(),
+        .rs2(),
+        .funct3(),
+        .funct7(),
+        .imm(),
 );
+
+
+register_file register_file(
+        .clk(clk),
+        .rst(rst),
+        .write_en(),
+
+        .read1_id(),
+        .read2_id(),
+        .write_id(),
+        .write_data(),
+
+        .read1_data(),
+        .read2_data()
+);
+
+
+control_unit ctrl_unit(
+
+        .opcode(_opcode),
+        .optype(_optype),
+        .funct3(_funct3),
+        .rs1_data(),
+        .rs2_data(),
+
+        .ctrl_mem_write,
+        .ctrl_mem_read,
+        .ctrl_mem_to_reg,
+        .ctrl_reg_wr_en,
+
+        .ctrl_zero_flag,
+        .ctrl_lt_flag,
+        .ctrl_ltu_flag,
+        .ctrl_gte_flag,
+        .ctrl_gteu_flag,
+
+        .ctrl_alu_src,
+
+        .ctrl_is_branch,
+        .ctrl_is_jump,
+        .ctrl_is_return,
+        .ctrl_branch_taken,
+        .ctrl_jump_taken
+
+)
 
 
 
@@ -48,8 +100,8 @@ id_ex id_ex_reg(
         .rst(rst),
 
         // IN SIGNALS
-        .i_rs_data1(id_rs1_data),
-        .i_rs_data2(id_rs2_data),
+        .i_rs1_data(id_rs1_data),
+        .i_rs1_data(id_rs2_data),
         .i_imm(id_imm),
 
         .i_funct3(id_funct3),
@@ -64,8 +116,8 @@ id_ex id_ex_reg(
         .i_ctrl_alu_src(id_ctrl_alu_src),
 
         // OUT SIGNALS
-        .o_rs_data1(id_ex_rs1_data),
-        .o_rs_data2(id_ex_rs2_data),
+        .o_rs1_data(id_ex_rs1_data),
+        .o_rs2_data(id_ex_rs2_data),
         .o_imm(id_ex_imm),
 
         .o_funct3(id_ex_funct3),
@@ -83,7 +135,7 @@ id_ex id_ex_reg(
 
 // EX-MEM
 logic [OPERAND_WIDTH-1:0] ex_alu_result, ex_mem_alu_result;
-logic ex_mem_rs_data2, ex_mem_rd_sel, ex_mem_ctrl_mem_write, ex_mem_ctrl_mem_read, ex_mem_ctrl_mem_to_reg, ex_mem_ctrl_reg_wr_en;
+logic ex_mem_rs2_data, ex_mem_rd_sel, ex_mem_ctrl_mem_write, ex_mem_ctrl_mem_read, ex_mem_ctrl_mem_to_reg, ex_mem_ctrl_reg_wr_en;
 
 
 execute ex_stage(
@@ -106,7 +158,7 @@ ex_mem ex_mem_reg(
 
         // Input
         .i_alu_result(ex_alu_result),
-        .i_rs_data2(id_ex_rs2_data),
+        .i_rs2_data(id_ex_rs2_data),
         .i_rd_sel(id_ex_rd_sel),
 
         // Control
@@ -117,7 +169,7 @@ ex_mem ex_mem_reg(
 
         // Output
         .o_alu_result(ex_mem_alu_result),
-        .o_rs_data2(ex_mem_rs_data2),
+        .o_rs2_data(ex_mem_rs2_data),
         .o_rd_sel(ex_mem_rd_sel),
 
         // Control
@@ -135,7 +187,7 @@ logic mem_wb_ctrl_mem_to_reg, mem_wb_ctrl_reg_wr_en;
 
 memory mem_stage(
         // Input
-        .rs2_data(ex_mem_rs_data2),
+        .rs2_data(ex_mem_rs2_data),
         .alu_result(ex_mem_alu_result),
         .mem_data_read(),
 
