@@ -1,7 +1,6 @@
 import common::*;
 
 module instruction_decode (
-        input clk,
         input [31:0] instruction,
 
         output logic [6:0] opcode,
