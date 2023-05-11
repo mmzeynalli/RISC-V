@@ -11,13 +11,8 @@ module memory (
         // Controls
         input ctrl_mem_read,
         input ctrl_mem_write,
-        input ctrl_mem_to_reg,
-        input ctrl_reg_write,
-        output  o_ctrl_reg_write,
-        output  o_ctrl_mem_to_reg,
 
         output logic mem_data_write_en,
-        output logic [4:0] o_reg_rd,
         output logic [PROGRAM_ADDRESS_WIDTH-1:0] mem_data_address,
         output logic [INSTRUCTION_WIDTH-1:0] mem_data_write,
         output logic [31:0] o_mem_data,
@@ -31,9 +26,7 @@ always @(*) begin
                 o_alu_result = alu_result;
                 o_mem_data = mem_data_read;
                 mem_data_address = alu_result;
-                o_reg_rd = reg_rd;
-                o_ctrl_reg_write = ctrl_reg_write;
-                o_ctrl_mem_to_reg = ctrl_mem_to_reg;
+
 
 
         end
@@ -42,16 +35,11 @@ always @(*) begin
                 o_alu_result = alu_result;
                 o_mem_data = mem_data_read;
                 mem_data_address = alu_result;
-                o_reg_rd= reg_rd;
-                o_ctrl_reg_write = ctrl_reg_write;
-                o_ctrl_mem_to_reg = ctrl_mem_to_reg;
         end
         else begin // all other operations
                o_alu_result = alu_result;
                o_mem_data = mem_data_read;
-               o_reg_rd = reg_rd;
-               o_ctrl_reg_write = ctrl_reg_write;
-               o_ctrl_mem_to_reg = ctrl_mem_to_reg;
+
         end
 end
 
