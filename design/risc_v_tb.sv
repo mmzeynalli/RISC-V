@@ -4,13 +4,13 @@
 module risc_v_tb;
 
   // Parameters
-  parameter int DATA_ADDRESS_WIDTH = 6;
-  parameter int CPU_DATA_WIDTH = 32;
-  parameter int REGISTER_FILE_ADDRESS_WIDTH = 5;
+  localparameter DATA_ADDRESS_WIDTH = 6;
+  localparameter CPU_DATA_WIDTH = 32;
+  localparameter REGISTER_FILE_ADDRESS_WIDTH = 5;
 
   // Inputs
-  logic clk;
-  logic rst;
+  logic clk = 0;
+  logic rst = 1;
 
   // Instantiate DUT
   risc_v #(
@@ -32,9 +32,11 @@ module risc_v_tb;
   end
 
   // Load instruction memory file
+`ifdef LOAD_INSTRUCTION_MEM
   initial begin
     $readmemh("instruction_mem.mem", dut.if_stage.instruction.mem, 0, 1023);
   end
+`endif
 
   // Wait for simulation to finish
   initial begin
