@@ -24,11 +24,11 @@ ram_type ram;
         // TODO: Fix address?
         always @(posedge clk) begin
                 if (write_en == 1)
-                        ram[address] = write_data;           
+                        ram[address >> 2] = write_data;           
         end
 
         always_comb begin : ram_read
-            read_data = ram[address];
+            read_data = ram[address >> 2];
         end
 
 endmodule
