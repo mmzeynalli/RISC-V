@@ -11,7 +11,6 @@ module memory (
         output logic [31:0] mem_data
 );
 
-
 data_memory data_memory(
         .clk(clk),
         .write_en(ctrl_mem_write),

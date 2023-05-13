@@ -53,7 +53,7 @@ typedef enum bit[2:0] {
         B_TYPE,
         U_TYPE,
         J_TYPE,
-        SYS_TYPE
+        SYS_TYPE,
 } instruction_op_type;
 
 
