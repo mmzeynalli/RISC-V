@@ -1,29 +1,29 @@
 import common::*;
 
 module alu_ctrl import common::*; (
-        input [2:0]                     func3,
-        input [6:0]                     func7,
+        input [2:0]                     funct3,
+        input [6:0]                     funct7,
         input instruction_op_type       optype,
         output alu_operation_type       op
 );
 
 always_comb begin : get_alu_op
 
-        case (func3)
+        case (funct3)
                 3'b001:
                         op = SLL;
                 3'b101: 
                 begin
-                        if (func7 == 7'b0100000)
+                        if (funct7 == 7'b0100000)
                                 op = SRL;
-                        else if (func7 == 7'b0000000)
+                        else if (funct7 == 7'b0000000)
                                 op = SRA;
                 end
                 3'b000:
                 begin
                         op = ADD;
 
-                        if (optype == R_TYPE && func7 == 7'b0100000)
+                        if (optype == R_TYPE && funct7 == 7'b0100000)
                                 op = SUB;
                 end
                 3'b100:

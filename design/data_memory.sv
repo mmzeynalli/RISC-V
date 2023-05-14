@@ -2,7 +2,7 @@ import common::*;
 
 
 module data_memory #(
-        int ADDRESS_WIDTH = 6,
+        int ADDRESS_WIDTH = 32,
         int DATA_WIDTH = 32
 ) (
         input clk,

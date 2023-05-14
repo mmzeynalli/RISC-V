@@ -14,7 +14,7 @@ module risc_v #(
 ////////////////////////////////////////////////////////////
 
 logic [31:0] if_instruction;
-logic [21:0] if_imm; // Defined later
+logic [20:0] if_imm; // Defined later
 logic if_ctrl_branch_taken, if_ctrl_jump_taken;  // Defined later
 
 instruction_fetch if_stage(
@@ -109,7 +109,10 @@ control_unit ctrl_unit(
         .ctrl_alu_src(id_ctrl_alu_src),
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
-        .ctrl_jump_taken(id_ctrl_jump_taken)
+        .ctrl_jump_taken(id_ctrl_jump_taken),
+
+        .ctrl_is_branch(),
+        .ctrl_is_jump()
 
 );
 
@@ -124,6 +127,7 @@ assign if_ctrl_jump_taken = id_ctrl_jump_taken;
 logic [OPERAND_WIDTH-1:0] id_ex_rs1_data, id_ex_rs2_data;
 logic [IMM_WIDTH-1:0] id_ex_imm;
 
+instruction_op_type id_ex_optype;
 logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rd_sel;
@@ -139,9 +143,10 @@ id_ex id_ex_reg(
         .i_rs2_data(id_rs2_data),
         .i_imm(id_imm),
 
+        .i_optype(id_optype),
         .i_funct3(id_funct3),
         .i_funct7(id_funct7),
-        .i_rd_sel(id_rd_sel),
+        .i_rd_sel(id_rd),
 
         //Controls
         .i_ctrl_mem_write(id_ctrl_mem_write),
@@ -155,6 +160,7 @@ id_ex id_ex_reg(
         .o_rs2_data(id_ex_rs2_data),
         .o_imm(id_ex_imm),
 
+        .o_optype(id_ex_optype),
         .o_funct3(id_ex_funct3),
         .o_funct7(id_ex_funct7),
         .o_rd_sel(id_ex_rd_sel),
@@ -176,9 +182,11 @@ logic [OPERAND_WIDTH-1:0] ex_alu_result;
 execute ex_stage(
 
         // Input
+        .optype(id_ex_optype),
         .funct3(id_ex_funct3),
         .funct7(id_ex_funct7),
         .imm(id_ex_imm),
+        .rs1_data(id_ex_rs1_data),
         .rs2_data(id_ex_rs2_data),
 
         // Controls
@@ -191,8 +199,9 @@ execute ex_stage(
 /////////////////////// END EX STAGE ///////////////////////
 ////////////////////////////////////////////////////////////
 
-logic [OPERAND_WIDTH-1:0] ex_mem_alu_result;
-logic ex_mem_rs2_data, ex_mem_rd_sel, ex_mem_ctrl_mem_write, ex_mem_ctrl_mem_read, ex_mem_ctrl_mem_to_reg, ex_mem_ctrl_reg_wr_en;
+logic [OPERAND_WIDTH-1:0] ex_mem_alu_result, ex_mem_rs2_data;
+logic [4:0] ex_mem_rd_sel;
+logic ex_mem_ctrl_mem_write, ex_mem_ctrl_mem_read, ex_mem_ctrl_mem_to_reg, ex_mem_ctrl_reg_wr_en;
 
 
 ex_mem ex_mem_reg(
@@ -237,7 +246,8 @@ memory mem_stage(
         // Control
         .ctrl_mem_read(ex_mem_ctrl_mem_read),
         .ctrl_mem_write(ex_mem_ctrl_mem_write),     // ? 
-        .ctrl_mem_to_reg(ex_mem_ctrl_mem_to_reg),  // ?
+        // .ctrl_mem_to_reg(ex_mem_ctrl_mem_to_reg),  // ?
+
 
         // Output
         .mem_data(mem_mem_data)
@@ -281,12 +291,12 @@ mem_wb mem_wb_reg(
 write_back wb_stage(
         .alu_result(mem_wb_alu_result),
         .rd_sel(mem_wb_rd_sel),
-        .mem_data_i(mem_wb_mem_data),
+        .i_mem_data(mem_wb_mem_data),
 
         .ctrl_reg_write(mem_wb_ctrl_reg_wr_en),
         .ctrl_mem_reg(mem_wb_ctrl_mem_to_reg),
 
-        .wb_data_o(id_register_file_wr_data)
+        .o_wb_data(id_register_file_wr_data)
 );
 
 assign id_register_file_wr_en = mem_wb_ctrl_reg_wr_en;

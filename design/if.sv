@@ -22,7 +22,6 @@ always @(posedge clk, posedge rst ) begin
         begin
                 pc <= '0;
                 // o_pc <= '0;
-                instruction <= '0;
         end
         else
         begin

@@ -1,6 +1,6 @@
 import common::*;
 
-module ctrl_unit import common::*; (
+module control_unit import common::*; (
         input [6:0] opcode,
         input instruction_op_type optype,
         input [2:0] funct3,
@@ -22,7 +22,6 @@ module ctrl_unit import common::*; (
 
         output logic ctrl_is_branch,
         output logic ctrl_is_jump,
-        output logic ctrl_is_return,
         output logic ctrl_branch_taken,
         output logic ctrl_jump_taken
 );
@@ -35,7 +34,6 @@ initial begin
         ctrl_is_branch <= '0;
         ctrl_alu_src <= '0;
         ctrl_is_jump <= '0;
-        ctrl_is_return <= '0;
         ctrl_branch_taken <= '0;
         ctrl_jump_taken <= '0;
 end

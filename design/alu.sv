@@ -17,7 +17,7 @@ logic        sltResult;
 logic        sltuResult;
 logic        sraResult;
 
-always_comb begin : ALU
+always_comb begin : calculate
 
         case (operation)
                 SLL :  alu_result = A << B;
