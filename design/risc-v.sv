@@ -74,6 +74,7 @@ assign if_imm = id_imm;
 logic id_register_file_wr_en;  // Defined later
 logic [31:0] id_register_file_wr_data;  // Defined later
 logic [OPERAND_WIDTH-1:0] id_rs1_data, id_rs2_data;
+logic [4:0] id_register_file_wr_id; // defined later
 
 register_file register_file(
         .clk(clk),
@@ -82,7 +83,7 @@ register_file register_file(
 
         .read1_id(id_rs1),
         .read2_id(id_rs2),
-        .write_id(id_rd),
+        .write_id(id_register_file_wr_id),
         .write_data(id_register_file_wr_data),
 
         .read1_data(id_rs1_data),
@@ -290,7 +291,6 @@ mem_wb mem_wb_reg(
 
 write_back wb_stage(
         .alu_result(mem_wb_alu_result),
-        .rd_sel(mem_wb_rd_sel),
         .i_mem_data(mem_wb_mem_data),
 
         .ctrl_reg_write(mem_wb_ctrl_reg_wr_en),
@@ -300,7 +300,7 @@ write_back wb_stage(
 );
 
 assign id_register_file_wr_en = mem_wb_ctrl_reg_wr_en;
-
+assign id_register_file_wr_id = mem_wb_rd_sel;
 ////////////////////////////////////////////////////////////
 /////////////////////// END WB STAGE ///////////////////////
 ////////////////////////////////////////////////////////////

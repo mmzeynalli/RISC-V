@@ -26,7 +26,15 @@ module control_unit import common::*; (
         output logic ctrl_jump_taken
 );
 
-initial begin
+logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
+
+always_comb begin : generate_signals
+        ctrl_zero_flag = (rs1_data == rs2_data) ? 1 : 0;
+        ctrl_lt_flag = (rs1_data < rs2_data) ? 1 : 0;
+        ctrl_ltu_flag = (unsigned'(rs1_data) == unsigned'(rs2_data)) ? 1 : 0;
+        ctrl_gte_flag = (rs1_data >= rs2_data) ? 1 : 0;
+        ctrl_gteu_flag = (unsigned'(rs1_data) >= unsigned'(rs2_data)) ? 1 : 0;
+
         ctrl_mem_write <= '0;
         ctrl_mem_read <= '0;
         ctrl_mem_to_reg <= '0;
@@ -36,16 +44,6 @@ initial begin
         ctrl_is_jump <= '0;
         ctrl_branch_taken <= '0;
         ctrl_jump_taken <= '0;
-end
-
-logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
-
-always @(*) begin : generate_signals
-        ctrl_zero_flag = (rs1_data == rs2_data) ? 1 : 0;
-        ctrl_lt_flag = (rs1_data < rs2_data) ? 1 : 0;
-        ctrl_ltu_flag = (unsigned'(rs1_data) == unsigned'(rs2_data)) ? 1 : 0;
-        ctrl_gte_flag = (rs1_data >= rs2_data) ? 1 : 0;
-        ctrl_gteu_flag = (unsigned'(rs1_data) >= unsigned'(rs2_data)) ? 1 : 0;
 
         case (optype)
                 R_TYPE:

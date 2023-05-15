@@ -1,5 +1,5 @@
 import common::*;
-`define TESTING
+// `define TESTING
 
 module instruction_memory #(
         int ADDRESS_WIDTH = 6,
@@ -18,13 +18,7 @@ ram_type ram;
 
 
         initial begin
-                `ifndef TESTING
-                        $display("Reading original file!");
-                        $readmemb("instruction_mem.mem", ram);
-                `else
-                        $display("Reading test file!");
-                        $readmemb("test_instructions.mem", ram);
-                `endif
+                $readmemb("instruction_mem.mem", ram);
         end
         
         // TODO: Fix address?

@@ -25,9 +25,9 @@ register_array registers;
         always @(posedge clk) begin
                 if (rst == RESET)
                         for (int i = 0; i < $size(registers); i++)
-                                registers[i] = '{default:'0};
+                                registers[i] = '{default: '0};
                 else
-                        if (write_en == 'b1)
+                        if (write_en == '1)
                                 registers[write_id] = write_data;
         end
         
