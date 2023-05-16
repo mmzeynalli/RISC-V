@@ -41,14 +41,15 @@ logic [31:0] expected_register_file [31:0];
 
 // Wait for simulation to finish
 initial begin
-        #100;
+        #1000;
 
         $readmemb("expected_register_file.txt", expected_register_file);
 
         for (int i = 0; i < 32; i++)
         begin
-                assert (expected_register_file[i] == dut.register_file.registers[i]) 
-                $display("%d: %b == %b", i, expected_register_file[i], dut.register_file.registers[i]);
+                assert (expected_register_file[i] == dut.register_file.registers[i])
+                else
+                        $display("%d: %b == %b", i, expected_register_file[i], dut.register_file.registers[i]);
         end
 
         $finish;

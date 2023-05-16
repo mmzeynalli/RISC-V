@@ -16,6 +16,7 @@ module instruction_fetch import common::*;
 
 // Combinational logic to determine next PC
 logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next, pc;
+logic [INSTRUCTION_WIDTH-1:0] instr;
 
 always @(posedge clk, posedge rst ) begin
         if (rst == RESET)
@@ -32,11 +33,18 @@ end
 
 always_comb begin : next_pc_selection
         pc_next = pc + 4;
+        instruction <= instr;
 
         if (ctrl_branch_taken) // conditional branch
-                pc_next = pc - 4 + 32'(signed'(imm)); 
+        begin
+                pc_next = pc - 4 + 32'(signed'(imm));
+                instruction <= 'h13;
+        end
         else if (ctrl_jump_taken) // unconditional jump
+        begin
                 pc_next = imm;
+                instruction <= 'h13;
+        end
         else if (stall) // Stall condition
                 pc_next = pc;
 
@@ -47,7 +55,7 @@ instruction_memory instruction_memory(
         .write_en(1'b0),
         .write_data(32'b0),
         .address(pc),
-        .read_data(instruction)
+        .read_data(instr)
 );
 
 

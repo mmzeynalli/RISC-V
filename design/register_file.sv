@@ -22,18 +22,30 @@ localparam int REGISTER_FILE_SIZE = 1 << ADDRESS_WIDTH;
 typedef logic [REGISTER_FILE_SIZE-1:0] register_array [DATA_WIDTH-1:0];
 register_array registers;
 
-        always @(posedge clk) begin
-                if (rst == RESET)
-                        for (int i = 0; i < $size(registers); i++)
-                                registers[i] = '{default: '0};
-                else
-                        if (write_en == '1)
-                                registers[write_id] = write_data;
+always @(posedge clk) begin
+        if (rst == RESET)
+                for (int i = 0; i < $size(registers); i++)
+                        registers[i] = '{default: '0};
+        else
+                if (write_en == '1)
+                        registers[write_id] = write_data;
+end
+
+always_comb begin : data_read
+
+        read1_data <= registers[read1_id];
+        read2_data <= registers[read2_id];
+
+        if (write_en == '1)
+        begin
+                if (write_id == read1_id)
+                        read1_data <= write_data;
+                
+                if (write_id == read2_id)
+                        read2_data <= write_data;
         end
+
         
-        always_comb begin : data_read
-                read1_data = registers[read1_id];
-                read2_data = registers[read2_id];
-        end
+end
         
 endmodule

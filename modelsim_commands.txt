@@ -38,7 +38,6 @@ add wave -position end  sim:/risc_v_tb/dut/mem_stage/data_memory/read_data
 
 add wave -divider WB
 add wave -decimal -position end  sim:/risc_v_tb/dut/wb_stage/alu_result
-add wave -unsigned -position end  sim:/risc_v_tb/dut/wb_stage/rd_sel
 add wave -position end  sim:/risc_v_tb/dut/wb_stage/ctrl_reg_write
 add wave -position end  sim:/risc_v_tb/dut/wb_stage/ctrl_mem_reg
 add wave -decimal -position end  sim:/risc_v_tb/dut/wb_stage/o_wb_data
@@ -51,3 +50,4 @@ add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_id
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_data
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/registers
