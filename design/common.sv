@@ -5,7 +5,7 @@ localparam int    IMM_WIDTH               = 21;
 localparam int    INSTRUCTION_WIDTH       = 32;
 localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;
-localparam int    PROGRAM_ADDRESS_WIDTH   = 6;
+localparam int    PROGRAM_ADDRESS_WIDTH   = 8;  // 6 + 2
 
 typedef enum bit[3:0] 
 { SLL, SRL, SRA, ADD, SUB, LUI, XOR, OR, AND, SLT, SLTU, LW, SW} alu_operation_type;
@@ -53,7 +53,7 @@ typedef enum bit[2:0] {
         B_TYPE,
         U_TYPE,
         J_TYPE,
-        SYS_TYPE,
+        SYS_TYPE
 } instruction_op_type;
 
 

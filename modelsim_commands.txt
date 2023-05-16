@@ -1,0 +1,53 @@
+add wave -divider IF
+add wave -position end sim:/risc_v_tb/dut/if_stage/clk
+add wave -position end sim:/risc_v_tb/dut/if_stage/rst
+add wave -decimal -position end sim:/risc_v_tb/dut/if_stage/imm
+add wave -position end sim:/risc_v_tb/dut/if_stage/ctrl_branch_taken
+add wave -position end sim:/risc_v_tb/dut/if_stage/ctrl_jump_taken
+add wave -position end sim:/risc_v_tb/dut/if_stage/instruction
+add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc_next
+add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc
+
+add wave -divider IF-ID
+add wave -position end  sim:/risc_v_tb/dut/if_id_reg/i_instruction
+add wave -position end  sim:/risc_v_tb/dut/if_id_reg/o_instruction
+
+add wave -divider ID
+add wave -position end  sim:/risc_v_tb/dut/id_stage/opcode
+add wave -position end  sim:/risc_v_tb/dut/id_stage/optype
+add wave -unsigned -position end  sim:/risc_v_tb/dut/id_stage/rd
+add wave -unsigned -position end  sim:/risc_v_tb/dut/id_stage/rs1
+add wave -unsigned -position end  sim:/risc_v_tb/dut/id_stage/rs2
+add wave -position end  sim:/risc_v_tb/dut/id_stage/funct3
+add wave -position end  sim:/risc_v_tb/dut/id_stage/funct7
+add wave -decimal -position end  sim:/risc_v_tb/dut/id_stage/imm
+
+add wave -divider EX
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/imm
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/rs1_data
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/rs2_data
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/ctrl_alu_src
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/alu_result
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_A
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_B
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu_op
+
+add wave -divider MEM
+add wave -position end  sim:/risc_v_tb/dut/mem_stage/data_memory/write_en
+add wave -position end  sim:/risc_v_tb/dut/mem_stage/data_memory/read_data
+
+add wave -divider WB
+add wave -decimal -position end  sim:/risc_v_tb/dut/wb_stage/alu_result
+add wave -position end  sim:/risc_v_tb/dut/wb_stage/ctrl_reg_write
+add wave -position end  sim:/risc_v_tb/dut/wb_stage/ctrl_mem_reg
+add wave -decimal -position end  sim:/risc_v_tb/dut/wb_stage/o_wb_data
+
+add wave -divider registers
+add wave -position end  sim:/risc_v_tb/dut/register_file/write_en
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_id
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_id
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_id
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_data
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_data
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_data
+add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/registers
