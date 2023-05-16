@@ -16,7 +16,7 @@ Here is the list of S-type and B-type commands and their decomposotion:
 
 | Implemented                | instruction | description      | imm12 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | imm12 (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ---------------- | ------------- | ----------- | ----------- | -------------- | ------------ | ------------ |
-| <ul> <li>- [ ] </li> </ul> | `sb`        | Store Byte       | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `010`          | `imm[4:0]`   | `0100011`    |
+| <ul> <li>- [ ] </li> </ul> | `sb`        | Store Byte       | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `000`          | `imm[4:0]`   | `0100011`    |
 | <ul> <li>- [ ] </li> </ul> | `sh`        | Store Halfword   | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `001`          | `imm[4:0]`   | `0100011`    |
 | <ul> <li>- [ ] </li> </ul> | `sw`        | Store Word       | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `010`          | `imm[4:0]`   | `0100011`    |
 | <ul> <li>- [ ] </li> </ul> | `fsw`       | Store Float Word | `imm[11:5]`   | `rs2[4:0]`  | `rs1[4:0]`  | `011`          | `imm[4:0]`   | `0100111`    |

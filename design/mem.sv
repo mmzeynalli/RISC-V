@@ -1,6 +1,7 @@
 import common::*;
 
 module memory (
+        input clk,
         input [OPERAND_WIDTH-1:0] alu_result,  // write/read address
         input [OPERAND_WIDTH-1:0] rs2_data,     // write data
 
@@ -15,7 +16,7 @@ data_memory data_memory(
         .clk(clk),
         .write_en(ctrl_mem_write),
         .write_data(rs2_data),
-        .address(alu_result),
+        .address(alu_result[7:0]),
         .read_data(mem_data)
 );
 

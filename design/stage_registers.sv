@@ -30,7 +30,7 @@ module id_ex (
     input [OPERAND_WIDTH-1:0] i_rs2_data,
     input [IMM_WIDTH-1:0] i_imm,
 
-    input instruction_op_type i_optype,
+    input instruction_format_type i_opcode,
     input [2:0] i_funct3,
     input [6:0] i_funct7,
 
@@ -48,7 +48,7 @@ module id_ex (
     output logic [OPERAND_WIDTH-1:0] o_rs2_data,
     output logic [IMM_WIDTH-1:0] o_imm,
 
-    output instruction_op_type o_optype,
+    output instruction_format_type o_opcode,
     output logic [2:0] o_funct3,
     output logic [6:0] o_funct7,
 

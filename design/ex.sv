@@ -3,7 +3,7 @@ import common::*;
 module execute import common::*; (
         // input [OPERAND_WIDTH-1:0] from_ex,
         // input [OPERAND_WIDTH-1:0] from_wb,
-        input instruction_op_type optype,
+        input instruction_format_type opcode,
         input [2:0] funct3,
         input [6:0] funct7,
 
@@ -26,7 +26,7 @@ logic is_zero;
 alu_ctrl alu_ctrl(
         .funct3(funct3),
         .funct7(funct7),
-        .optype(optype),
+        .opcode(opcode),
         .op(alu_op)
 );
 

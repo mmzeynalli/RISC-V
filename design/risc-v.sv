@@ -128,7 +128,7 @@ assign if_ctrl_jump_taken = id_ctrl_jump_taken;
 logic [OPERAND_WIDTH-1:0] id_ex_rs1_data, id_ex_rs2_data;
 logic [IMM_WIDTH-1:0] id_ex_imm;
 
-instruction_op_type id_ex_optype;
+instruction_format_type id_ex_opcode;
 logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rd_sel;
@@ -144,7 +144,7 @@ id_ex id_ex_reg(
         .i_rs2_data(id_rs2_data),
         .i_imm(id_imm),
 
-        .i_optype(id_optype),
+        .i_opcode(id_ex_opcode),
         .i_funct3(id_funct3),
         .i_funct7(id_funct7),
         .i_rd_sel(id_rd),
@@ -161,7 +161,7 @@ id_ex id_ex_reg(
         .o_rs2_data(id_ex_rs2_data),
         .o_imm(id_ex_imm),
 
-        .o_optype(id_ex_optype),
+        .o_opcode(id_ex_opcode),
         .o_funct3(id_ex_funct3),
         .o_funct7(id_ex_funct7),
         .o_rd_sel(id_ex_rd_sel),
@@ -183,7 +183,7 @@ logic [OPERAND_WIDTH-1:0] ex_alu_result;
 execute ex_stage(
 
         // Input
-        .optype(id_ex_optype),
+        .opcode(id_ex_opcode),
         .funct3(id_ex_funct3),
         .funct7(id_ex_funct7),
         .imm(id_ex_imm),
@@ -241,6 +241,7 @@ logic [31:0] mem_mem_data;
 
 memory mem_stage(
         // Input
+        .clk(clk),
         .alu_result(ex_mem_alu_result),
         .rs2_data(ex_mem_rs2_data),
 

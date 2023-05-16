@@ -35,13 +35,15 @@ end
 initial begin
         dut.if_stage.instruction_memory.ram = '{default: 'h13};  // nop
         $readmemb("test_instructions.mem", dut.if_stage.instruction_memory.ram);
+        dut.if_stage.instruction_memory.ram[31] = 32'b00000000000000000000000001100011;
 end
 
 logic [31:0] expected_register_file [31:0];
+logic [31:0] expected_memory [63:0];
 
 // Wait for simulation to finish
 initial begin
-        #1000;
+        #2000;
 
         $readmemb("expected_register_file.txt", expected_register_file);
 
@@ -49,7 +51,16 @@ initial begin
         begin
                 assert (expected_register_file[i] == dut.register_file.registers[i])
                 else
-                        $display("%d: %b == %b", i, expected_register_file[i], dut.register_file.registers[i]);
+                        $display("Register %d: %b != %b", i, expected_register_file[i], dut.register_file.registers[i]);
+        end
+
+        $readmemb("expected_memory.txt", expected_memory);
+
+        for (int i = 0; i < 64; i++)
+        begin
+                assert (expected_memory[i] == dut.mem_stage.data_memory.ram[i])
+                else
+                        $display("Memory %d: %b != %b", i, expected_memory[i], dut.mem_stage.data_memory.ram[i]);
         end
 
         $finish;
