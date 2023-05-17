@@ -7,6 +7,8 @@ localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;
 localparam int    PROGRAM_ADDRESS_WIDTH   = 8;  // 6 + 2
 
+localparam [INSTRUCTION_WIDTH-1:0] NOOP = 'h13;
+
 typedef enum bit[3:0] 
 { SLL, SRL, SRA, ADD, SUB, LUI, XOR, OR, AND, SLT, SLTU, LW, SW} alu_operation_type;
 

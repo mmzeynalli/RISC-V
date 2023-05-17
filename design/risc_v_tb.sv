@@ -33,7 +33,7 @@ end
 
 // Load instruction memory file
 initial begin
-        dut.if_stage.instruction_memory.ram = '{default: 'h13};  // nop
+        dut.if_stage.instruction_memory.ram = '{default: NOOP};  // nop
         $readmemb("test_instructions.mem", dut.if_stage.instruction_memory.ram);
         dut.if_stage.instruction_memory.ram[31] = 32'b00000000000000000000000001100011;
 end
