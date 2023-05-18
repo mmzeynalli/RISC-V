@@ -12,7 +12,7 @@ Switch to:
 
 Here is the list of I-type commands and their decomposotion:
 
-### Integer register-integer shifts (RV32I):
+### Integer register-integer shifts (RV32I)
 
 | Implemented                | instruction | description | funct7 (31:25) | imm12 (24:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ----------- | -------------- | ------------- | ----------- | -------------- | --------- | ------------ |
@@ -20,7 +20,7 @@ Here is the list of I-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `srli`      |             | `0000000`      | `imm[4:0]`    | `rs1[4:0]`  | `101`          | `rd[4:0]` | `0010011`    |
 | <ul> <li>- [ ] </li> </ul> | `srai`      |             | `0100000`      | `imm[4:0]`    | `rs1[4:0]`  | `101`          | `rd[4:0]` | `0010011`    |
 
-### Integer register-integer operations (RV32I):
+### Integer register-integer operations (RV32I)
 
 | Implemented                | instruction | description | imm12 (31:20)  | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ----------- | -------------- | ----------- | -------------- | --------- | ------------ |
@@ -37,6 +37,7 @@ Here is the list of I-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `ebreak`    |             | `000000000001` | `00000`     | `000`          | `00000`   | `1110011`    |
 
 ### Load Integer Operations
+
 | Implemented                | instruction | description | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ----------- | ------------- | ----------- | -------------- | --------- | ------------ |
 | <ul> <li>- [ ] </li> </ul> | `lb`        |             | `imm[11:0]`   | `rs1[4:0]`  | `000`          | `rd[4:0]` | `0000011`    |
@@ -45,10 +46,8 @@ Here is the list of I-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `lhu`       |             | `imm[11:0]`   | `rs1[4:0]`  | `101`          | `rd[4:0]` | `0000011`    |
 | <ul> <li>- [ ] </li> </ul> | `lw`        |             | `imm[11:0]`   | `rs1[4:0]`  | `010`          | `rd[4:0]` | `0000011`    |
 
-
-
-
 ### Single-precision floating-point register-integer operations (RV32F)
+
 | Implemented                | instruction | description     | imm12 (31:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | --------------- | ------------- | ----------- | -------------- | --------- | ------------ |
 | <ul> <li>- [ ] </li> </ul> | `flw`       | Load float word | `imm[11:0]`   | `rs1[4:0]`  | `010`          | `rd[4:0]` | `0000111`    |

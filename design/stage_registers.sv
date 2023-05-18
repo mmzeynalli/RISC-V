@@ -4,8 +4,8 @@ module if_id (
     input clk,
     input rst,
 
-    input [31:0] i_instruction,
-    output logic [31:0] o_instruction
+    input [INSTRUCTION_WIDTH-1:0] i_instruction,
+    output logic [INSTRUCTION_WIDTH-1:0] o_instruction
 );
 
 always_ff @( posedge clk, posedge rst ) begin
@@ -26,13 +26,16 @@ module id_ex (
     input rst,
 
     // IN SIGNALS
-    input [OPERAND_WIDTH-1:0] i_rs_data1,
-    input [OPERAND_WIDTH-1:0] i_rs_data2,
-    input [OPERAND_WIDTH-1:0] i_imm,
+    input [OPERAND_WIDTH-1:0] i_rs1_data,
+    input [OPERAND_WIDTH-1:0] i_rs2_data,
+    input [IMM_WIDTH-1:0] i_imm,
 
+    input instruction_format_type i_opcode,
     input [2:0] i_funct3,
     input [6:0] i_funct7,
 
+    input [4:0] i_rs1,
+    input [4:0] i_rs2,
     input [4:0] i_rd_sel,
 
     //Controls
@@ -41,16 +44,18 @@ module id_ex (
     input i_ctrl_mem_to_reg,
     input i_ctrl_reg_wr_en,
     input i_ctrl_alu_src,
-    input i_ctrl_is_signed_imm,
 
     // OUT SIGNALS
-    output logic [OPERAND_WIDTH-1:0] o_rs_data1,
-    output logic [OPERAND_WIDTH-1:0] o_rs_data2,
-    output logic [OPERAND_WIDTH-1:0] o_imm,
+    output logic [OPERAND_WIDTH-1:0] o_rs1_data,
+    output logic [OPERAND_WIDTH-1:0] o_rs2_data,
+    output logic [IMM_WIDTH-1:0] o_imm,
 
+    output instruction_format_type o_opcode,
     output logic [2:0] o_funct3,
     output logic [6:0] o_funct7,
 
+    output logic [4:0] o_rs1,
+    output logic [4:0] o_rs2,
     output logic [4:0] o_rd_sel,
 
     //Controls
@@ -58,15 +63,14 @@ module id_ex (
     output logic o_ctrl_mem_read,
     output logic o_ctrl_mem_to_reg,
     output logic o_ctrl_reg_wr_en,
-    output logic o_ctrl_alu_src,
-    output logic o_ctrl_is_signed_imm
+    output logic o_ctrl_alu_src
 );
 
 always_ff @( posedge clk, posedge rst ) begin
     if (rst == RESET)
     begin
-        o_rs_data1 <= '0;
-        o_rs_data2 <= '0;
+        o_rs1_data <= '0;
+        o_rs2_data <= '0;
         o_imm <= '0;
 
         o_funct3 <= '0;
@@ -80,12 +84,11 @@ always_ff @( posedge clk, posedge rst ) begin
         o_ctrl_mem_to_reg <= '0;
         o_ctrl_reg_wr_en <= '0;
         o_ctrl_alu_src <= '0;
-        o_ctrl_is_signed_imm <= '0;
     end
     else
     begin
-        o_rs_data1 <= i_rs_data1;
-        o_rs_data2 <= i_rs_data2;
+        o_rs1_data <= i_rs1_data;
+        o_rs2_data <= i_rs2_data;
         o_imm <= i_imm;
 
         o_funct3 <= i_funct3;
@@ -99,7 +102,6 @@ always_ff @( posedge clk, posedge rst ) begin
         o_ctrl_mem_to_reg <= i_ctrl_mem_to_reg;
         o_ctrl_reg_wr_en <= i_ctrl_reg_wr_en;
         o_ctrl_alu_src <= i_ctrl_alu_src;
-        o_ctrl_is_signed_imm <= i_ctrl_is_signed_imm;
     end
 end
     
@@ -111,7 +113,7 @@ module ex_mem (
 
     // IN SIGNALS
     input [OPERAND_WIDTH-1:0] i_alu_result,
-    input [OPERAND_WIDTH-1:0] i_rs_data2,
+    input [OPERAND_WIDTH-1:0] i_rs2_data,
     input [4:0] i_rd_sel,
 
     //Controls
@@ -122,7 +124,7 @@ module ex_mem (
 
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_alu_result,
-    output logic [OPERAND_WIDTH-1:0] o_rs_data2,
+    output logic [OPERAND_WIDTH-1:0] o_rs2_data,
     output logic [4:0] o_rd_sel,
 
     // Controls
@@ -136,7 +138,7 @@ always_ff @( posedge clk, posedge rst ) begin
     if (rst == RESET)
     begin
         o_alu_result <= '0;
-        o_rs_data2 <= '0;       
+        o_rs2_data <= '0;       
         o_rd_sel <= '0;
 
         // Controls
@@ -148,7 +150,7 @@ always_ff @( posedge clk, posedge rst ) begin
     else
     begin
         o_alu_result <= i_alu_result;
-        o_rs_data2 <= i_rs_data2;       
+        o_rs2_data <= i_rs2_data;       
         o_rd_sel <= i_rd_sel;
 
         // Controls

@@ -1,20 +1,20 @@
 import common::*;
 
 module write_back (
-    input  logic ctrl_reg_write,
-    input  logic ctrl_mem_reg,
-    input  logic [31:0] alu_result,
-    input  logic [4:0] rd_sel,
-    input  logic [31:0] mem_data_i,
-    output logic [31:0] wb_data_o 
+    input [31:0] alu_result,
+    input [31:0] i_mem_data,
+    input ctrl_reg_write,
+    input ctrl_mem_reg,
+
+    output logic [31:0] o_wb_data
 );
 
-always @(*) begin
+always_comb begin
 
     if ((ctrl_reg_write == 1) && (ctrl_mem_reg == 1))
-        wb_data_o = mem_data_i;
+        o_wb_data = i_mem_data;
     else
-        wb_data_o = alu_result;   
+        o_wb_data = alu_result;   
 end
 
 endmodule

@@ -3,12 +3,12 @@ import common::*;
 module ALU import common::*; #(
         int DATA_WIDTH = 32
 ) (
-        input alu_operation_type operation,
         input [DATA_WIDTH-1:0]  A,
         input [DATA_WIDTH-1:0]  B,
+        input alu_operation_type operation,
 
         output logic zero,
-        output logic [DATA_WIDTH-1:0] result // ???
+        output logic [DATA_WIDTH-1:0] result
 );
 
 
@@ -17,7 +17,7 @@ logic        sltResult;
 logic        sltuResult;
 logic        sraResult;
 
-always_comb begin : ALU
+always_comb begin : calculate
 
         case (operation)
                 SLL :  alu_result = A << B;

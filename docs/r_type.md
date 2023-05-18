@@ -1,4 +1,5 @@
 # R-TYPE
+
 Switch to:
 
 [I-Type](/docs/i_type.md)
@@ -11,7 +12,7 @@ Switch to:
 
 Here is the list of R-type commands and their decomposotion:
 
-### Integer register-register operations (RV32I):
+### Integer register-register operations (RV32I)
 
 | Implemented                | instruction | description            | funct7 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ---------------------- | -------------- | ----------- | ----------- | -------------- | --------- | ------------ |
@@ -26,7 +27,8 @@ Here is the list of R-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `slt`       | Set Less Than          | `0000000`      | `rs2[4:0]`  | `rs1[4:0]`  | `010`          | `rd[4:0]` | `0110011`    |
 | <ul> <li>- [ ] </li> </ul> | `sltu`      | Set Less Than Unsigned | `0000000`      | `rs2[4:0]`  | `rs1[4:0]`  | `011`          | `rd[4:0]` | `0110011`    |
 
-### Integer multiplication and division (RV32M):
+### Integer multiplication and division (RV32M)
+
 | Implemented                | instruction | description                                          | funct7 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ---------------------------------------------------- | -------------- | ----------- | ----------- | -------------- | --------- | ------------ |
 | <ul> <li>- [ ] </li> </ul> | `mul`       | Multiplication                                       | `0000001`      | `rs2[4:0]`  | `rs1[4:0]`  | `000`          | `rd[4:0]` | `0110011`    |
@@ -38,8 +40,8 @@ Here is the list of R-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `rem`       | Remainder (signed % signed → signed)                 | `0000001`      | `rs2[4:0]`  | `rs1[4:0]`  | `110`          | `rd[4:0]` | `0110011`    |
 | <ul> <li>- [ ] </li> </ul> | `remu`      | Remainder (unsigned % unsigned → unsigned)           | `0000001`      | `rs2[4:0]`  | `rs1[4:0]`  | `111`          | `rd[4:0]` | `0110011`    |
 
-
 ### Single-precision floating-point register-register operations (RV32F): (SPFP -> Single-Precision Floating-Point)
+
 | Implemented                | instruction | description                   | funct7 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ----------------------------- | -------------- | ----------- | ----------- | -------------- | --------- | ------------ |
 | <ul> <li>- [ ] </li> </ul> | `fmw.w.x`   | Move From Integer             | `0101100`      | `00000`     | `rs1[4:0]`  | `010`          | `rd[4:0]` | `1010011`    |
@@ -73,7 +75,7 @@ Here is the list of R-type commands and their decomposotion:
 | <ul> <li>- [ ] </li> </ul> | `fsrm`      |                               | `x`            | `rs2[4:0]`  | `rs1[4:0]`  | `x`            | `rd[4:0]` | `x`          |
 | <ul> <li>- [ ] </li> </ul> | `fsflags`   |                               | `x`            | `rs2[4:0]`  | `rs1[4:0]`  | `x`            | `rd[4:0]` | `x`          |
 
+### Double-precision floating-point register-register operations (RV32D)
 
-### Double-precision floating-point register-register operations (RV32D):
 | instruction | description | funct7 (31:25) | rs2 (24:20) | rs1 (19:15) | funct3 (14:12) | rd (11:7) | opcode (6:0) |
 | ----------- | ----------- | -------------- | ----------- | ----------- | -------------- | --------- |
