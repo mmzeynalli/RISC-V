@@ -34,6 +34,8 @@ module id_ex (
     input [2:0] i_funct3,
     input [6:0] i_funct7,
 
+    input [4:0] i_rs1,
+    input [4:0] i_rs2,
     input [4:0] i_rd_sel,
 
     //Controls
@@ -52,6 +54,8 @@ module id_ex (
     output logic [2:0] o_funct3,
     output logic [6:0] o_funct7,
 
+    output logic [4:0] o_rs1,
+    output logic [4:0] o_rs2,
     output logic [4:0] o_rd_sel,
 
     //Controls

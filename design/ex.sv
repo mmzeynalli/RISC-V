@@ -1,8 +1,6 @@
 import common::*;
 
 module execute import common::*; (
-        // input [OPERAND_WIDTH-1:0] from_ex,
-        // input [OPERAND_WIDTH-1:0] from_wb,
         input instruction_format_type opcode,
         input [2:0] funct3,
         input [6:0] funct7,
@@ -10,9 +8,13 @@ module execute import common::*; (
         input [IMM_WIDTH-1:0] imm,
         input [DATA_WIDTH-1:0] rs1_data,
         input [DATA_WIDTH-1:0] rs2_data,
+        input [OPERAND_WIDTH-1:0] from_mem,
+        input [OPERAND_WIDTH-1:0] from_wb,
 
         // Controls
         input ctrl_alu_src,
+        input forwarding_type ctrl_forward_left_operand,
+        input forwarding_type ctrl_forward_right_operand,
 
         output [OPERAND_WIDTH-1:0] alu_result
 );
@@ -39,8 +41,26 @@ ALU alu(
 );
 
 always_comb begin : select_operands
-        operand_A <= rs1_data;  // Later from_mem and from_wb
-        operand_B <= (ctrl_alu_src == 0) ? rs2_data : 32'(signed'(imm));
+
+        case (ctrl_forward_left_operand)
+                NONE:
+                        operand_A <= rs1_data;
+                EX_MEM:
+                        operand_A <= from_mem;
+                MEM_WB:
+                        operand_A <= from_wb;
+                default: 
+        endcase
+
+        case (ctrl_forward_right_operand)
+                NONE:
+                        operand_B <= (ctrl_alu_src == 0) ? rs2_data : 32'(signed'(imm));
+                EX_MEM:
+                        operand_B <= from_mem;
+                MEM_WB:
+                        operand_B <= from_wb;
+                default: 
+        endcase
 end
         
 endmodule
