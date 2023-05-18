@@ -19,7 +19,7 @@ module instruction_fetch import common::*;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next, pc;
 logic [INSTRUCTION_WIDTH-1:0] instr;
 
-always @(posedge clk, posedge rst ) begin
+always @(posedge clk, posedge rst) begin
         if (rst == RESET)
         begin
                 pc <= '0;
@@ -34,7 +34,7 @@ end
 
 always_comb begin : next_pc_selection
         pc_next = pc + 4;
-        instruction <= instr;
+        instruction = instr;        
 
         if (is_compressed) // is compressed (16-bit) instruction
                 pc_next = pc + 2;
@@ -42,16 +42,13 @@ always_comb begin : next_pc_selection
         if (ctrl_branch_taken) // conditional branch
         begin
                 pc_next = pc - 4 + 32'(signed'(imm));
-                instruction <= NOOP;
-        end
-        else if (ctrl_jump_taken) // unconditional jump
-        begin
-                pc_next = imm;
-                instruction <= NOOP;
+                instruction = NOOP;
         end
         else if (stall) // Stall condition
+        begin
                 pc_next = pc;
-                instruction <= NOOP;
+                instruction = NOOP;
+        end
 
 end
 

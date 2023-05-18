@@ -12,6 +12,7 @@ module decompose (
         output logic [IMM_WIDTH-1:0] imm
 );
 
+
 logic [INSTRUCTION_WIDTH-1:0] instruction;
 logic is_compressed;
 

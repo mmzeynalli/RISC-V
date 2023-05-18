@@ -22,8 +22,7 @@ module control_unit import common::*; (
 
         output logic ctrl_is_branch,
         output logic ctrl_is_jump,
-        output logic ctrl_branch_taken,
-        output logic ctrl_jump_taken
+        output logic ctrl_branch_taken
 );
 
 logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
@@ -43,7 +42,6 @@ always_comb begin : generate_signals
         ctrl_alu_src <= '0;
         ctrl_is_jump <= '0;
         ctrl_branch_taken <= '0;
-        ctrl_jump_taken <= '0;
 
         case (optype)
                 R_TYPE:
@@ -82,8 +80,7 @@ always_comb begin : generate_signals
                         end
                 J_TYPE:
                 begin
-                        ctrl_is_jump <= 1;
-                        ctrl_jump_taken <= 1;
+                        ctrl_branch_taken <= 1;
                 end
                 default:
                         $error("Unknown optype!");

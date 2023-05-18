@@ -20,6 +20,7 @@ logic if_ctrl_branch_taken, if_ctrl_jump_taken;  // Defined later
 instruction_fetch if_stage(
         .clk(clk),
         .rst(rst),
+        .is_compressed(1'b0),
         .stall(1'b0),
         .imm(if_imm),
         .ctrl_branch_taken(if_ctrl_branch_taken),
@@ -91,7 +92,7 @@ register_file register_file(
 );
 
 logic id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem_to_reg, id_ctrl_reg_wr_en, id_ctrl_alu_src;
-logic id_ctrl_branch_taken, id_ctrl_jump_taken;
+logic id_ctrl_branch_taken;
 
 
 control_unit ctrl_unit(
@@ -110,7 +111,6 @@ control_unit ctrl_unit(
         .ctrl_alu_src(id_ctrl_alu_src),
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
-        .ctrl_jump_taken(id_ctrl_jump_taken),
 
         .ctrl_is_branch(),
         .ctrl_is_jump()
@@ -119,7 +119,6 @@ control_unit ctrl_unit(
 
 // Connection to IF stage
 assign if_ctrl_branch_taken = id_ctrl_branch_taken;
-assign if_ctrl_jump_taken = id_ctrl_jump_taken;
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END ID STAGE ///////////////////////
