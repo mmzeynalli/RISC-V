@@ -16,19 +16,18 @@ localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
 typedef logic [DATA_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 ram_type ram;
 
+initial begin
+        $readmemb("instruction_mem.mem", ram);
+end
 
-        initial begin
-                $readmemb("instruction_mem.mem", ram);
-        end
-        
-        // TODO: Fix address?
-        always @(posedge clk) begin
-                if (write_en == 1)
-                        ram[address >> 2] = write_data;           
-        end
+// TODO: Fix address?
+always @(posedge clk) begin
+        if (write_en)
+                ram[address >> 2] = write_data;           
+end
 
-        always_comb begin : ram_read
-            read_data = ram[address >> 2];
-        end
+always_comb begin : ram_read
+        read_data = ram[address >> 2];
+end
 
 endmodule
