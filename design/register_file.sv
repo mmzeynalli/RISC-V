@@ -27,7 +27,7 @@ always @(posedge clk) begin
                 for (int i = 0; i < $size(registers); i++)
                         registers[i] = '{default: '0};
         else
-                if (write_en == '1)
+                if (write_en)
                         registers[write_id] = write_data;
 end
 
@@ -36,7 +36,7 @@ always_comb begin : data_read
         read1_data <= registers[read1_id];
         read2_data <= registers[read2_id];
 
-        if (write_en == '1)
+        if (write_en)
         begin
                 if (write_id == read1_id)
                         read1_data <= write_data;

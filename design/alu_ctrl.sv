@@ -9,36 +9,41 @@ module alu_ctrl import common::*; (
 
 always_comb begin : get_alu_op
 
-        op = ADD;
+        op <= ADD;
+        $display(opcode);
 
-        if (opcode == OP || op == OP_IMM)
+        if (opcode == OP || opcode == OP_IMM)
                 case (funct3)
                         3'b001:
-                                op = SLL;
+                                op <= SLL;
                         3'b101: 
                         begin
-                                if (funct7 == 7'b0100000)
-                                        op = SRL;
+                                if (funct7 == 7'b010_0000)
+                                        op <= SRL;
                                 else if (funct7 == 7'b0000000)
-                                        op = SRA;
+                                        op <= SRA;
                         end
                         3'b000:
                         begin
-                                op = ADD;
+                                $display("here!");
+                                op <= ADD;
 
-                                if (funct7 == 7'b0100000)
-                                        op = SUB;
+                                if (funct7 == 7'b010_0000)
+                                begin
+                                        $display("SUB!!");    
+                                        op <= SUB;
+                                end
                         end
                         3'b100:
-                                op = XOR;
+                                op <= XOR;
                         3'b110:
-                                op = OR;
+                                op <= OR;
                         3'b111:
-                                op = AND;
+                                op <= AND;
                         3'b010:
-                                op = SLT;
+                                op <= SLT;
                         3'b011:
-                                op = SLTU;
+                                op <= SLTU;
                         default: 
                                 $error("No such operation!");
 

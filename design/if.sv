@@ -7,7 +7,6 @@ module instruction_fetch import common::*;
         input stall,
         input [IMM_WIDTH-1:0] imm,
         input ctrl_branch_taken,
-        input ctrl_jump_taken,
         input is_compressed,
 
         // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 

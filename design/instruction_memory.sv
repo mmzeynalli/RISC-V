@@ -22,7 +22,7 @@ end
 
 // TODO: Fix address?
 always @(posedge clk) begin
-        if (write_en == 1)
+        if (write_en)
                 ram[address >> 2] = write_data;           
 end
 

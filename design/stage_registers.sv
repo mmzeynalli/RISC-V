@@ -73,6 +73,7 @@ always_ff @(posedge clk) begin
         o_rs2 <= '0;
         o_imm <= '0;
 
+        o_opcode <= OP;
         o_funct3 <= '0;
         o_funct7 <= '0;
         
@@ -92,6 +93,7 @@ always_ff @(posedge clk) begin
         o_rs2 <= i_rs2;
         o_imm <= i_imm;
 
+        o_opcode <= i_opcode;
         o_funct3 <= i_funct3;
         o_funct7 <= i_funct7;
         

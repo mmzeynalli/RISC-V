@@ -14,7 +14,6 @@ module control_unit import common::*; (
         output logic ctrl_alu_src,
 
         output logic ctrl_is_branch,
-        output logic ctrl_is_jump,
         output logic ctrl_branch_taken
 );
 
@@ -32,7 +31,6 @@ always_comb begin : generate_signals
         ctrl_reg_write <= '0;
         ctrl_is_branch <= '0;
         ctrl_alu_src <= '0;
-        ctrl_is_jump <= '0;
         ctrl_branch_taken <= '0;
 
         case (optype)
@@ -56,12 +54,12 @@ always_comb begin : generate_signals
                 begin
                         ctrl_is_branch <= 1;
 
-                        if ((funct3 == BEQ && ctrl_zero_flag == 1) ||
+                        if ((funct3 == BEQ && ctrl_zero_flag) ||
                         (funct3 == BNE && ctrl_zero_flag != 1) ||
-                        (funct3 == BLT && ctrl_lt_flag == 1) ||
-                        (funct3 == BGE && ctrl_gte_flag == 1) ||
-                        (funct3 == BLTU && ctrl_ltu_flag == 1) ||
-                        (funct3 == BGEU && ctrl_gteu_flag == 1))
+                        (funct3 == BLT && ctrl_lt_flag) ||
+                        (funct3 == BGE && ctrl_gte_flag) ||
+                        (funct3 == BLTU && ctrl_ltu_flag) ||
+                        (funct3 == BGEU && ctrl_gteu_flag))
                                 ctrl_branch_taken <= 1;
                 end
                 U_TYPE:

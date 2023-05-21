@@ -3,8 +3,7 @@ add wave -position end sim:/risc_v_tb/dut/if_stage/clk
 add wave -position end sim:/risc_v_tb/dut/if_stage/rst
 add wave -decimal -position end sim:/risc_v_tb/dut/if_stage/imm
 add wave -position end sim:/risc_v_tb/dut/if_stage/ctrl_branch_taken
-add wave -position end sim:/risc_v_tb/dut/if_stage/ctrl_jump_taken
-add wave -hex -position end sim:/risc_v_tb/dut/if_stage/instruction
+add wave -hexadecimal -position end sim:/risc_v_tb/dut/if_stage/instruction
 add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc_next
 add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc
 
@@ -33,8 +32,8 @@ add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/alu_result
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_A
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_B
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/write_data
-add wave -position end  sim:/risc_v_tb/dut/ex_stage/from_mem
-add wave -position end  sim:/risc_v_tb/dut/ex_stage/from_wb
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/from_mem
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/from_wb
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/ctrl_forward_left_operand
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/ctrl_forward_right_operand
 

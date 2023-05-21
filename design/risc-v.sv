@@ -15,17 +15,16 @@ module risc_v #(
 
 logic [31:0] if_instruction;
 logic [20:0] if_imm; // Defined later
-logic if_ctrl_branch_taken, if_ctrl_jump_taken;  // Defined later
+logic if_ctrl_branch_taken;  // Defined later
 
 instruction_fetch if_stage(
         // Input
         .clk(clk),
         .rst(rst),
-        .is_compressed(1'b0),
-        .stall(1'b0),
+        .is_compressed('0),
+        .stall('0),
         .imm(if_imm),
         .ctrl_branch_taken(if_ctrl_branch_taken),
-        .ctrl_jump_taken(if_ctrl_jump_taken),
 
         // Output
         .instruction(if_instruction)
@@ -113,9 +112,7 @@ control_unit ctrl_unit(
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
 
-        .ctrl_is_branch(),
-        .ctrl_is_jump()
-
+        .ctrl_is_branch()
 );
 
 // Connection to IF stage
@@ -146,7 +143,7 @@ id_ex id_ex_reg(
         .i_rs2_data(id_rs2_data),
         .i_imm(id_imm),
 
-        .i_opcode(id_ex_opcode),
+        .i_opcode(instruction_format_type'(id_opcode)),
         .i_funct3(id_funct3),
         .i_funct7(id_funct7),
         .i_rd_sel(id_rd),

@@ -18,7 +18,7 @@ typedef logic [DATA_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 ram_type ram = '{default: '0};
 
 always @(posedge clk) begin
-        if (write_en == '1)
+        if (write_en)
                 ram[address >> 2] = write_data;
 end
 
