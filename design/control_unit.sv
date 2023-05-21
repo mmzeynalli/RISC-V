@@ -8,15 +8,8 @@ module control_unit import common::*; (
         input [31:0] rs2_data,
 
         output logic ctrl_mem_write,
-        output logic ctrl_mem_read,
-        output logic ctrl_mem_to_reg,
-        output logic ctrl_reg_wr_en,
-
-        // output logic ctrl_zero_flag,
-        // output logic ctrl_lt_flag,
-        // output logic ctrl_ltu_flag,
-        // output logic ctrl_gte_flag,
-        // output logic ctrl_gteu_flag,
+        output logic ctrl_mem2reg,
+        output logic ctrl_reg_write,
 
         output logic ctrl_alu_src,
 
@@ -35,9 +28,8 @@ always_comb begin : generate_signals
         ctrl_gteu_flag = (unsigned'(rs1_data) >= unsigned'(rs2_data)) ? 1 : 0;
 
         ctrl_mem_write <= '0;
-        ctrl_mem_read <= '0;
-        ctrl_mem_to_reg <= '0;
-        ctrl_reg_wr_en <= '0;
+        ctrl_mem2reg <= '0;
+        ctrl_reg_write <= '0;
         ctrl_is_branch <= '0;
         ctrl_alu_src <= '0;
         ctrl_is_jump <= '0;
@@ -45,15 +37,14 @@ always_comb begin : generate_signals
 
         case (optype)
                 R_TYPE:
-                        ctrl_reg_wr_en <= 1;
+                        ctrl_reg_write <= 1;
                 I_TYPE:
                 begin
-                        ctrl_reg_wr_en <= 1;
+                        ctrl_reg_write <= 1;
                         ctrl_alu_src <= 1;
 
                         if (opcode == LOAD || opcode == LOAD_FP) begin
-                                ctrl_mem_read <= 1;
-                                ctrl_mem_to_reg <= 1;
+                                ctrl_mem2reg <= 1;
                         end
                 end
                 S_TYPE:
@@ -75,8 +66,7 @@ always_comb begin : generate_signals
                 end
                 U_TYPE:
                         if (opcode == U_LUI) begin
-                                ctrl_mem_read <= 1;
-                                ctrl_mem_to_reg <= 1;
+                                ctrl_mem2reg <= 1;
                         end
                 J_TYPE:
                 begin

@@ -19,16 +19,15 @@ module instruction_fetch import common::*;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] pc_next, pc;
 logic [INSTRUCTION_WIDTH-1:0] instr;
 
-always @(posedge clk, posedge rst) begin
+always @(posedge clk) begin
         if (rst == RESET)
         begin
                 pc <= '0;
-                // o_pc <= '0;
+                // instruction <= NOOP;
         end
         else
         begin
                 pc <= pc_next;
-                // o_pc <= pc;
         end
 end
 
