@@ -16,7 +16,8 @@ module execute import common::*; (
         input forwarding_type ctrl_forward_left_operand,
         input forwarding_type ctrl_forward_right_operand,
 
-        output [OPERAND_WIDTH-1:0] alu_result
+        output logic [OPERAND_WIDTH-1:0] alu_result,
+        output logic [OPERAND_WIDTH-1:0] write_data
 );
 
 logic [OPERAND_WIDTH-1:0] operand_A;
@@ -49,18 +50,23 @@ always_comb begin : select_operands
                         operand_A <= from_mem;
                 MEM_WB:
                         operand_A <= from_wb;
-                default: 
         endcase
 
+        // Intermediate value of operand_B, which is also write_data
         case (ctrl_forward_right_operand)
                 NONE:
-                        operand_B <= (ctrl_alu_src == 0) ? rs2_data : 32'(signed'(imm));
+                        operand_B = rs2_data;
                 EX_MEM:
-                        operand_B <= from_mem;
+                        operand_B = from_mem;
                 MEM_WB:
-                        operand_B <= from_wb;
-                default: 
+                        operand_B = from_wb;
         endcase
+
+        write_data <= operand_B;
+
+        // Final operand_B
+        if (ctrl_alu_src == 1)
+                operand_B <= 32'(signed'(imm));
 end
         
 endmodule

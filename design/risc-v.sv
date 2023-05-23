@@ -15,17 +15,16 @@ module risc_v #(
 
 logic [31:0] if_instruction;
 logic [20:0] if_imm; // Defined later
-logic if_ctrl_branch_taken, if_ctrl_jump_taken;  // Defined later
+logic if_ctrl_branch_taken;  // Defined later
 
 instruction_fetch if_stage(
         // Input
         .clk(clk),
         .rst(rst),
-        .is_compressed(1'b0),
-        .stall(1'b0),
+        .is_compressed('0),
+        .stall('0),
         .imm(if_imm),
         .ctrl_branch_taken(if_ctrl_branch_taken),
-        .ctrl_jump_taken(if_ctrl_jump_taken),
 
         // Output
         .instruction(if_instruction)
@@ -93,7 +92,7 @@ register_file register_file(
         .read2_data(id_rs2_data)
 );
 
-logic id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem_to_reg, id_ctrl_reg_wr_en, id_ctrl_alu_src;
+logic id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
 
 
@@ -106,17 +105,14 @@ control_unit ctrl_unit(
         .rs2_data(id_rs2_data),
 
         .ctrl_mem_write(id_ctrl_mem_write),
-        .ctrl_mem_read(id_ctrl_mem_read),
-        .ctrl_mem_to_reg(id_ctrl_mem_to_reg),
-        .ctrl_reg_wr_en(id_ctrl_reg_wr_en),
+        .ctrl_mem2reg(id_ctrl_mem2reg),
+        .ctrl_reg_write(id_ctrl_reg_write),
 
         .ctrl_alu_src(id_ctrl_alu_src),
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
 
-        .ctrl_is_branch(),
-        .ctrl_is_jump()
-
+        .ctrl_is_branch()
 );
 
 // Connection to IF stage
@@ -134,7 +130,7 @@ logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
-logic id_ex_ctrl_mem_write, id_ex_ctrl_mem_read, id_ex_ctrl_mem_to_reg, id_ex_ctrl_reg_wr_en, id_ex_ctrl_alu_src;
+logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src;
 
 id_ex id_ex_reg(
         .clk(clk),
@@ -147,16 +143,15 @@ id_ex id_ex_reg(
         .i_rs2_data(id_rs2_data),
         .i_imm(id_imm),
 
-        .i_opcode(id_ex_opcode),
+        .i_opcode(instruction_format_type'(id_opcode)),
         .i_funct3(id_funct3),
         .i_funct7(id_funct7),
         .i_rd_sel(id_rd),
 
         //Controls
         .i_ctrl_mem_write(id_ctrl_mem_write),
-        .i_ctrl_mem_read(id_ctrl_mem_read),
-        .i_ctrl_mem_to_reg(id_ctrl_mem_to_reg),
-        .i_ctrl_reg_wr_en(id_ctrl_reg_wr_en),
+        .i_ctrl_mem2reg(id_ctrl_mem2reg),
+        .i_ctrl_reg_write(id_ctrl_reg_write),
         .i_ctrl_alu_src(id_ctrl_alu_src),
 
         // OUT SIGNALS
@@ -173,9 +168,8 @@ id_ex id_ex_reg(
 
         //Controls
         .o_ctrl_mem_write(id_ex_ctrl_mem_write),
-        .o_ctrl_mem_read(id_ex_ctrl_mem_read),
-        .o_ctrl_mem_to_reg(id_ex_ctrl_mem_to_reg),
-        .o_ctrl_reg_wr_en(id_ex_ctrl_reg_wr_en),
+        .o_ctrl_mem2reg(id_ex_ctrl_mem2reg),
+        .o_ctrl_reg_write(id_ex_ctrl_reg_write),
         .o_ctrl_alu_src(id_ex_ctrl_alu_src)
 );
 
@@ -185,6 +179,7 @@ id_ex id_ex_reg(
 
 logic [OPERAND_WIDTH-1:0] ex_alu_result;
 logic [OPERAND_WIDTH-1:0] ex_from_mem, ex_from_wb;  // defined later
+logic [OPERAND_WIDTH-1:0] ex_write_data;
 forwarding_type ex_ctrl_forward_left_operand = NONE, ex_ctrl_forward_right_operand = NONE; // defined later
 
 execute ex_stage(
@@ -203,18 +198,19 @@ execute ex_stage(
         // Controls
         .ctrl_alu_src(id_ex_ctrl_alu_src),
         .ctrl_forward_left_operand(ex_ctrl_forward_left_operand),
-        .ctrl_forward_right_operand(ex_ctrl_forward_right_operand)
+        .ctrl_forward_right_operand(ex_ctrl_forward_right_operand),
 
-        .alu_result(ex_alu_result)
+        .alu_result(ex_alu_result),
+        .write_data(ex_write_data)
 );
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END EX STAGE ///////////////////////
 ////////////////////////////////////////////////////////////
 
-logic [OPERAND_WIDTH-1:0] ex_mem_alu_result, ex_mem_rs2_data;
+logic [OPERAND_WIDTH-1:0] ex_mem_alu_result, ex_mem_write_data;
 logic [4:0] ex_mem_rd_sel;
-logic ex_mem_ctrl_mem_write, ex_mem_ctrl_mem_read, ex_mem_ctrl_mem_to_reg, ex_mem_ctrl_reg_wr_en;
+logic ex_mem_ctrl_mem_write, ex_mem_ctrl_mem2reg, ex_mem_ctrl_reg_write;
 
 ex_mem ex_mem_reg(
         .clk(clk),
@@ -222,25 +218,23 @@ ex_mem ex_mem_reg(
 
         // Input
         .i_alu_result(ex_alu_result),
-        .i_rs2_data(id_ex_rs2_data),
+        .i_write_data(ex_write_data),
         .i_rd_sel(id_ex_rd_sel),
 
         // Control
         .i_ctrl_mem_write(id_ex_ctrl_mem_write),
-        .i_ctrl_mem_read(id_ex_ctrl_mem_read),
-        .i_ctrl_mem_to_reg(id_ex_ctrl_mem_to_reg),
-        .i_ctrl_reg_wr_en(id_ex_ctrl_reg_wr_en),
+        .i_ctrl_mem2reg(id_ex_ctrl_mem2reg),
+        .i_ctrl_reg_write(id_ex_ctrl_reg_write),
 
         // Output
         .o_alu_result(ex_mem_alu_result),
-        .o_rs2_data(ex_mem_rs2_data),
+        .o_write_data(ex_mem_write_data),
         .o_rd_sel(ex_mem_rd_sel),
 
         // Control
         .o_ctrl_mem_write(ex_mem_ctrl_mem_write),
-        .o_ctrl_mem_read(ex_mem_ctrl_mem_read),
-        .o_ctrl_mem_to_reg(ex_mem_ctrl_mem_to_reg),
-        .o_ctrl_reg_wr_en(ex_mem_ctrl_reg_wr_en)
+        .o_ctrl_mem2reg(ex_mem_ctrl_mem2reg),
+        .o_ctrl_reg_write(ex_mem_ctrl_reg_write)
 );
 
 ////////////////////////////////////////////////////////////
@@ -254,25 +248,14 @@ memory mem_stage(
         // Input
         .clk(clk),
         .alu_result(ex_mem_alu_result),
-        .rs2_data(ex_mem_rs2_data),
+        .write_data(ex_mem_write_data),
 
         // Control
-        .ctrl_mem_read(ex_mem_ctrl_mem_read),
-        .ctrl_mem_write(ex_mem_ctrl_mem_write),     // ? 
-        // .ctrl_mem_to_reg(ex_mem_ctrl_mem_to_reg),  // ?
-
+        .ctrl_mem_write(ex_mem_ctrl_mem_write),
 
         // Output
         .mem_data(mem_mem_data)
 );
-
-// Forwarding
-if (ex_mem_rd_sel == id_ex_rs1)
-        assigm ex_ctrl_forward_left_operand = EX_MEM;
-else if (ex_mem_rd_sel == id_ex_rs2)
-        assigm ex_ctrl_forward_right_operand = EX_MEM;
-
-assign ex_from_mem = mem_mem_data;
 
 ////////////////////////////////////////////////////////////
 ////////////////////// END MEM STAGE ///////////////////////
@@ -280,7 +263,7 @@ assign ex_from_mem = mem_mem_data;
 
 logic [31:0] mem_wb_alu_result, mem_wb_mem_data;
 logic [4:0] mem_wb_rd_sel;
-logic mem_wb_ctrl_mem_to_reg, mem_wb_ctrl_reg_wr_en;
+logic mem_wb_ctrl_mem2reg, mem_wb_ctrl_reg_write;
 
 mem_wb mem_wb_reg(
         .clk(clk),
@@ -292,8 +275,8 @@ mem_wb mem_wb_reg(
         .i_rd_sel(ex_mem_rd_sel),
 
         // Controls
-        .i_ctrl_mem_to_reg(ex_mem_ctrl_mem_to_reg),
-        .i_ctrl_reg_wr_en(ex_mem_ctrl_reg_wr_en),
+        .i_ctrl_mem2reg(ex_mem_ctrl_mem2reg),
+        .i_ctrl_reg_write(ex_mem_ctrl_reg_write),
 
         // OUT SIGNALS
         .o_alu_result(mem_wb_alu_result),
@@ -301,8 +284,8 @@ mem_wb mem_wb_reg(
         .o_rd_sel(mem_wb_rd_sel),
 
         // Controls
-        .o_ctrl_mem_to_reg(mem_wb_ctrl_mem_to_reg),
-        .o_ctrl_reg_wr_en(mem_wb_ctrl_reg_wr_en)
+        .o_ctrl_mem2reg(mem_wb_ctrl_mem2reg),
+        .o_ctrl_reg_write(mem_wb_ctrl_reg_write)
 );
 
 ////////////////////////////////////////////////////////////
@@ -313,22 +296,44 @@ write_back wb_stage(
         .alu_result(mem_wb_alu_result),
         .i_mem_data(mem_wb_mem_data),
 
-        .ctrl_reg_write(mem_wb_ctrl_reg_wr_en),
-        .ctrl_mem_reg(mem_wb_ctrl_mem_to_reg),
+        .ctrl_reg_write(mem_wb_ctrl_reg_write),
+        .ctrl_mem2reg(mem_wb_ctrl_mem2reg),
 
         .o_wb_data(id_register_file_wr_data)
 );
 
-assign id_register_file_wr_en = mem_wb_ctrl_reg_wr_en;
+assign id_register_file_wr_en = mem_wb_ctrl_reg_write;
 assign id_register_file_wr_id = mem_wb_rd_sel;
 
-// Forwarding
-if (mem_wb_rd_sel == id_ex_rs1)
-        assigm ex_ctrl_forward_left_operand = MEM_WB;
-else if (mem_wb_rd_sel == id_ex_rs2)
-        assigm ex_ctrl_forward_right_operand = MEM_WB;
+always_comb begin : forwarding
 
-assign ex_from_wb = id_register_file_wr_data;
+        ex_ctrl_forward_left_operand = NONE;
+        ex_ctrl_forward_right_operand = NONE;
+
+        // Forwarding from MEM
+        if (ex_mem_ctrl_reg_write)
+        begin
+                if (ex_mem_rd_sel == id_ex_rs1)
+                        ex_ctrl_forward_left_operand = EX_MEM;
+                
+                if (ex_mem_rd_sel == id_ex_rs2)
+                        ex_ctrl_forward_right_operand = EX_MEM;
+        end
+
+        ex_from_mem = (ex_mem_ctrl_mem2reg) ? mem_mem_data : ex_mem_alu_result;
+
+        // Forwarding from WB
+        if (mem_wb_ctrl_reg_write)
+        begin
+                if (mem_wb_rd_sel == id_ex_rs1)
+                        ex_ctrl_forward_left_operand = MEM_WB;
+                
+                if (mem_wb_rd_sel == id_ex_rs2)
+                        ex_ctrl_forward_right_operand = MEM_WB;
+        end
+
+        ex_from_wb = id_register_file_wr_data;
+end
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END WB STAGE ///////////////////////

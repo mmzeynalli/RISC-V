@@ -51,7 +51,7 @@ initial begin
         begin
                 assert (expected_register_file[i] == dut.register_file.registers[i])
                 else
-                        $display("Register %d: %b != %b", i, expected_register_file[i], dut.register_file.registers[i]);
+                        $display("Register %d: Expected %b, got %b", i, expected_register_file[i], dut.register_file.registers[i]);
         end
 
         $readmemb("expected_memory.txt", expected_memory);
@@ -60,7 +60,7 @@ initial begin
         begin
                 assert (expected_memory[i] == dut.mem_stage.data_memory.ram[i])
                 else
-                        $display("Memory %d: %b != %b", i, expected_memory[i], dut.mem_stage.data_memory.ram[i]);
+                        $display("Memory %d: Expected %b, got %b", i, expected_memory[i], dut.mem_stage.data_memory.ram[i]);
         end
 
         $finish;
