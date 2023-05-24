@@ -17,10 +17,6 @@ localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
 typedef logic [INSTR_MIN_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 ram_type ram;
 
-initial begin
-        $readmemb("instruction_mem.mem", ram);
-end
-
 // TODO: Fix address?
 always @(posedge clk) begin
         if (write_en)

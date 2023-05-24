@@ -31,11 +31,45 @@ initial begin
         #10 rst = ~RESET;
 end
 
+int fd;
+string line;
+int data32;
+int i;
+
 // Load instruction memory file
 initial begin
-        dut.if_stage.instruction_memory.ram = '{default: NOOP};  // nop
-        $readmemb("test_instructions.mem", dut.if_stage.instruction_memory.ram);
-        dut.if_stage.instruction_memory.ram[31] = 32'b00000000000000000000000001100011;
+
+        dut.if_stage.instruction_memory.ram = '{default: '0};  // nop
+
+        fd = $fopen("test_instructions.mem", "r");
+
+        if (fd == 0) begin
+                $display("Error opening instructions file.");
+                $finish;
+        end
+
+        i = 0;
+        while (!$feof(fd))
+        begin
+                if ($fscanf(fd, "%32b", data32) == 1)
+                begin
+                        dut.if_stage.instruction_memory.ram[i] = data32[15:0];
+                        dut.if_stage.instruction_memory.ram[i+1] = data32[31:16];
+                        i = i + 2;
+                end
+                else begin
+                        // Read a 16-character line
+                        $fscanf(fd, "%16b", dut.if_stage.instruction_memory.ram[i]);
+                        i = i + 1;
+                end
+        end
+
+        // Loop
+        for (i = i; i < 62; i = i + 2)
+                dut.if_stage.instruction_memory.ram[i] = 16'(NOOP);
+
+        dut.if_stage.instruction_memory.ram[63] = 16'b0;
+        dut.if_stage.instruction_memory.ram[62] = 16'h63;
 end
 
 logic [31:0] expected_register_file [31:0];
