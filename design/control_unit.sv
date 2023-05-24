@@ -70,8 +70,6 @@ always_comb begin : generate_signals
                 begin
                         ctrl_branch_taken <= 1;
                 end
-                default:
-                        $error("Unknown optype!");
         endcase
 end
 

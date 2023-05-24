@@ -57,7 +57,7 @@ logic [IMM_WIDTH-1:0] id_imm;
 
 instruction_decode id_stage(
         // Input
-        .instruction(if_id_instruction),
+        .mem_instruction(if_id_instruction),
 
         // Output
         .opcode(id_opcode),

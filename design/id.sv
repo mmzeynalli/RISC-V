@@ -1,6 +1,6 @@
 import common::*;
 
-module decompose (
+module instruction_decode (
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
         output logic [6:0] opcode,
         output instruction_op_type optype,
@@ -49,7 +49,7 @@ always_comb begin : get_optype
                 SYSTEM:
                         optype = SYS_TYPE;
                 default:
-                        $error("Unknown opcode!");
+                        optype = R_TYPE;
         endcase
 
 end
@@ -64,7 +64,7 @@ function generate_imm();
                 U_TYPE: return 21'({instruction[31:12]});
                 J_TYPE: return 21'(signed'({instruction[31], instruction[19:12], instruction[30:21], 1'b0}));
                 default: 
-                        $error("Unknown format!");
+                        return 21'b0;
         endcase
 
 endfunction
