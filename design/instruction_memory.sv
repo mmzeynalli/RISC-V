@@ -14,8 +14,14 @@ module instruction_memory #(
 );
 
 localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
-typedef logic [INSTR_MIN_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
-ram_type ram;
+typedef logic [INSTR_MIN_WIDTH-1:0] ram_type;
+ram_type [MEMORY_DEPTH-1:0] ram;
+//typedef logic [INSTR_MIN_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
+//ram_type ram;
+
+//localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
+//reg [INSTR_MIN_WIDTH-1:0] ram [MEMORY_DEPTH-1:0];
+
 
 // TODO: Fix address?
 always @(posedge clk) begin
