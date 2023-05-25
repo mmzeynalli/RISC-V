@@ -3,7 +3,8 @@ import common::*;
 
 module instruction_memory #(
         int ADDRESS_WIDTH = 6,
-        int DATA_WIDTH = 32
+        int DATA_WIDTH = 32,
+        int INSTR_MIN_WIDTH = 16
 ) (
         input clk,
         input write_en,
@@ -13,21 +14,17 @@ module instruction_memory #(
 );
 
 localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
-typedef logic [DATA_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
+typedef logic [INSTR_MIN_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 ram_type ram;
-
-initial begin
-        $readmemb("instruction_mem.mem", ram);
-end
 
 // TODO: Fix address?
 always @(posedge clk) begin
         if (write_en)
-                ram[address >> 2] = write_data;           
+                ram[address >> 1] = write_data;           
 end
 
 always_comb begin : ram_read
-        read_data = ram[address >> 2];
+        read_data = {ram[(address >> 1) + 1], ram[address >> 1]};
 end
 
 endmodule

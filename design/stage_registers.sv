@@ -38,7 +38,7 @@ module id_ex (
     input [4:0] i_rs2,
     input [4:0] i_rd_sel,
 
-    //Controls
+    // Controls
     input i_ctrl_mem_write,
     input i_ctrl_mem2reg,
     input i_ctrl_reg_write,

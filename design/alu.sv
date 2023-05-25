@@ -32,7 +32,7 @@ always_comb begin : calculate
                 SLTU:  alu_result = (unsigned'(A) < unsigned'(B)) ? 32'h1 : 32'h0;
                 SRA :  alu_result = A >>> B;
                 default: 
-                        $error("No such operation!!, %d\n", operation);
+                        alu_result = 0;
         endcase
 end
 

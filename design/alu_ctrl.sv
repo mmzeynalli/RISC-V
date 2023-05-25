@@ -10,7 +10,6 @@ module alu_ctrl import common::*; (
 always_comb begin : get_alu_op
 
         op <= ADD;
-        $display(opcode);
 
         if (opcode == OP || opcode == OP_IMM)
                 case (funct3)
@@ -25,14 +24,10 @@ always_comb begin : get_alu_op
                         end
                         3'b000:
                         begin
-                                $display("here!");
                                 op <= ADD;
 
                                 if (funct7 == 7'b010_0000)
-                                begin
-                                        $display("SUB!!");    
                                         op <= SUB;
-                                end
                         end
                         3'b100:
                                 op <= XOR;

@@ -43,19 +43,19 @@ ALU alu(
 
 always_comb begin : select_operands
 
+        operand_A = rs1_data;
+
         case (ctrl_forward_left_operand)
-                NONE:
-                        operand_A <= rs1_data;
                 EX_MEM:
                         operand_A <= from_mem;
                 MEM_WB:
                         operand_A <= from_wb;
         endcase
 
+        operand_B = rs2_data;
+        
         // Intermediate value of operand_B, which is also write_data
         case (ctrl_forward_right_operand)
-                NONE:
-                        operand_B = rs2_data;
                 EX_MEM:
                         operand_B = from_mem;
                 MEM_WB:
