@@ -58,7 +58,7 @@ initial begin
 
                 if (data32[1:0] == 2'b11)
                 begin
-                        dut.if_stage.instruction_memory.ram[i+1] = data32[31:16];
+                        dut.if_stage.instruction_memory.ram[i] = data32[31:16];
                         i = i + 1;
                 end
         end

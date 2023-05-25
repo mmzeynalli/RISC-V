@@ -32,9 +32,9 @@ end
 
 always_comb begin : next_pc_selection
         pc_next = pc + 4;
-        instruction = instr;        
+        instruction = instr;
 
-        if (is_compressed) // is compressed (16-bit) instruction
+        if (instr[1:0] != 'b11) // is compressed (16-bit) instruction
                 pc_next = pc + 2;
         
         if (ctrl_branch_taken) // conditional branch

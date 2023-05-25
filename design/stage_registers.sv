@@ -11,7 +11,7 @@ module if_id (
 always_ff @(posedge clk) begin
     if (rst == RESET)
     begin
-        o_instruction <= '0;
+        o_instruction <= NOOP;
     end
     else
     begin
