@@ -35,6 +35,7 @@ int fd;
 string line;
 int data32;
 int i;
+int tmp;
 
 // Load instruction memory file
 initial begin
@@ -49,17 +50,15 @@ initial begin
         end
 
         i = 0;
-        while (!$feof(fd))
+        while (!$feof(fd) && $fscanf(fd, "%32b", data32) == 1)
         begin
-                if ($fscanf(fd, "%32b", data32) == 1)
+                $display("Scanned data = %X", data32);
+                dut.if_stage.instruction_memory.ram[i] = data32[15:0];
+                i = i + 1;
+
+                if (data32[1:0] == 2'b11)
                 begin
-                        dut.if_stage.instruction_memory.ram[i] = data32[15:0];
                         dut.if_stage.instruction_memory.ram[i+1] = data32[31:16];
-                        i = i + 2;
-                end
-                else begin
-                        // Read a 16-character line
-                        $fscanf(fd, "%16b", dut.if_stage.instruction_memory.ram[i]);
                         i = i + 1;
                 end
         end
@@ -101,6 +100,3 @@ initial begin
 end
 
 endmodule
-
-
-
