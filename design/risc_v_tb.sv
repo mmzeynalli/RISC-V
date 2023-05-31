@@ -19,7 +19,8 @@ risc_v #(
         .REGISTER_FILE_ADDRESS_WIDTH(REGISTER_FILE_ADDRESS_WIDTH)
 ) dut (
         .clk(clk),
-        .rst(rst)
+        .rst(rst),
+        .rx('0)
 );
 
 // Generate clock
@@ -40,7 +41,7 @@ int tmp;
 // Load instruction memory file
 initial begin
 
-        dut.if_stage.instruction_memory.ram = '{default: '0};  // nop
+        dut.instruction_memory.ram = '{default: '0};  // nop
 
         fd = $fopen("test_instructions.mem", "r");
 
@@ -52,23 +53,22 @@ initial begin
         i = 0;
         while (!$feof(fd) && $fscanf(fd, "%32b", data32) == 1)
         begin
-                $display("Scanned data = %X", data32);
-                dut.if_stage.instruction_memory.ram[i] = data32[15:0];
+                dut.instruction_memory.ram[i] = data32[15:0];
                 i = i + 1;
 
                 if (data32[1:0] == 2'b11)
                 begin
-                        dut.if_stage.instruction_memory.ram[i] = data32[31:16];
+                        dut.instruction_memory.ram[i] = data32[31:16];
                         i = i + 1;
                 end
         end
 
         // Loop
         for (i = i; i < 62; i = i + 2)
-                dut.if_stage.instruction_memory.ram[i] = 16'(NOOP);
+                dut.instruction_memory.ram[i] = 16'(NOOP);
 
-        dut.if_stage.instruction_memory.ram[63] = 16'b0;
-        dut.if_stage.instruction_memory.ram[62] = 16'h63;
+        dut.instruction_memory.ram[63] = 16'b0;
+        dut.instruction_memory.ram[62] = INF_LOOP;
 end
 
 logic [31:0] expected_register_file [31:0];

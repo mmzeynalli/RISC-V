@@ -6,28 +6,68 @@ module risc_v #(
         int REGISTER_FILE_ADDRESS_WIDTH = 5
 ) (
         input clk,
-        input rst
+        input rst,
+        input rx
 );
+
+////////////////////////////////////////////////////////////
+/////////////////////////// UART ///////////////////////////
+////////////////////////////////////////////////////////////
+
+logic [SHORT_INSTRUCTION_WIDTH-1:0] uart_command;
+logic uart_valid_data;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] cmd_write_address;
+
+uart2ram uart2ram(
+        .clk(clk),
+        .rst(rst),
+        .rx(rx),
+        .data(uart_command),
+        .write_address(cmd_write_address),
+        .is_valid_data(uart_valid_data)
+);
+
 
 ////////////////////////////////////////////////////////////
 ///////////////////////// IF STAGE /////////////////////////
 ////////////////////////////////////////////////////////////
 
-logic [31:0] if_instruction;
-logic [20:0] if_imm; // Defined later
+logic [INSTRUCTION_WIDTH-1:0] if_instruction;
+logic [IMM_WIDTH-1:0] if_imm; // Defined later
 logic if_ctrl_branch_taken;  // Defined later
+logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
+logic [INSTRUCTION_WIDTH-1:0] if_mem_instr;
 
 instruction_fetch if_stage(
         // Input
         .clk(clk),
         .rst(rst),
-        .is_compressed('0),
+
+        .mem_instruction(if_mem_instr),
         .stall('0),
         .imm(if_imm),
         .ctrl_branch_taken(if_ctrl_branch_taken),
 
         // Output
+        .o_pc(if_pc),
         .instruction(if_instruction)
+);
+
+logic [PROGRAM_ADDRESS_WIDTH-1:0] im_address;
+
+always_comb begin : get_im_address
+        if (uart_valid_data)
+                im_address = cmd_write_address;
+        else
+                im_address = if_pc;
+end
+
+instruction_memory instruction_memory(
+        .clk(clk),
+        .write_en(uart_valid_data),
+        .write_data(uart_command),
+        .address(im_address),
+        .read_data(if_mem_instr)
 );
 
 ////////////////////////////////////////////////////////////

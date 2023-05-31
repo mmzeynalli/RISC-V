@@ -8,14 +8,14 @@ module instruction_memory #(
 ) (
         input clk,
         input write_en,
-        input [DATA_WIDTH-1:0] write_data,
+        input [SHORT_INSTRUCTION_WIDTH-1:0] write_data,
         input [PROGRAM_ADDRESS_WIDTH-1:0] address,
         output logic [DATA_WIDTH-1:0] read_data
 );
 
 localparam int MEMORY_DEPTH = 1 << ADDRESS_WIDTH;
 typedef logic [INSTR_MIN_WIDTH-1:0] ram_type;
-ram_type [MEMORY_DEPTH-1:0] ram;
+ram_type ram [MEMORY_DEPTH-1:0];
 //typedef logic [INSTR_MIN_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 //ram_type ram;
 
