@@ -2,14 +2,15 @@ import common::*;
 
 module instruction_fetch import common::*;
 (
-        input clk,  
-        input rst,  
+        input clk,
+        input rst,
+
+        input [INSTRUCTION_WIDTH-1:0] mem_instruction,
         input stall,
         input [IMM_WIDTH-1:0] imm,
         input ctrl_branch_taken,
-        input is_compressed,
 
-        // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 
+        output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 
         // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_4, 
         output  logic [INSTRUCTION_WIDTH-1:0] instruction
 );
@@ -31,10 +32,11 @@ always @(posedge clk) begin
 end
 
 always_comb begin : next_pc_selection
+        o_pc <= pc;
         pc_next = pc + 4;
-        instruction = instr;        
+        instruction = mem_instruction;
 
-        if (is_compressed) // is compressed (16-bit) instruction
+        if (mem_instruction[1:0] != 2'b11) // is compressed (16-bit) instruction
                 pc_next = pc + 2;
         
         if (ctrl_branch_taken) // conditional branch
@@ -49,16 +51,5 @@ always_comb begin : next_pc_selection
         end
 
 end
-
-instruction_memory instruction_memory(
-        .clk(clk),
-        .write_en(1'b0),
-        .write_data(32'b0),
-        .address(pc),
-        .read_data(instr)
-);
-
-
-
 
 endmodule
