@@ -8,8 +8,13 @@ localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;
 localparam int    PROGRAM_ADDRESS_WIDTH   = 8;  // 6 + 2
 
-localparam [INSTRUCTION_WIDTH-1:0] NOOP                 = 'h13;
-localparam [SHORT_INSTRUCTION_WIDTH-1:0] INF_LOOP       = 'h63;
+parameter BAUD = 115200;
+localparam FREQUENCY_IN_HZ = 100_000_000;
+localparam BAUD_COUNT_CHECK = FREQUENCY_IN_HZ / BAUD;
+localparam NUM_DATA_BITS = 8;  
+
+localparam [INSTRUCTION_WIDTH-1:0] NOOP         = 'h13;
+localparam [INSTRUCTION_WIDTH-1:0] INF_LOOP     = 'h63;
 
 typedef enum bit[3:0] 
 { SLL, SRL, SRA, ADD, SUB, LUI, XOR, OR, AND, SLT, SLTU, LW, SW} alu_operation_type;

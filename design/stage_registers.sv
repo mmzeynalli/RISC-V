@@ -5,17 +5,22 @@ module if_id (
     input rst,
 
     input [INSTRUCTION_WIDTH-1:0] i_instruction,
-    output logic [INSTRUCTION_WIDTH-1:0] o_instruction
+    output logic [INSTRUCTION_WIDTH-1:0] o_instruction,
+    output logic is_end_of_program
 );
 
 always_ff @(posedge clk) begin
     if (rst == RESET)
     begin
         o_instruction <= NOOP;
+        is_end_of_program <= 0;
     end
     else
     begin
-        o_instruction <= i_instruction;
+        o_instruction = i_instruction;
+
+        if (o_instruction == INF_LOOP)
+            is_end_of_program = 1;
     end
 end
     

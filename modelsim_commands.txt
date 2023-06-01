@@ -8,8 +8,8 @@ add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc_next
 add wave -unsigned -position end sim:/risc_v_tb/dut/if_stage/pc
 
 add wave -divider IF-ID
-add wave -position end  sim:/risc_v_tb/dut/if_id_reg/i_instruction
-add wave -position end  sim:/risc_v_tb/dut/if_id_reg/o_instruction
+add wave -hexadecimal -position end  sim:/risc_v_tb/dut/if_id_reg/i_instruction
+add wave -hexadecimal -position end  sim:/risc_v_tb/dut/if_id_reg/o_instruction
 
 add wave -divider ID
 add wave -position end  sim:/risc_v_tb/dut/id_stage/opcode
@@ -61,3 +61,11 @@ add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/registers
+
+add wave -divider UART
+add wave -position end  sim:/risc_v_tb/dut/id_is_end_of_program
+add wave -position end  sim:/risc_v_tb/dut/tx_byte
+add wave -position end  sim:/risc_v_tb/dut/tx_done
+add wave -position end  sim:/risc_v_tb/dut/uart_tx/tx_uart_state
+add wave -position end  sim:/risc_v_tb/dut/uart_tx/cycle_count
+add wave -position end  sim:/risc_v_tb/dut/i

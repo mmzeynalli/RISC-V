@@ -27,6 +27,11 @@ uart2ram uart2ram(
         .is_valid_data(uart_valid_data)
 );
 
+initial begin
+        // Add infinite loop as a last instruction
+        instruction_memory.ram[cmd_write_address] = INF_LOOP;
+        instruction_memory.ram[cmd_write_address + 1] = '0;
+end
 
 ////////////////////////////////////////////////////////////
 ///////////////////////// IF STAGE /////////////////////////
@@ -57,7 +62,7 @@ logic [PROGRAM_ADDRESS_WIDTH-1:0] im_address;
 
 always_comb begin : get_im_address
         if (uart_valid_data)
-                im_address = cmd_write_address;
+                im_address = cmd_write_address << 1;
         else
                 im_address = if_pc;
 end
@@ -75,12 +80,14 @@ instruction_memory instruction_memory(
 ////////////////////////////////////////////////////////////
 
 logic [INSTRUCTION_WIDTH-1:0] if_id_instruction;
+logic id_is_end_of_program;
 
 if_id if_id_reg(
         .clk(clk),
         .rst(rst),
         .i_instruction(if_instruction),
-        .o_instruction(if_id_instruction)
+        .o_instruction(if_id_instruction),
+        .is_end_of_program(id_is_end_of_program)
 );
 
 
@@ -378,5 +385,104 @@ end
 ////////////////////////////////////////////////////////////
 /////////////////////// END WB STAGE ///////////////////////
 ////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////
+///////////////////////// RAM2UART /////////////////////////
+////////////////////////////////////////////////////////////
+
+logic tx_done;
+logic [7:0] tx_byte, tx_byte_next;
+
+const logic [7:0] NEWLINE [1:0] = {8'h0a, 8'h0d};
+const logic [7:0] REGS_STR [6:0] = {NEWLINE, 8'h3a, 8'h53,  8'h47, 8'h45, 8'h52};  // REGS:\n
+const logic [7:0] MEM_STR [5:0] = {NEWLINE, 8'h4d, 8'h3a, 8'h45, 8'h4d};  // MEM:\n
+
+int i, i_next;
+logic [5:0] ith_bit, ith_bit_next;
+
+always @(posedge clk) begin
+        if (rst == RESET)
+        begin
+                i <= 0;
+                ith_bit <= 0;
+                tx_byte <= 0;
+        end
+        else
+        begin
+                i = i_next;
+                ith_bit = ith_bit_next;
+                tx_byte = tx_byte_next;
+        end
+end
+
+always_comb begin : ram2uart
+        i_next = i;
+        tx_byte_next = tx_byte;
+        ith_bit_next = ith_bit;
+
+        if (id_is_end_of_program)
+        begin
+                if (tx_done)
+                begin
+                        if (i < 7)
+                        begin
+                                tx_byte_next = REGS_STR[i];
+                                i_next = i + 1;
+                        end
+                        else if (i < 39)
+                        begin
+                                ith_bit_next = ith_bit + 1;
+
+                                if (ith_bit < 32)
+                                begin
+                                        tx_byte_next = (register_file.registers[i - 7][ith_bit] == 0) ? 8'h30 : 8'h31;
+                                        $display("%d: Reg %d, Bit %d: %d", i - 7, ith_bit, register_file.registers[i - 7][ith_bit]);
+                                end
+                                else if (ith_bit == 32)
+                                        tx_byte_next = NEWLINE[0];
+                                else if (ith_bit == 33)
+                                begin
+                                        tx_byte_next = NEWLINE[1];
+                                        i_next = i + 1;
+                                        ith_bit_next = 0;
+                                end
+                        end
+                        else if (i < 45)
+                        begin
+                                tx_byte_next = MEM_STR[i];
+                                i_next = i + 1;
+                        end
+                        else if (i < 77)
+                        begin
+                                ith_bit_next = ith_bit + 1;
+
+                                if (ith_bit < 32)
+                                        tx_byte_next = (mem_stage.data_memory.ram[i - 45][ith_bit] == 0) ? 8'h30 : 8'h31;
+                                else if (ith_bit == 32)
+                                        tx_byte_next = NEWLINE[0];
+                                else if (ith_bit == 33)
+                                begin
+                                        tx_byte_next = NEWLINE[1];
+                                        i_next = i + 1;
+                                        ith_bit_next = 0;
+                                end
+                        end
+                        else
+                                tx_byte_next = 8'b0;
+                end
+
+
+        end
+end
+
+uart_tx uart_tx(
+        .clk(clk),
+        .rst(rst),
+        .tx_en(id_is_end_of_program),
+        .tx_byte(tx_byte),
+        .tx(tx),
+        .tx_done(tx_done)
+);
 
 endmodule

@@ -23,7 +23,6 @@ ram_type ram [MEMORY_DEPTH-1:0];
 //reg [INSTR_MIN_WIDTH-1:0] ram [MEMORY_DEPTH-1:0];
 
 
-// TODO: Fix address?
 always @(posedge clk) begin
         if (write_en)
                 ram[address >> 1] = write_data;           

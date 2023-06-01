@@ -27,7 +27,7 @@ always_comb begin : decompose
         funct3 <= instruction[14:12]; // optype != U_TYPE
         rs1 <= instruction[19:15]; // optype != U_TYPE
         rs2 <= instruction[24:20]; // optype != I_TYPE && optype != U_TYPE && optype != J_TYPE
-        funct7 <= instruction[31:25]; // optype == R_TYPE  
+        funct7 <= instruction[31:25]; // optype == R_TYPE
 end
 
 always_comb begin : get_optype
