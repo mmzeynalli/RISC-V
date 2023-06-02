@@ -41,8 +41,9 @@ always_comb begin : get_alu_op
                                 op <= SLTU;
                         default: 
                                 $error("No such operation!");
-
                 endcase
+        else if(opcode == U_LUI)
+                op <= LUI;
 end
 
 endmodule
