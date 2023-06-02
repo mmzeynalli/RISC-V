@@ -16,6 +16,7 @@ int cycle_count, cycle_count_next;
 int data_bit_count, data_bit_count_next;
 
 logic [7:0] data_next;
+logic is_data_rdy_next;
 
 
 always @(posedge clk)
@@ -34,6 +35,7 @@ begin
                 data = data_next;
                 cycle_count = cycle_count_next;
                 data_bit_count = data_bit_count_next;
+                is_data_rdy = is_data_rdy_next;                
         end
 end    
 
@@ -43,7 +45,7 @@ always @(*) begin
         cycle_count_next = cycle_count;
         data_next = data;
         data_bit_count_next = data_bit_count;
-        is_data_rdy = 0;
+        is_data_rdy_next = is_data_rdy;                
     
         case (rx_uart_state)
         
@@ -77,7 +79,7 @@ always @(*) begin
                 if (data_bit_count == 7)
                 begin
                         rx_uart_state_next = rx_wait_full_last_bit;
-                        is_data_rdy = 1;
+                        is_data_rdy_next = 1;
                 end
                 else
                         rx_uart_state_next = rx_wait_full_data_bit;
@@ -85,7 +87,7 @@ always @(*) begin
 
         rx_wait_full_last_bit:
         begin
-                is_data_rdy  = 0;
+                is_data_rdy_next  = 0;
                 cycle_count_next = cycle_count + 1;
                 if (cycle_count == BAUD_COUNT_CHECK) begin
                         rx_uart_state_next = rx_standby;

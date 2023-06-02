@@ -7,7 +7,8 @@ module risc_v #(
 ) (
         input clk,
         input rst,
-        input rx
+        input rx,
+        output tx
 );
 
 ////////////////////////////////////////////////////////////
@@ -29,8 +30,8 @@ uart2ram uart2ram(
 
 initial begin
         // Add infinite loop as a last instruction
-        instruction_memory.ram[cmd_write_address] = INF_LOOP;
-        instruction_memory.ram[cmd_write_address + 1] = '0;
+//        instruction_memory.ram[cmd_write_address] = INF_LOOP;
+//        instruction_memory.ram[cmd_write_address + 1] = '0;
 end
 
 ////////////////////////////////////////////////////////////
@@ -395,8 +396,8 @@ logic tx_done;
 logic [7:0] tx_byte, tx_byte_next;
 
 const logic [7:0] NEWLINE [1:0] = {8'h0a, 8'h0d};
-const logic [7:0] REGS_STR [6:0] = {NEWLINE, 8'h3a, 8'h53,  8'h47, 8'h45, 8'h52};  // REGS:\n
-const logic [7:0] MEM_STR [5:0] = {NEWLINE, 8'h4d, 8'h3a, 8'h45, 8'h4d};  // MEM:\n
+const logic [7:0] REGS_STR [6:0] = {8'h0a, 8'h0d, 8'h3a, 8'h53,  8'h47, 8'h45, 8'h52};  // REGS:\n
+const logic [7:0] MEM_STR [5:0] = {8'h0a, 8'h0d, 8'h4d, 8'h3a, 8'h45, 8'h4d};  // MEM:\n
 
 int i, i_next;
 logic [5:0] ith_bit, ith_bit_next;
@@ -437,7 +438,7 @@ always_comb begin : ram2uart
                                 if (ith_bit < 32)
                                 begin
                                         tx_byte_next = (register_file.registers[i - 7][ith_bit] == 0) ? 8'h30 : 8'h31;
-                                        $display("%d: Reg %d, Bit %d: %d", i - 7, ith_bit, register_file.registers[i - 7][ith_bit]);
+                                        $display(": Reg %d, Bit %d: %d", i - 7, ith_bit, register_file.registers[i - 7][ith_bit]);
                                 end
                                 else if (ith_bit == 32)
                                         tx_byte_next = NEWLINE[0];
