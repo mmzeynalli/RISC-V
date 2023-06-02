@@ -63,8 +63,10 @@ always_comb begin : generate_signals
                                 ctrl_branch_taken <= 1;
                 end
                 U_TYPE:
-                        if (opcode == U_LUI) begin
-                                ctrl_mem2reg <= 1;
+                        if (opcode == U_LUI) 
+                        begin
+                                ctrl_reg_write <= 1;
+                                ctrl_alu_src <= 1;
                         end
                 J_TYPE:
                 begin
