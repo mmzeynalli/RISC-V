@@ -33,16 +33,16 @@ end
 
 always_comb begin : data_read
 
-        read1_data <= registers[read1_id];
-        read2_data <= registers[read2_id];
+        read1_data = registers[read1_id];
+        read2_data = registers[read2_id];
 
         if (write_en)
         begin
                 if (write_id == read1_id)
-                        read1_data <= write_data;
+                        read1_data = write_data;
                 
                 if (write_id == read2_id)
-                        read2_data <= write_data;
+                        read2_data = write_data;
         end
 
         

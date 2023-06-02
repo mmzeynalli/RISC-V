@@ -9,8 +9,8 @@ module compressed (
 
 always_comb begin : compressed_expand
 
-        is_compressed <= '1;
-        instruction <= mem_instruction;
+        is_compressed = '1;
+        instruction = mem_instruction;
         
         case(mem_instruction[1:0])
         2'b11:

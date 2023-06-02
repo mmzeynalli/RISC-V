@@ -11,8 +11,8 @@ set_property PACKAGE_PIN E3 [get_ports clk]
  
 ## Switches
 #Bank = 34, Pin name = IO_L21P_T3_DQS_34,					Sch name = SW0
-set_property PACKAGE_PIN U9 [get_ports rst]					
-	set_property IOSTANDARD LVCMOS33 [get_ports rst]
+# set_property PACKAGE_PIN U9 [get_ports {reset_n}]					
+# 	set_property IOSTANDARD LVCMOS33 [get_ports {reset_n}]
 #Bank = 34, Pin name = IO_25_34,							Sch name = SW1
 #set_property PACKAGE_PIN U8 [get_ports {input[1]}]					
 	#set_property IOSTANDARD LVCMOS33 [get_ports {input[1]}]
@@ -188,11 +188,11 @@ set_property PACKAGE_PIN U9 [get_ports rst]
 
 ##Buttons
 #Bank = 15, Pin name = IO_L3P_T0_DQS_AD1P_15,				Sch name = CPU_RESET
-set_property PACKAGE_PIN C12 [get_ports {reset_n}]				
-	set_property IOSTANDARD LVCMOS33 [get_ports {reset_n}]
+set_property PACKAGE_PIN C12 [get_ports rst]				
+	set_property IOSTANDARD LVCMOS33 [get_ports rst]
 #Bank = 15, Pin name = IO_L11N_T1_SRCC_15,					Sch name = BTNC
-set_property PACKAGE_PIN E16 [get_ports {b_Enter}]						
-	set_property IOSTANDARD LVCMOS33 [get_ports {b_Enter}]
+# set_property PACKAGE_PIN E16 [get_ports {b_Enter}]						
+# 	set_property IOSTANDARD LVCMOS33 [get_ports {b_Enter}]
 ##Bank = 15, Pin name = IO_L14P_T2_SRCC_15,					Sch name = BTNU
 #set_property PACKAGE_PIN F15 [get_ports b_Enter]						
 #	set_property IOSTANDARD LVCMOS33 [get_ports b_Enter]

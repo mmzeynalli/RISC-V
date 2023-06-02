@@ -47,9 +47,9 @@ always_comb begin : select_operands
 
         case (ctrl_forward_left_operand)
                 EX_MEM:
-                        operand_A <= from_mem;
+                        operand_A = from_mem;
                 MEM_WB:
-                        operand_A <= from_wb;
+                        operand_A = from_wb;
         endcase
 
         operand_B = rs2_data;
@@ -62,11 +62,11 @@ always_comb begin : select_operands
                         operand_B = from_wb;
         endcase
 
-        write_data <= operand_B;
+        write_data = operand_B;
 
         // Final operand_B
         if (ctrl_alu_src == 1)
-                operand_B <= 32'(signed'(imm));
+                operand_B = 32'(signed'(imm));
 end
         
 endmodule

@@ -8,7 +8,7 @@ localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;
 localparam int    PROGRAM_ADDRESS_WIDTH   = 8;  // 6 + 2
 
-parameter BAUD = 115200;
+parameter  BAUD = 115200;
 localparam FREQUENCY_IN_HZ = 100_000_000;
 localparam BAUD_COUNT_CHECK = FREQUENCY_IN_HZ / BAUD;
 localparam NUM_DATA_BITS = 8;  

@@ -15,7 +15,7 @@ uart_tx_state_type tx_uart_state, tx_uart_state_next;
 
 int cycle_count, cycle_count_next;
 int ii, ii_next;
-logic tx_done_next;
+logic tx_done_next, tx_next;
 
 
 always @(posedge clk)
@@ -26,6 +26,7 @@ begin
                 cycle_count = 0;
                 ii = 0;
                 tx_done = 1;
+                tx = 1;
         end 
         else
         begin
@@ -33,6 +34,7 @@ begin
                 cycle_count = cycle_count_next;
                 ii = ii_next;
                 tx_done = tx_done_next;
+                tx = tx_next;
         end
 end    
 
@@ -41,11 +43,13 @@ always_comb begin : transmit
         tx_uart_state_next = tx_uart_state;
         cycle_count_next = cycle_count;
         tx_done_next = tx_done;
+        tx_next = tx;
+        ii_next = ii;
 
         case (tx_uart_state)
                 tx_idle:
                 begin
-                        tx = 1;
+                        tx_next = 1;
                         cycle_count_next = '0;
 
                         if (tx_en)
@@ -56,7 +60,7 @@ always_comb begin : transmit
                 end
                 tx_start_bit:
                 begin
-                        tx = 0;
+                        tx_next = 0;
                         tx_uart_state_next = tx_wait_clk_cycle;
                 end
                 tx_wait_clk_cycle:
@@ -70,7 +74,7 @@ always_comb begin : transmit
                 end
                 tx_send_data_bits:
                 begin
-                        tx = tx_byte[ii];
+                        tx_next = tx_byte[ii];
                         ii_next = ii + 1;
                         tx_uart_state_next = tx_wait_clk_cycle;
 
@@ -82,7 +86,7 @@ always_comb begin : transmit
                 end
                 tx_stop_bit:
                 begin
-                        tx = 1;
+                        tx_next = 1;
 
                         cycle_count_next = cycle_count + 1; 
 

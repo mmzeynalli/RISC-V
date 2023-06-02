@@ -26,12 +26,12 @@ always_comb begin : generate_signals
         ctrl_gte_flag = (rs1_data >= rs2_data) ? 1 : 0;
         ctrl_gteu_flag = (unsigned'(rs1_data) >= unsigned'(rs2_data)) ? 1 : 0;
 
-        ctrl_mem_write <= '0;
-        ctrl_mem2reg <= '0;
-        ctrl_reg_write <= '0;
-        ctrl_is_branch <= '0;
-        ctrl_alu_src <= '0;
-        ctrl_branch_taken <= '0;
+        ctrl_mem_write = 0;
+        ctrl_mem2reg = 0;
+        ctrl_reg_write = 0;
+        ctrl_is_branch = 0;
+        ctrl_alu_src = 0;
+        ctrl_branch_taken = 0;
 
         case (optype)
                 R_TYPE:

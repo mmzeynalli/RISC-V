@@ -13,7 +13,7 @@ typedef enum {rx_standby, rx_wait_half_start_bit, rx_wait_full_data_bit, rx_capt
 uart_rx_state_type rx_uart_state, rx_uart_state_next;
 
 int cycle_count, cycle_count_next;
-int data_bit_count, data_bit_count_next;
+logic [2:0] data_bit_count, data_bit_count_next;
 
 logic [7:0] data_next;
 logic is_data_rdy_next;
@@ -35,17 +35,17 @@ begin
                 data = data_next;
                 cycle_count = cycle_count_next;
                 data_bit_count = data_bit_count_next;
-                is_data_rdy = is_data_rdy_next;                
+                is_data_rdy = is_data_rdy_next;
         end
 end    
 
 
-always @(*) begin
+always_comb begin : receive_byte
         rx_uart_state_next = rx_uart_state;
         cycle_count_next = cycle_count;
         data_next = data;
         data_bit_count_next = data_bit_count;
-        is_data_rdy_next = is_data_rdy;                
+        is_data_rdy_next = is_data_rdy;
     
         case (rx_uart_state)
         
@@ -87,7 +87,7 @@ always @(*) begin
 
         rx_wait_full_last_bit:
         begin
-                is_data_rdy_next  = 0;
+                is_data_rdy_next = 0;
                 cycle_count_next = cycle_count + 1;
                 if (cycle_count == BAUD_COUNT_CHECK) begin
                         rx_uart_state_next = rx_standby;
@@ -97,5 +97,11 @@ always @(*) begin
         end                             
         endcase
 end
+
+ila_1 ila_1 (
+    .clk(clk),
+    .probe0(is_data_rdy),
+    .probe1(data)
+);
     
 endmodule
