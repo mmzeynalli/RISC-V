@@ -2,6 +2,7 @@ import common::*;
 
 module instruction_decode (
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
+        input  logic [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
         output logic [6:0] opcode,
         output instruction_op_type optype,
         output logic [4:0] rd,
@@ -10,6 +11,7 @@ module instruction_decode (
         output logic [2:0] funct3,
         output logic [6:0] funct7,
         output logic [IMM_WIDTH-1:0] imm
+        output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
 );
 
 

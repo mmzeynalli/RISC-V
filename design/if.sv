@@ -9,6 +9,7 @@ module instruction_fetch import common::*;
         input stall,
         input [IMM_WIDTH-1:0] imm,
         input ctrl_branch_taken,
+        input ctrl_AUIPC_taken,
 
         output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 
         // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_4, 
@@ -43,6 +44,10 @@ always_comb begin : next_pc_selection
         begin
                 pc_next = pc - 4 + 32'(signed'(imm));
                 instruction = NOOP;
+        end
+        else if (ctrl_AUIPC_taken) // AUIPC
+        begin
+                pc_next = pc - 4 + (signed'({imm,12'b0}));
         end
         else if (stall) // Stall condition
         begin

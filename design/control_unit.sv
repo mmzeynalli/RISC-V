@@ -14,7 +14,9 @@ module control_unit import common::*; (
         output logic ctrl_alu_src,
 
         output logic ctrl_is_branch,
-        output logic ctrl_branch_taken
+        output logic ctrl_branch_taken,
+         output logic ctrl_AUIPC_taken
+
 );
 
 logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
@@ -32,6 +34,7 @@ always_comb begin : generate_signals
         ctrl_is_branch = 0;
         ctrl_alu_src = 0;
         ctrl_branch_taken = 0;
+        ctrl_AUIPC_taken = 0;
 
         case (optype)
                 R_TYPE:
@@ -67,6 +70,12 @@ always_comb begin : generate_signals
                         begin
                                 ctrl_reg_write <= 1;
                                 ctrl_alu_src <= 1;
+                        end
+                        else if(opcode == U_AUIPC)
+                        begin
+                                ctrl_AUIPC_taken <= 1;
+                                ctrl_alu_src <= 1;
+                                ctrl_reg_write <= 1;
                         end
                 J_TYPE:
                 begin
