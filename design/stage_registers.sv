@@ -4,7 +4,10 @@ module if_id (
     input clk,
     input rst,
 
+    input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
     input [INSTRUCTION_WIDTH-1:0] i_instruction,
+    
+    output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
     output logic [INSTRUCTION_WIDTH-1:0] o_instruction,
     output logic is_end_of_program
 );
@@ -14,10 +17,12 @@ always_ff @(posedge clk) begin
     begin
         o_instruction <= NOOP;
         is_end_of_program <= 0;
+        o_pc <= 0;
     end
     else
     begin
         o_instruction = i_instruction;
+        o_pc = i_pc;
 
         if (o_instruction == INF_LOOP)
             is_end_of_program = 1;
@@ -48,7 +53,11 @@ module id_ex (
     input i_ctrl_mem2reg,
     input i_ctrl_reg_write,
     input i_ctrl_alu_src,
+    input i_ctrl_AUIPC_taken,
 
+    //pc signals
+    input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
+    output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_rs1_data,
     output logic [OPERAND_WIDTH-1:0] o_rs2_data,
@@ -66,6 +75,7 @@ module id_ex (
     output logic o_ctrl_mem_write,
     output logic o_ctrl_mem2reg,
     output logic o_ctrl_reg_write,
+    output logic o_ctrl_AUIPC_taken,
     output logic o_ctrl_alu_src
 );
 
@@ -83,12 +93,17 @@ always_ff @(posedge clk) begin
         o_funct7 <= '0;
         
         o_rd_sel <= '0;
+        o_pc <= '0;
 
         // Controls
         o_ctrl_mem_write <= '0;
         o_ctrl_mem2reg <= '0;
         o_ctrl_reg_write <= '0;
         o_ctrl_alu_src <= '0;
+        o_ctrl_AUIPC_taken <= '0;
+
+
+
     end
     else
     begin
@@ -103,12 +118,14 @@ always_ff @(posedge clk) begin
         o_funct7 <= i_funct7;
         
         o_rd_sel <= i_rd_sel;
+        o_pc <= i_pc;
 
         // Controls
         o_ctrl_mem_write <= i_ctrl_mem_write;
         o_ctrl_mem2reg <= i_ctrl_mem2reg;
         o_ctrl_reg_write <= i_ctrl_reg_write;
         o_ctrl_alu_src <= i_ctrl_alu_src;
+        o_ctrl_AUIPC_taken <= i_ctrl_AUIPC_taken;
     end
 end
     

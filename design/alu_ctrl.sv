@@ -42,6 +42,7 @@ always_comb begin : get_alu_op
                         default: 
                                 $error("No such operation!");
                 endcase
+
         else if(opcode == U_LUI)
                 op <= LUI;
         else if(opcode == U_AUIPC)

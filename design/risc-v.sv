@@ -41,6 +41,7 @@ end
 logic [INSTRUCTION_WIDTH-1:0] if_instruction;
 logic [IMM_WIDTH-1:0] if_imm; // Defined later
 logic if_ctrl_branch_taken;  // Defined later
+logic if_ctrl_AUIPC_taken;  // Defined later
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
 logic [INSTRUCTION_WIDTH-1:0] if_mem_instr;
 
@@ -53,6 +54,7 @@ instruction_fetch if_stage(
         .stall('0),
         .imm(if_imm),
         .ctrl_branch_taken(if_ctrl_branch_taken),
+        .ctrl_AUIPC_taken(if_ctrl_AUIPC_taken),
 
         // Output
         .o_pc(if_pc),
@@ -81,11 +83,16 @@ instruction_memory instruction_memory(
 ////////////////////////////////////////////////////////////
 
 logic [INSTRUCTION_WIDTH-1:0] if_id_instruction;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] if_id_pc;
+
 logic id_is_end_of_program;
 
 if_id if_id_reg(
         .clk(clk),
         .rst(rst),
+
+        .i_pc(if_pc),
+        .o_pc(if_id_pc),
         .i_instruction(if_instruction),
         .o_instruction(if_id_instruction),
         .is_end_of_program(id_is_end_of_program)
@@ -142,6 +149,7 @@ register_file register_file(
 
 logic id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
+logic id_ctrl_AUIPC_taken;
 
 
 control_unit ctrl_unit(
@@ -159,12 +167,14 @@ control_unit ctrl_unit(
         .ctrl_alu_src(id_ctrl_alu_src),
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
+        .ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
 
         .ctrl_is_branch()
 );
 
 // Connection to IF stage
 assign if_ctrl_branch_taken = id_ctrl_branch_taken;
+assign if_ctrl_AUIPC_taken = id_ctrl_AUIPC_taken;
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END ID STAGE ///////////////////////
@@ -172,13 +182,15 @@ assign if_ctrl_branch_taken = id_ctrl_branch_taken;
 
 logic [OPERAND_WIDTH-1:0] id_ex_rs1_data, id_ex_rs2_data;
 logic [IMM_WIDTH-1:0] id_ex_imm;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] id_ex_pc;
+
 
 instruction_format_type id_ex_opcode;
 logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
-logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src;
+logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken;
 
 id_ex id_ex_reg(
         .clk(clk),
@@ -196,11 +208,16 @@ id_ex id_ex_reg(
         .i_funct7(id_funct7),
         .i_rd_sel(id_rd),
 
+        //pc signals
+        .i_pc(if_id_pc),
+        .o_pc(id_ex_pc),
+        
         //Controls
         .i_ctrl_mem_write(id_ctrl_mem_write),
         .i_ctrl_mem2reg(id_ctrl_mem2reg),
         .i_ctrl_reg_write(id_ctrl_reg_write),
         .i_ctrl_alu_src(id_ctrl_alu_src),
+        .i_ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
 
         // OUT SIGNALS
         .o_rs1(id_ex_rs1),
@@ -218,7 +235,8 @@ id_ex id_ex_reg(
         .o_ctrl_mem_write(id_ex_ctrl_mem_write),
         .o_ctrl_mem2reg(id_ex_ctrl_mem2reg),
         .o_ctrl_reg_write(id_ex_ctrl_reg_write),
-        .o_ctrl_alu_src(id_ex_ctrl_alu_src)
+        .o_ctrl_alu_src(id_ex_ctrl_alu_src),
+        .o_ctrl_AUIPC_taken(id_ex_ctrl_AUIPC_taken)
 );
 
 ////////////////////////////////////////////////////////////
@@ -245,6 +263,7 @@ execute ex_stage(
 
         // Controls
         .ctrl_alu_src(id_ex_ctrl_alu_src),
+        .ctrl_AUIPC_taken(id_ex_ctrl_AUIPC_taken),
         .ctrl_forward_left_operand(ex_ctrl_forward_left_operand),
         .ctrl_forward_right_operand(ex_ctrl_forward_right_operand),
 

@@ -47,7 +47,7 @@ always_comb begin : next_pc_selection
         end
         else if (ctrl_AUIPC_taken) // AUIPC
         begin
-                pc_next = pc - 4 + (signed'({imm,12'b0}));
+                pc_next = pc - 4 + signed'({imm, 12'b0});
         end
         else if (stall) // Stall condition
         begin

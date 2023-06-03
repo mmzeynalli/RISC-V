@@ -1,7 +1,7 @@
 import common::*;
 
 module control_unit import common::*; (
-        input [6:0] opcode,
+        input instruction_format_type opcode,
         input instruction_op_type optype,
         input [2:0] funct3,
         input [31:0] rs1_data,
@@ -15,8 +15,8 @@ module control_unit import common::*; (
 
         output logic ctrl_is_branch,
         output logic ctrl_branch_taken,
-         output logic ctrl_AUIPC_taken
-
+        output logic ctrl_AUIPC_taken,
+        output logic [2:0] ctrl_word_size
 );
 
 logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
@@ -35,6 +35,7 @@ always_comb begin : generate_signals
         ctrl_alu_src = 0;
         ctrl_branch_taken = 0;
         ctrl_AUIPC_taken = 0;
+        ctrl_word_size = 3'b0;
 
         case (optype)
                 R_TYPE:
@@ -42,16 +43,18 @@ always_comb begin : generate_signals
                 I_TYPE:
                 begin
                         ctrl_reg_write <= 1;
-                        ctrl_alu_src <= 1;
-
+                        ctrl_alu_src <= 1;                               
+                
                         if (opcode == LOAD || opcode == LOAD_FP) begin
                                 ctrl_mem2reg <= 1;
+                                ctrl_word_size = funct3;
                         end
                 end
                 S_TYPE:
                 begin
                         ctrl_alu_src <= 1;
                         ctrl_mem_write <= 1;
+                        ctrl_word_size = funct3;
                 end
                 B_TYPE:
                 begin

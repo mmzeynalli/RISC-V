@@ -12,6 +12,8 @@ module execute import common::*; (
         input [OPERAND_WIDTH-1:0] from_mem,
         input [OPERAND_WIDTH-1:0] from_wb,
 
+        input ctrl_AUIPC_taken,
+
         // Controls
         input ctrl_alu_src,
         input forwarding_type ctrl_forward_left_operand,

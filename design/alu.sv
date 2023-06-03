@@ -24,8 +24,8 @@ always_comb begin : calculate
                 SRL  :  alu_result = A >> B;
                 ADD  :  alu_result = A + B;
                 SUB  :  alu_result = A - B;
-                LUI  :  alu_result = {B, 12'h0};
-                AUIPC:  alu_result = A + B;
+                LUI  :  alu_result = {B[31:12], 12'h0};
+                AUIPC:  alu_result = A + {B[31:12], 12'h0};
                 XOR  :  alu_result = A ^ B;
                 OR   :  alu_result = A | B;
                 AND  :  alu_result = A & B;

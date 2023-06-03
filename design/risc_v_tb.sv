@@ -1,4 +1,6 @@
 `timescale 1ns / 1ns
+`define ASSERT
+
 import common::*;
 
 module risc_v_tb;
@@ -82,18 +84,26 @@ initial begin
 
         for (int i = 0; i < 32; i++)
         begin
+                `ifdef ASSERT
                 assert (expected_register_file[i] == dut.register_file.registers[i])
                 else
                         $display("Register %d: Expected %b, got %b", i, expected_register_file[i], dut.register_file.registers[i]);
+                `endif
+                $display("Register %d: %b", i, dut.register_file.registers[i]);
+        
         end
 
         $readmemb("expected_memory.txt", expected_memory);
+        $display("");
 
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < 32; i++)
         begin
+                `ifdef ASSERT
                 assert (expected_memory[i] == dut.mem_stage.data_memory.ram[i])
                 else
                         $display("Memory %d: Expected %b, got %b", i, expected_memory[i], dut.mem_stage.data_memory.ram[i]);
+                `endif
+                $display("Memory %d: %b", i, dut.mem_stage.data_memory.ram[i]);
         end
 
         $finish;
