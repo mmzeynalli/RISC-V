@@ -19,8 +19,13 @@ module register_file #(
 
 localparam int REGISTER_FILE_SIZE = 1 << ADDRESS_WIDTH;
 
-typedef logic [REGISTER_FILE_SIZE-1:0] register_array [DATA_WIDTH-1:0];
+typedef logic [DATA_WIDTH-1:0] register_array [REGISTER_FILE_SIZE-1:0];
 register_array registers;
+
+initial begin
+        for (int i = 0; i < REGISTER_FILE_SIZE; i++)
+                registers[i] = 0;
+end
 
 always @(posedge clk) begin
         if (rst == RESET)
@@ -43,9 +48,28 @@ always_comb begin : data_read
                 
                 if (write_id == read2_id)
                         read2_data = write_data;
-        end
-
-        
+        end       
 end
+
+ila_mem ila_reg (
+    .clk(clk),
+    .probe0(registers[0]),
+    .probe1(registers[1]),
+    .probe2(registers[2]),
+    .probe3(registers[3]),
+    .probe4(registers[4]),
+    .probe5(registers[5]),
+    .probe6(registers[6]),
+    .probe7(registers[7]),
+    .probe8(registers[8]),
+    .probe9(registers[9]),
+    .probe10(registers[10]),
+    .probe11(registers[11]),
+    .probe12(registers[12]),
+    .probe13(registers[13]),
+    .probe14(registers[14]),
+    .probe15(registers[15])
+);
+
         
 endmodule

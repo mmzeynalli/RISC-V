@@ -63,7 +63,7 @@ logic [PROGRAM_ADDRESS_WIDTH-1:0] im_address;
 
 always_comb begin : get_im_address
         if (uart_valid_data)
-                im_address = cmd_write_address ^ 'b10;
+                im_address = cmd_write_address ^ 8'b10;
         else
                 im_address = if_pc;
 end
@@ -417,6 +417,7 @@ always @(posedge clk) begin
         end
 end
 
+/*
 always_comb begin : ram2uart
         i_next = i;
         tx_byte_next = tx_byte;
@@ -437,8 +438,8 @@ always_comb begin : ram2uart
 
                                 if (ith_bit < 32)
                                 begin
-                                        tx_byte_next = (register_file.registers[i - 7][ith_bit] == 0) ? 8'h30 : 8'h31;
-                                        $display("Reg %d, Bit %d: %d", i - 7, ith_bit, register_file.registers[i - 7][ith_bit]);
+                                        tx_byte_next = 8'h31; //(register_file.registers[i - 7][ith_bit] == 0) ? 8'h30 : 8'h31;
+                                        //$display("Reg %d, Bit %d: %d", i - 7, ith_bit, register_file.registers[i - 7][ith_bit]);
                                 end
                                 else if (ith_bit == 32)
                                         tx_byte_next = NEWLINE[0];
@@ -459,7 +460,7 @@ always_comb begin : ram2uart
                                 ith_bit_next = ith_bit + 1;
 
                                 if (ith_bit < 32)
-                                        tx_byte_next = (mem_stage.data_memory.ram[i - 45][ith_bit] == 0) ? 8'h30 : 8'h31;
+                                        tx_byte_next = 8'h31; //(mem_stage.data_memory.ram[i - 45][ith_bit] == 0) ? 8'h30 : 8'h31;
                                 else if (ith_bit == 32)
                                         tx_byte_next = NEWLINE[0];
                                 else if (ith_bit == 33)
@@ -485,15 +486,5 @@ uart_tx uart_tx(
         .tx(tx),
         .tx_done(tx_done)
 );
-
-ila_0 ila (
-    .clk(clk),
-    .probe0(instruction_memory.ram[0]),
-    .probe1(instruction_memory.ram[1]),
-    .probe2(instruction_memory.ram[2]),
-    .probe3(instruction_memory.ram[3]),
-    .probe4(instruction_memory.ram[4]),
-    .probe5(instruction_memory.ram[5])
-);
-
+*/
 endmodule

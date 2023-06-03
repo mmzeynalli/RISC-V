@@ -97,11 +97,5 @@ always_comb begin : receive_byte
         end                             
         endcase
 end
-
-ila_1 ila_1 (
-    .clk(clk),
-    .probe0(is_data_rdy),
-    .probe1(data)
-);
     
 endmodule

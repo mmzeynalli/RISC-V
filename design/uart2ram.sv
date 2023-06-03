@@ -39,10 +39,16 @@ always_comb begin : bytes_to_command
         cnt_next = cnt;
         data_next = data;
         write_address_next = write_address;
-        is_valid_data_next = 0;
+        is_valid_data_next = is_valid_data;
 
         if (is_valid_byte)
         begin
+                // Get the next address
+                if (is_valid_data)
+                        write_address_next = write_address + 2;
+
+                is_valid_data_next = 0;
+
                 if (byte_data == 'h30)
                 begin
                         data_next = {data[SHORT_INSTRUCTION_WIDTH-2:0], 1'b0};
@@ -55,11 +61,8 @@ always_comb begin : bytes_to_command
                 end
         end
 
-        if (cnt == (SHORT_INSTRUCTION_WIDTH - 1))
-        begin
+        if (cnt == (SHORT_INSTRUCTION_WIDTH - 1) && cnt_next == 0)
                 is_valid_data_next = 1;
-                write_address_next = write_address + 2;
-        end
 end
 
 uart_rx uart_rx(
