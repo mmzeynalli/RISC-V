@@ -44,6 +44,8 @@ always_comb begin : get_alu_op
                 endcase
         else if(opcode == U_LUI)
                 op <= LUI;
+        else if(opcode == U_AUIPC)
+                op <= AUIPC;
 end
 
 endmodule

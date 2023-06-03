@@ -20,17 +20,18 @@ logic        sraResult;
 always_comb begin : calculate
 
         case (operation)
-                SLL :  alu_result = A << B;
-                SRL :  alu_result = A >> B;
-                ADD :  alu_result = A + B;
-                SUB :  alu_result = A - B;
-                LUI :  alu_result = {B, 12'h0};
-                XOR :  alu_result = A ^ B;
-                OR  :  alu_result = A | B;
-                AND :  alu_result = A & B;
-                SLT :  alu_result = (A < B) ? 32'h1 : 32'h0;
-                SLTU:  alu_result = (unsigned'(A) < unsigned'(B)) ? 32'h1 : 32'h0;
-                SRA :  alu_result = A >>> B;
+                SLL  :  alu_result = A << B;
+                SRL  :  alu_result = A >> B;
+                ADD  :  alu_result = A + B;
+                SUB  :  alu_result = A - B;
+                LUI  :  alu_result = {B, 12'h0};
+                AUIPC:  alu_result = A + B;
+                XOR  :  alu_result = A ^ B;
+                OR   :  alu_result = A | B;
+                AND  :  alu_result = A & B;
+                SLT  :  alu_result = (A < B) ? 32'h1 : 32'h0;
+                SLTU :  alu_result = (unsigned'(A) < unsigned'(B)) ? 32'h1 : 32'h0;
+                SRA  :  alu_result = A >>> B;
                 default: 
                         alu_result = 0;
         endcase
