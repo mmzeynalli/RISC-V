@@ -48,7 +48,7 @@ always_comb begin : data_read
                 
                 if (write_id == read2_id)
                         read2_data = write_data;
-        end       
+        end
 end
 
 ila_mem ila_reg (
