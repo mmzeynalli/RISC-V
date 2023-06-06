@@ -22,7 +22,8 @@ risc_v #(
 ) dut (
         .clk(clk),
         .rst(rst),
-        .rx('0)
+        .rx('0),
+        .tx()
 );
 
 // Generate clock
@@ -64,13 +65,6 @@ initial begin
                         i = i + 1;
                 end
         end
-
-        // Loop
-        for (i = i; i < 62; i = i + 2)
-                dut.instruction_memory.ram[i] = 16'(NOOP);
-
-        dut.instruction_memory.ram[63] = 16'b0;
-        dut.instruction_memory.ram[62] = INF_LOOP;
 end
 
 logic [31:0] expected_register_file [31:0];

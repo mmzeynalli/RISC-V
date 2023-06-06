@@ -2,7 +2,7 @@ import common::*;
 
 module instruction_decode (
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
-        output logic [6:0] opcode,
+        output instruction_format_type opcode,
         output instruction_op_type optype,
         output logic [4:0] rd,
         output logic [4:0] rs1,
@@ -31,7 +31,7 @@ always_comb begin : decompose
 end
 
 always_comb begin : get_optype
-        opcode = instruction[6:0];
+        opcode = instruction_format_type'(instruction[6:0]);
 
         case (opcode)
                 OP, OP_FP, MADD, MSUB, NMSUB, NMADD:

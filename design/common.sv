@@ -1,5 +1,7 @@
 package common;
 
+`define ILA_ENABLED
+
 const logic       RESET                   = 1'b0;
 localparam int    IMM_WIDTH               = 21;
 localparam int    INSTRUCTION_WIDTH       = 32;

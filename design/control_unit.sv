@@ -13,7 +13,6 @@ module control_unit import common::*; (
 
         output logic ctrl_alu_src,
 
-        output logic ctrl_is_branch,
         output logic ctrl_branch_taken,
         output logic ctrl_AUIPC_taken,
         output logic [2:0] ctrl_word_size
@@ -31,7 +30,6 @@ always_comb begin : generate_signals
         ctrl_mem_write = 0;
         ctrl_mem2reg = 0;
         ctrl_reg_write = 0;
-        ctrl_is_branch = 0;
         ctrl_alu_src = 0;
         ctrl_branch_taken = 0;
         ctrl_AUIPC_taken = 0;
@@ -58,8 +56,6 @@ always_comb begin : generate_signals
                 end
                 B_TYPE:
                 begin
-                        ctrl_is_branch <= 1;
-
                         if ((funct3 == BEQ && ctrl_zero_flag) ||
                         (funct3 == BNE && ctrl_zero_flag != 1) ||
                         (funct3 == BLT && ctrl_lt_flag) ||

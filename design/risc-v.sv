@@ -103,7 +103,7 @@ if_id if_id_reg(
 ///////////////////////// ID STAGE /////////////////////////
 ////////////////////////////////////////////////////////////
 
-logic [6:0] id_opcode;
+instruction_format_type id_opcode;
 instruction_op_type id_optype;
 logic [4:0] id_rs1, id_rs2, id_rd;
 logic [2:0] id_funct3;
@@ -168,8 +168,7 @@ control_unit ctrl_unit(
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
         .ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
-
-        .ctrl_is_branch()
+        .ctrl_word_size()
 );
 
 // Connection to IF stage
@@ -254,7 +253,9 @@ execute ex_stage(
         .opcode(id_ex_opcode),
         .funct3(id_ex_funct3),
         .funct7(id_ex_funct7),
+
         .imm(id_ex_imm),
+        .i_pc(id_ex_pc),
 
         .rs1_data(id_ex_rs1_data),
         .rs2_data(id_ex_rs2_data),
