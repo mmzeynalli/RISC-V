@@ -14,15 +14,15 @@ module memory (
 );
 
 // all the LOAD operations
- if(ctrl_load_size == 'b000 )
+ if(ctrl_load_size = 'b000 )
         write_data = {24'b0,write_data[7:0]};
-else if(ctrl_load_size == 'b001)
+else if(ctrl_load_size = 'b001)
         write_data = {16'b0,write_data[15:0]};
-else if(ctrl_load_size == 'b010 )
+else if(ctrl_load_size = 'b010 )
         write_data = write_data;
- else if(ctrl_load_size == 'b100 )
+ else if(ctrl_load_size = 'b100 )
         write_data = {write_data[7:0], 24'b0};
-else if(ctrl_load_size == 'b101 )
+else if(ctrl_load_size = 'b101 )
         write_data = {write_data[15:0], 16'b0};
 
 data_memory data_memory(
@@ -34,11 +34,11 @@ data_memory data_memory(
 );
 
 //all the STORE instructions
-if(ctrl_load_size == 'b000 )
+if(ctrl_load_size = 'b000 )
         mem_data = {24'b0,mem_data[7:0]};
-else if(ctrl_load_size == 'b001 )
+else if(ctrl_load_size = 'b001 )
         mem_data = {16'b0,mem_data[15:0]};
-else if(ctrl_load_size == 'b010 )
+else if(ctrl_load_size = 'b010 )
         mem_data = mem_data;
 
 
