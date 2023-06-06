@@ -7,21 +7,23 @@ module memory (
 
         // Controls
         input ctrl_mem_write,
+        input [2:0] ctrl_load_size,
+        input [2:0] ctrl_store_size,
 
         output logic [31:0] mem_data
 );
 
 // all the LOAD operations
-// if(ctrl_LB_taken == 1 )
-//         write_data = {24'b0,write_data[7:0]};
-// else if(ctrl_LH_taken == 1 )
-//         write_data = {16'b0,write_data[15:0]};
-// else if(ctrl_LW_taken == 1 )
-//         write_data = write_data;
-// else if(ctrl_LBU_taken == 1 )
-//         write_data = {write_data[7:0], 24'b0};
-// else if(ctrl_LHU_taken == 1 )
-//         write_data = {write_data[15:0], 16'b0};
+ if(ctrl_load_size == 'b000 )
+        write_data = {24'b0,write_data[7:0]};
+else if(ctrl_load_size == 'b001)
+        write_data = {16'b0,write_data[15:0]};
+else if(ctrl_load_size == 'b010 )
+        write_data = write_data;
+ else if(ctrl_load_size == 'b100 )
+        write_data = {write_data[7:0], 24'b0};
+else if(ctrl_load_size == 'b101 )
+        write_data = {write_data[15:0], 16'b0};
 
 data_memory data_memory(
         .clk(clk),
@@ -32,12 +34,12 @@ data_memory data_memory(
 );
 
 //all the STORE instructions
-// if(ctrl_SB_taken == 1 )
-//         mem_data = {24'b0,mem_data[7:0]};
-// else if(ctrl_SH_taken == 1 )
-//         mem_data = {16'b0,mem_data[15:0]};
-// else if(ctrl_SW_taken == 1 )
-//         mem_data = mem_data;
+if(ctrl_load_size == 'b000 )
+        mem_data = {24'b0,mem_data[7:0]};
+else if(ctrl_load_size == 'b001 )
+        mem_data = {16'b0,mem_data[15:0]};
+else if(ctrl_load_size == 'b010 )
+        mem_data = mem_data;
 
 
 endmodule

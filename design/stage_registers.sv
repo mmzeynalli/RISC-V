@@ -54,6 +54,8 @@ module id_ex (
     input i_ctrl_reg_write,
     input i_ctrl_alu_src,
     input i_ctrl_AUIPC_taken,
+    input [2:0] i_ctrl_load_size,
+    input [2:0] i_ctrl_store_size,
 
     //pc signals
     input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
@@ -77,6 +79,8 @@ module id_ex (
     output logic o_ctrl_reg_write,
     output logic o_ctrl_AUIPC_taken,
     output logic o_ctrl_alu_src
+    output logic [2:0] o_ctrl_load_size,
+    output logic [2:0] o_ctrl_store_size
 );
 
 always_ff @(posedge clk) begin
@@ -101,6 +105,8 @@ always_ff @(posedge clk) begin
         o_ctrl_reg_write <= '0;
         o_ctrl_alu_src <= '0;
         o_ctrl_AUIPC_taken <= '0;
+        o_ctrl_load_size <= '0;
+        o_ctrl_store_size <= '0;
 
 
 
@@ -126,6 +132,8 @@ always_ff @(posedge clk) begin
         o_ctrl_reg_write <= i_ctrl_reg_write;
         o_ctrl_alu_src <= i_ctrl_alu_src;
         o_ctrl_AUIPC_taken <= i_ctrl_AUIPC_taken;
+        o_ctrl_load_size <= i_ctrl_load_size;
+        o_ctrl_store_size <= i_ctrl_store_size;
     end
 end
     
@@ -144,6 +152,9 @@ module ex_mem (
     input i_ctrl_mem_write,
     input i_ctrl_mem2reg,
     input i_ctrl_reg_write,
+    input [2:0] i_ctrl_load_size,
+    input [2:0] i_ctrl_store_size,
+
 
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_alu_result,
@@ -153,7 +164,9 @@ module ex_mem (
     // Controls
     output logic o_ctrl_mem_write,
     output logic o_ctrl_mem2reg,
-    output logic o_ctrl_reg_write
+    output logic o_ctrl_reg_write,
+    output logic [2:0] o_ctrl_load_size,
+    output logic [2:0] o_ctrl_store_size
 );
 
 always_ff @(posedge clk) begin
@@ -167,6 +180,8 @@ always_ff @(posedge clk) begin
         o_ctrl_mem_write <= '0;
         o_ctrl_mem2reg <= '0;
         o_ctrl_reg_write <= '0;
+        o_ctrl_load_size <= '0;
+        o_ctrl_store_size <= '0;
     end
     else
     begin
@@ -178,6 +193,8 @@ always_ff @(posedge clk) begin
         o_ctrl_mem_write <= i_ctrl_mem_write;
         o_ctrl_mem2reg <= i_ctrl_mem2reg;
         o_ctrl_reg_write <= i_ctrl_reg_write;
+        o_ctrl_load_size <= i_ctrl_load_size;
+        o_ctrl_store_size <= i_ctrl_store_size;
     end
 end
     
