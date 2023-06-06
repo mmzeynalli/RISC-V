@@ -170,7 +170,7 @@ control_unit ctrl_unit(
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
         .ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
-        .ctrl_store_size(ctrl_store_size)
+        .ctrl_store_size(ctrl_store_size),
         .ctrl_load_size(ctrl_load_size)
 
 );
