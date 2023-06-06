@@ -15,7 +15,8 @@ module control_unit import common::*; (
 
         output logic ctrl_branch_taken,
         output logic ctrl_AUIPC_taken,
-        output logic [2:0] ctrl_word_size
+        output logic [2:0] ctrl_load_size,
+        output logic [2:0] ctrl_store_size
 );
 
 logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
