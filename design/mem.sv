@@ -14,17 +14,18 @@ module memory (
 );
 
 // all the LOAD operations
- if(ctrl_load_size == 3'b000 )
-        write_data = {24'b0,write_data[7:0]};
-else if(ctrl_load_size == 3'b001)
-        write_data = {16'b0,write_data[15:0]};
-else if(ctrl_load_size == 3'b010 )
-        write_data = write_data;
- else if(ctrl_load_size == 3'b100 )
-        write_data = {write_data[7:0], 24'b0};
-else if(ctrl_load_size == 3'b101 )
-        write_data = {write_data[15:0], 16'b0};
-
+always_comb begin: load
+        if(ctrl_load_size == 3'b000 )
+                write_data = {24'b0,write_data[7:0]};
+        else if(ctrl_load_size == 3'b001)
+                write_data = {16'b0,write_data[15:0]};
+        else if(ctrl_load_size == 3'b010 )
+                write_data = write_data;
+        else if(ctrl_load_size == 3'b100 )
+                write_data = {write_data[7:0], 24'b0};
+        else if(ctrl_load_size == 3'b101 )
+                write_data = {write_data[15:0], 16'b0};
+end
 data_memory data_memory(
         .clk(clk),
         .write_en(ctrl_mem_write),
@@ -34,12 +35,14 @@ data_memory data_memory(
 );
 
 //all the STORE instructions
-if(ctrl_load_size == 3'b000 )
-        mem_data = {24'b0,mem_data[7:0]};
-else if(ctrl_load_size == 3'b001 )
-        mem_data = {16'b0,mem_data[15:0]};
-else if(ctrl_load_size == 3'b010 )
-        mem_data = mem_data;
+always_comb begin: store
 
+        if(ctrl_load_size == 3'b000 )
+                mem_data = {24'b0,mem_data[7:0]};
+        else if(ctrl_load_size == 3'b001 )
+                mem_data = {16'b0,mem_data[15:0]};
+        else if(ctrl_load_size == 3'b010 )
+                mem_data = mem_data;
+end
 
 endmodule
