@@ -40,7 +40,7 @@ data_memory data_memory(
 always_comb begin: store
 
         if(ctrl_load_size == 3'b000 )
-                mem_data = {24'b0,mem_[7:0]};
+                mem_data = {24'b0,mem[7:0]};
         else if(ctrl_load_size == 3'b001 )
                 mem_data = {16'b0,mem[15:0]};
         else if(ctrl_load_size == 3'b010 )
