@@ -224,7 +224,7 @@ id_ex id_ex_reg(
         .i_ctrl_alu_src(id_ctrl_alu_src),
         .i_ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
         .i_ctrl_store_size(id_ctrl_store_size),
-        .id_ctrl_load_size(id_ctrl_load_size),
+        .i_ctrl_load_size(id_ctrl_load_size),
 
         // OUT SIGNALS
         .o_rs1(id_ex_rs1),
