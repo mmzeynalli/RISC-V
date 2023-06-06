@@ -78,7 +78,7 @@ module id_ex (
     output logic o_ctrl_mem2reg,
     output logic o_ctrl_reg_write,
     output logic o_ctrl_AUIPC_taken,
-    output logic o_ctrl_alu_src
+    output logic o_ctrl_alu_src,
     output logic [2:0] o_ctrl_load_size,
     output logic [2:0] o_ctrl_store_size
 );
