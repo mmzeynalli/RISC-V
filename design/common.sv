@@ -16,7 +16,7 @@ localparam NUM_DATA_BITS = 8;
 localparam [INSTRUCTION_WIDTH-1:0] NOOP         = 'h13;
 localparam [INSTRUCTION_WIDTH-1:0] INF_LOOP     = 'h63;
 
-typedef enum bit[3:0] 
+typedef enum bit[4:0] 
 { SLL, SRL, SRA, ADD, SUB, LUI, AUIPC, XOR, OR, AND, SLT, SLTU, LW, SW} alu_operation_type;
 
 
