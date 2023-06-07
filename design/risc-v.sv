@@ -155,6 +155,8 @@ register_file register_file(
 logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
 logic id_ctrl_AUIPC_taken;
+logic [2:0] id_ctrl_store_size;
+logic [2:0] id_ctrl_load_size;
 
 control_unit ctrl_unit(
 
@@ -174,7 +176,9 @@ control_unit ctrl_unit(
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
         .ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
-        .ctrl_word_size()
+        .ctrl_store_size(ctrl_store_size),
+        .ctrl_load_size(ctrl_load_size)
+
 );
 
 // Connection to IF stage
@@ -198,6 +202,8 @@ logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
 logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken;
 logic id_ex_stall; // defined later
+logic [2:0] id_ex_ctrl_store_size;
+logic [2:0] id_ex_ctrl_load_size;
 
 id_ex id_ex_reg(
         .clk(clk),
@@ -226,6 +232,8 @@ id_ex id_ex_reg(
         .i_ctrl_reg_write(id_ctrl_reg_write),
         .i_ctrl_alu_src(id_ctrl_alu_src),
         .i_ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
+        .i_ctrl_store_size(id_ctrl_store_size),
+        .i_ctrl_load_size(id_ctrl_load_size),
 
         // OUT SIGNALS
         .o_rs1(id_ex_rs1),
@@ -244,7 +252,9 @@ id_ex id_ex_reg(
         .o_ctrl_mem2reg(id_ex_ctrl_mem2reg),
         .o_ctrl_reg_write(id_ex_ctrl_reg_write),
         .o_ctrl_alu_src(id_ex_ctrl_alu_src),
-        .o_ctrl_AUIPC_taken(id_ex_ctrl_AUIPC_taken)
+        .o_ctrl_AUIPC_taken(id_ex_ctrl_AUIPC_taken),
+        .o_ctrl_store_size(id_ex_ctrl_store_size),
+        .o_ctrl_load_size(id_ex_ctrl_load_size)
 );
 
 ////////////////////////////////////////////////////////////
@@ -256,6 +266,7 @@ logic [OPERAND_WIDTH-1:0] ex_from_mem, ex_from_wb;  // defined later
 logic [OPERAND_WIDTH-1:0] ex_write_data;
 forwarding_type ex_ctrl_forward_left_operand = NONE, ex_ctrl_forward_right_operand = NONE; // defined later
 logic ex_stall;
+
 
 execute ex_stage(
         .clk(clk),
@@ -296,6 +307,9 @@ assign if_stall = ex_stall;
 logic [OPERAND_WIDTH-1:0] ex_mem_alu_result, ex_mem_write_data;
 logic [4:0] ex_mem_rd_sel;
 logic ex_mem_ctrl_mem_write, ex_mem_ctrl_mem2reg, ex_mem_ctrl_reg_write;
+logic [2:0] ex_mem_ctrl_store_size;
+logic [2:0] ex_mem_ctrl_load_size;
+
 
 ex_mem ex_mem_reg(
         .clk(clk),
@@ -310,6 +324,8 @@ ex_mem ex_mem_reg(
         .i_ctrl_mem_write(id_ex_ctrl_mem_write),
         .i_ctrl_mem2reg(id_ex_ctrl_mem2reg),
         .i_ctrl_reg_write(id_ex_ctrl_reg_write),
+        .i_ctrl_load_size(id_ex_ctrl_load_size),
+        .i_ctrl_store_size(id_ex_ctrl_store_size),
 
         // Output
         .o_alu_result(ex_mem_alu_result),
@@ -319,7 +335,9 @@ ex_mem ex_mem_reg(
         // Control
         .o_ctrl_mem_write(ex_mem_ctrl_mem_write),
         .o_ctrl_mem2reg(ex_mem_ctrl_mem2reg),
-        .o_ctrl_reg_write(ex_mem_ctrl_reg_write)
+        .o_ctrl_reg_write(ex_mem_ctrl_reg_write),
+        .o_ctrl_load_size(ex_mem_ctrl_load_size),
+        .o_ctrl_store_size(ex_mem_ctrl_store_size)
 );
 
 ////////////////////////////////////////////////////////////
@@ -337,6 +355,9 @@ memory mem_stage(
 
         // Control
         .ctrl_mem_write(ex_mem_ctrl_mem_write),
+        .ctrl_load_size(ex_mem_ctrl_load_size),
+        .ctrl_store_size(ex_mem_ctrl_store_size),
+
 
         // Output
         .mem_data(mem_mem_data)

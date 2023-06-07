@@ -17,7 +17,8 @@ module control_unit import common::*; (
 
         output logic ctrl_branch_taken,
         output logic ctrl_AUIPC_taken,
-        output logic [2:0] ctrl_word_size
+        output logic [2:0] ctrl_load_size,
+        output logic [2:0] ctrl_store_size
 );
 
 logic ctrl_zero_flag, ctrl_lt_flag, ctrl_ltu_flag, ctrl_gte_flag, ctrl_gteu_flag;
@@ -35,7 +36,8 @@ always_comb begin : generate_signals
         ctrl_alu_src = 0;
         ctrl_branch_taken = 0;
         ctrl_AUIPC_taken = 0;
-        ctrl_word_size = 3'b0;
+        ctrl_load_size = 3'b0;
+        ctrl_store_size = 3'b0;
 
         ctrl_prev_is_compressed = (opcode[1:0] != 2'b11) ? 1 : 0;
 
@@ -47,16 +49,20 @@ always_comb begin : generate_signals
                         ctrl_reg_write <= 1;
                         ctrl_alu_src <= 1;                               
                 
-                        if (opcode == LOAD || opcode == LOAD_FP) begin
+                        if (opcode == LOAD || opcode == LOAD_FP)
+                        begin
                                 ctrl_mem2reg <= 1;
-                                ctrl_word_size = funct3;
+                                ctrl_load_size = funct3;
                         end
                 end
                 S_TYPE:
                 begin
-                        ctrl_alu_src <= 1;
-                        ctrl_mem_write <= 1;
-                        ctrl_word_size = funct3;
+                        if (opcode == STORE || opcode == STORE_FP)
+                        begin
+                                ctrl_alu_src <= 1;
+                                ctrl_mem_write <= 1;
+                                ctrl_store_size = funct3;
+                        end 
                 end
                 B_TYPE:
                 begin
