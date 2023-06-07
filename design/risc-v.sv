@@ -210,8 +210,7 @@ logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
 logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken,id_ex_ctrl_AUIPC_taken;
 logic id_ex_stall; // defined later
-logic [2:0] id_ex_ctrl_store_size;
-logic [2:0] id_ex_ctrl_load_size;
+logic [2:0] id_ex_ctrl_word_size;
 
 id_ex id_ex_reg(
         .clk(clk),
@@ -262,7 +261,7 @@ id_ex id_ex_reg(
         .o_ctrl_reg_write(id_ex_ctrl_reg_write),
         .o_ctrl_alu_src(id_ex_ctrl_alu_src),
         .o_ctrl_AUIPC_taken(id_ex_ctrl_AUIPC_taken),
-        .o_ctrl_store_size(id_ex_ctrl_store_size)
+        .o_ctrl_word_size(id_ex_ctrl_word_size)
 );
 
 ////////////////////////////////////////////////////////////
@@ -332,8 +331,7 @@ ex_mem ex_mem_reg(
         .i_ctrl_mem_write(id_ex_ctrl_mem_write),
         .i_ctrl_mem2reg(id_ex_ctrl_mem2reg),
         .i_ctrl_reg_write(id_ex_ctrl_reg_write),
-        .i_ctrl_load_size(id_ex_ctrl_load_size),
-        .i_ctrl_store_size(id_ex_ctrl_store_size),
+        .i_ctrl_word_size(id_ex_ctrl_word_size),
 
         // Output
         .o_alu_result(ex_mem_alu_result),

@@ -157,8 +157,7 @@ module ex_mem (
     input i_ctrl_mem_write,
     input i_ctrl_mem2reg,
     input i_ctrl_reg_write,
-    input [2:0] i_ctrl_load_size,
-    input [2:0] i_ctrl_store_size,
+    input [2:0] i_ctrl_word_size,
 
 
     // OUT SIGNALS
@@ -170,8 +169,7 @@ module ex_mem (
     output logic o_ctrl_mem_write,
     output logic o_ctrl_mem2reg,
     output logic o_ctrl_reg_write,
-    output logic [2:0] o_ctrl_load_size,
-    output logic [2:0] o_ctrl_store_size
+    output logic [2:0] o_ctrl_word_size
 );
 
 always_ff @(posedge clk) begin
@@ -185,8 +183,7 @@ always_ff @(posedge clk) begin
         o_ctrl_mem_write <= '0;
         o_ctrl_mem2reg <= '0;
         o_ctrl_reg_write <= '0;
-        o_ctrl_load_size <= '0;
-        o_ctrl_store_size <= '0;
+        o_ctrl_word_size <= '0;
     end
     else
     begin
@@ -198,8 +195,7 @@ always_ff @(posedge clk) begin
         o_ctrl_mem_write <= i_ctrl_mem_write;
         o_ctrl_mem2reg <= i_ctrl_mem2reg;
         o_ctrl_reg_write <= i_ctrl_reg_write;
-        o_ctrl_load_size <= i_ctrl_load_size;
-        o_ctrl_store_size <= i_ctrl_store_size;
+        o_ctrl_word_size <= i_ctrl_word_size;
     end
 end
     
