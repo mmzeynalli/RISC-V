@@ -17,6 +17,7 @@ module control_unit import common::*; (
 
         output logic ctrl_branch_taken,
         output logic ctrl_AUIPC_taken,
+        output logic ctrl_jump_taken,
         output logic [2:0] ctrl_load_size,
         output logic [2:0] ctrl_store_size
 );
