@@ -102,7 +102,7 @@ if_id if_id_reg(
         .rst(rst),
         .stall(if_id_stall),
 
-        .i_pc_next(if_pc_next)
+        .i_pc_next(if_pc_next),
         .o_pc_next(if_id_pc_next),
         .i_pc(if_pc),
         .o_pc(if_id_pc),
