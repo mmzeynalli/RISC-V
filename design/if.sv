@@ -52,9 +52,10 @@ always_comb begin : next_pc_selection
                 instruction = NOOP;
         end
         else if (ctrl_jump_taken) // JALR 
+        begin
                 pc_next = pc_JALR;
                 instruction = NOOP;
-
+        end
         
         else if (mem_instruction[1:0] != 2'b11) // is compressed (16-bit) instruction
                 pc_next = pc + 2;  
