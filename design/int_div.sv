@@ -61,12 +61,12 @@ end
 always_comb begin
         if (acc >= {1'b0, divisor})
         begin
-                acc_next = acc - divisor;       
-                quo_next = quo + 1;
+                acc_next = {acc - divisor, dividend[max_iter - i]};       
+                quo_next = (quo + 1) << 1;
         end
         else
         begin
-                acc_next = {acc << 1, dividend[max_iter - i]};
+                acc_next = {acc, dividend[max_iter - i]};
                 quo_next = quo << 1;
         end
 end
@@ -81,17 +81,18 @@ always_ff @(posedge clk) begin
                 res <= 0;
                 rem <= 0;
                 max_iter <= 0;
+                
+                quo <= 0;
+                acc <= 0;
+                i = 0;
         end
         else
         begin
                 done = 0;
-                max_iter <= log2(dividend);
                 
                 if (start) 
                 begin
                         valid = 0;
-                        i = 0;
-
                         if (divisor == 0) // catch divide by zero 
                         begin  
                                 busy <= 0;
@@ -109,20 +110,21 @@ always_ff @(posedge clk) begin
                         begin
                                 busy <= 1;
                                 dbz <= 0;
-                                acc <= {{(OPERAND_WIDTH-1){1'b0}}, dividend[max_iter]};
+                                acc <= 0;
                                 quo <= '0;
+                                max_iter <= log2(dividend);
+                                i = 0;
                         end
                 end 
                 else if (busy)
                 begin
-                        if (i == max_iter) // we're done
+                        if (i == max_iter + 1) // we're done, one extra cycle to set acc, quo
                         begin  
                                 busy <= 0;
                                 done <= 1;
                                 valid <= 1;
-                                res <= (a_sign ^ b_sign) ? -quo_next : quo_next;
-                                rem <= (a_sign) ? -acc_next[OPERAND_WIDTH:1] : acc_next[OPERAND_WIDTH:1];  // undo final shift
-                        end 
+                                res <= (a_sign ^ b_sign) ? -quo : quo;
+                                rem <= (a_sign) ? -acc[OPERAND_WIDTH-1:0] : acc[OPERAND_WIDTH-1:0];                        end 
                         else 
                         begin  // next iteration
                                 i <= i + 1;
