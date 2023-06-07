@@ -66,7 +66,7 @@ always_comb begin : get_alu_op
                 op <= LUI;
         else if(opcode == U_AUIPC)
                 op <= AUIPC;  // Can be ADD, but this is more explicit
-        else if((opcaode == J_JAL) && (opcode == JALR))
+        else if((opcode == J_JAL) && (opcode == JALR))
                 op <= ADD;
 end
 
