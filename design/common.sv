@@ -19,7 +19,7 @@ localparam [INSTRUCTION_WIDTH-1:0] NOOP         = 'h13;
 localparam [INSTRUCTION_WIDTH-1:0] INF_LOOP     = 'h63;
 
 typedef enum bit[4:0] 
-{ SLL, SRL, SRA, ADD, SUB, LUI, AUIPC, XOR, OR, AND, SLT, SLTU, LW, SW, JAL, JALR, MUL, MULU, DIV, DIVU, REM, REMU} alu_operation_type;
+{ SLL, SRL, SRA, ADD, SUB, LUI, AUIPC, XOR, OR, AND, SLT, SLTU, LW, SW, MUL, MULU, DIV, DIVU, REM, REMU} alu_operation_type;
 
 
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } forwarding_type;
