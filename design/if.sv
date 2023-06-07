@@ -41,11 +41,6 @@ always_comb begin : next_pc_selection
 
         if (stall) // Stall condition
                 pc_next = pc;
-        else if (ctrl_AUIPC_taken) // AUIPC
-        begin
-                pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + signed'({imm, 12'b0});
-                instruction = NOOP;
-        end
         else if (ctrl_branch_taken) // conditional branch/JAL
         begin
                 pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + 32'(signed'(imm));  // FIX THIS!!

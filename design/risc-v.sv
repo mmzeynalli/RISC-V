@@ -41,7 +41,6 @@ end
 logic [INSTRUCTION_WIDTH-1:0] if_instruction;
 logic [IMM_WIDTH-1:0] if_imm; // Defined later
 logic if_ctrl_branch_taken;   // Defined later
-logic if_ctrl_AUIPC_taken;    // Defined later
 logic if_ctrl_jump_taken;     // Defined later
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc_next;
@@ -59,7 +58,6 @@ instruction_fetch if_stage(
         .stall(if_stall),
         .ctrl_prev_is_compressed(if_ctrl_prev_is_compressed),
         .ctrl_branch_taken(if_ctrl_branch_taken),
-        .ctrl_AUIPC_taken(if_ctrl_AUIPC_taken),
         .ctrl_jump_taken(if_ctrl_jump_taken),
 
         // Output
@@ -193,7 +191,6 @@ control_unit ctrl_unit(
 // Connection to IF stage
 assign if_ctrl_prev_is_compressed = id_ctrl_prev_is_compressed;
 assign if_ctrl_branch_taken = id_ctrl_branch_taken;
-assign if_ctrl_AUIPC_taken = id_ctrl_AUIPC_taken;
 assign if_ctrl_jump_taken = id_ctrl_jump_taken;
 
 ////////////////////////////////////////////////////////////
