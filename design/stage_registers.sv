@@ -6,9 +6,11 @@ module if_id (
     input stall,
 
     input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
+    input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc_next,
     input [INSTRUCTION_WIDTH-1:0] i_instruction,
     
     output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
+    output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_next,
     output logic [INSTRUCTION_WIDTH-1:0] o_instruction,
     output logic is_end_of_program
 );
@@ -19,11 +21,13 @@ always_ff @(posedge clk) begin
         o_instruction <= NOOP;
         is_end_of_program <= 0;
         o_pc <= 0;
+        o_pc_next <= 0;
     end
     else if (~stall)
     begin
         o_instruction = i_instruction;
         o_pc = i_pc;
+        o_pc_next = i_pc_next; 
 
         if (o_instruction == INF_LOOP)
             is_end_of_program = 1;
@@ -62,6 +66,8 @@ module id_ex (
     //pc signals
     input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
     output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
+    input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc_next,
+    output logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_next,
     // OUT SIGNALS
     output logic [OPERAND_WIDTH-1:0] o_rs1_data,
     output logic [OPERAND_WIDTH-1:0] o_rs2_data,
@@ -100,6 +106,7 @@ always_ff @(posedge clk) begin
         
         o_rd_sel <= '0;
         o_pc <= '0;
+        o_pc_next <= '0;
 
         // Controls
         o_ctrl_mem_write <= '0;
@@ -127,6 +134,8 @@ always_ff @(posedge clk) begin
         
         o_rd_sel <= i_rd_sel;
         o_pc <= i_pc;
+        o_pc_next <= i_pc_next;
+
 
         // Controls
         o_ctrl_mem_write <= i_ctrl_mem_write;

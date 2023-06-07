@@ -70,7 +70,7 @@ always_comb begin : compressed_expand
                                         instruction <= {7'b0, 2'b01, mem_instruction[4:2], 2'b01, mem_instruction[9:7], 3'b111, 2'b01, mem_instruction[9:7], 7'b0110011}; 
                                 endcase
                         end
-                        endcase
+                        endcase 
                 end
         end
         endcase

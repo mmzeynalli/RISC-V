@@ -2,6 +2,7 @@ import common::*;
 
 module instruction_decode (
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
+        input [DATA_WIDTH-1:0] read1_data,
         output instruction_format_type opcode,
         output instruction_op_type optype,
         output logic [4:0] rd,
@@ -9,7 +10,8 @@ module instruction_decode (
         output logic [4:0] rs2,
         output logic [2:0] funct3,
         output logic [6:0] funct7,
-        output logic [IMM_WIDTH-1:0] imm
+        output logic [IMM_WIDTH-1:0] imm,
+        output logic [31:0] pc_JALR
 );
 
 
@@ -63,12 +65,18 @@ function [IMM_WIDTH-1:0] generate_imm();
                 S_TYPE: return 21'(signed'({instruction[31:25], instruction[11:7]}));
                 B_TYPE: return 21'(signed'({instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0}));
                 U_TYPE: return 21'({instruction[31:12]});
-                J_TYPE: return 21'(signed'({instruction[31], instruction[19:12], instruction[30:21], 1'b0}));
+                J_TYPE: return 21'(signed'({instruction[31], instruction[19:12], instruction[20],instruction[30:21]}));
                 default: 
                         return 21'b0;
         endcase
 
 endfunction
 
+always_comb begin
+        if(opcode == JALR)
+                pc_JALR = ((32'(signed'(imm))) + read1_data) & ~1;
+
+        
+end
 
 endmodule

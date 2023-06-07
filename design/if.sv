@@ -7,13 +7,17 @@ module instruction_fetch import common::*;
 
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
         input [IMM_WIDTH-1:0] imm,
+        input [DATA_WIDTH-1:0] pc_JALR,
 
         input stall,
         input ctrl_prev_is_compressed,
         input ctrl_branch_taken,
         input ctrl_AUIPC_taken,
+        input ctrl_jump_taken,
 
-        output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc, 
+        output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,
+        output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_next, 
+        
         // output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc_4, 
         output  logic [INSTRUCTION_WIDTH-1:0] instruction
 );
@@ -32,17 +36,24 @@ end
 always_comb begin : next_pc_selection
         o_pc <= pc;
         pc_next = pc + 4;
+        o_pc_next <= pc_next;
         instruction = mem_instruction;
 
         if (stall) // Stall condition
                 pc_next = pc;
         else if (ctrl_AUIPC_taken) // AUIPC
                 pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + signed'({imm, 12'b0});
-        else if (ctrl_branch_taken) // conditional branch
+                instruction = NOOP;
+        else if (ctrl_branch_taken) // conditional branch/JAL
         begin
                 pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + 32'(signed'(imm));  // FIX THIS!!
                 instruction = NOOP;
         end
+        else if (ctrl_jump_taken) // JALR 
+                pc_next = pc_JALR;
+                instruction = NOOP;
+
+        
         else if (mem_instruction[1:0] != 2'b11) // is compressed (16-bit) instruction
                 pc_next = pc + 2;  
 

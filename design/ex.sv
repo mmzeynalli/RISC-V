@@ -5,6 +5,7 @@ module execute import common::*; (
         input rst,
         input instruction_format_type opcode,
         input  logic [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
+        input  logic [PROGRAM_ADDRESS_WIDTH-1:0] i_pc_next,
         input [2:0] funct3,
         input [6:0] funct7,
 
@@ -77,7 +78,12 @@ always_comb begin : select_operands
         if (ctrl_alu_src == 1)
                 operand_B = 32'(signed'(imm));
         if (ctrl_AUIPC_taken == 1)
-                operand_A = i_pc;
+                operand_A = 32'(signed'(i_pc));
+        if ((opcode == J_JAL) && (opcode == JALR))
+        begin
+                operand_A = 32'(signed'(i_pc_next));
+                operand_B = 0;
+        end
 end
         
 endmodule

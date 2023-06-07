@@ -35,6 +35,7 @@ always_comb begin : generate_signals
         ctrl_reg_write = 0;
         ctrl_alu_src = 0;
         ctrl_branch_taken = 0;
+        ctrl_jump_taken = 0;
         ctrl_AUIPC_taken = 0;
         ctrl_load_size = 3'b0;
         ctrl_store_size = 3'b0;
@@ -53,6 +54,10 @@ always_comb begin : generate_signals
                         begin
                                 ctrl_mem2reg <= 1;
                                 ctrl_load_size = funct3;
+                        end
+                        else if (opcode == JALR)
+                        begin
+                                ctrl_jump_taken <= 1;
                         end
                 end
                 S_TYPE:
@@ -89,6 +94,9 @@ always_comb begin : generate_signals
                 J_TYPE:
                 begin
                         ctrl_branch_taken <= 1;
+                        ctrl_reg_write <= 1;
+                        ctrl_alu_src <= 1;
+                        
                 end
         endcase
 end

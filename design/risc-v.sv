@@ -40,9 +40,11 @@ end
 
 logic [INSTRUCTION_WIDTH-1:0] if_instruction;
 logic [IMM_WIDTH-1:0] if_imm; // Defined later
-logic if_ctrl_branch_taken;  // Defined later
-logic if_ctrl_AUIPC_taken;  // Defined later
+logic if_ctrl_branch_taken;   // Defined later
+logic if_ctrl_AUIPC_taken;    // Defined later
+logic if_ctrl_jump_taken;     // Defined later
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc_next;
 logic [INSTRUCTION_WIDTH-1:0] if_mem_instr;
 logic if_stall, if_prev_is_compressed; // Defined later
 
@@ -58,9 +60,11 @@ instruction_fetch if_stage(
         .ctrl_prev_is_compressed(if_ctrl_prev_is_compressed),
         .ctrl_branch_taken(if_ctrl_branch_taken),
         .ctrl_AUIPC_taken(if_ctrl_AUIPC_taken),
+        .ctrl_jump_taken(if_ctrl_jump_taken),
 
         // Output
         .o_pc(if_pc),
+        .o_pc_next(if_pc_next),
         .instruction(if_instruction)
 );
 
@@ -87,6 +91,8 @@ instruction_memory instruction_memory(
 
 logic [INSTRUCTION_WIDTH-1:0] if_id_instruction;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_id_pc;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] if_id_pc_next;
+
 
 logic id_is_end_of_program;
 logic if_id_stall; // defined later
@@ -96,6 +102,8 @@ if_id if_id_reg(
         .rst(rst),
         .stall(if_id_stall),
 
+        .i_pc_next(if_pc_next)
+        .o_pc_next(if_id_pc_next),
         .i_pc(if_pc),
         .o_pc(if_id_pc),
         .i_instruction(if_instruction),
@@ -118,6 +126,7 @@ logic [IMM_WIDTH-1:0] id_imm;
 instruction_decode id_stage(
         // Input
         .mem_instruction(if_id_instruction),
+        .read1_data(id_rs1_data),
 
         // Output
         .opcode(id_opcode),
@@ -155,6 +164,7 @@ register_file register_file(
 logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
 logic id_ctrl_AUIPC_taken;
+logic id_ctrl_jump_taken;
 logic [2:0] id_ctrl_store_size;
 logic [2:0] id_ctrl_load_size;
 
@@ -176,6 +186,7 @@ control_unit ctrl_unit(
 
         .ctrl_branch_taken(id_ctrl_branch_taken),
         .ctrl_AUIPC_taken(id_ctrl_AUIPC_taken),
+        .ctrl_jump_taken(id_ctrl_jump_taken),
         .ctrl_store_size(ctrl_store_size),
         .ctrl_load_size(ctrl_load_size)
 
@@ -185,6 +196,7 @@ control_unit ctrl_unit(
 assign if_ctrl_prev_is_compressed = id_ctrl_prev_is_compressed;
 assign if_ctrl_branch_taken = id_ctrl_branch_taken;
 assign if_ctrl_AUIPC_taken = id_ctrl_AUIPC_taken;
+assign if_ctrl_jump_taken = id_ctrl_jump_taken;
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END ID STAGE ///////////////////////
@@ -193,6 +205,7 @@ assign if_ctrl_AUIPC_taken = id_ctrl_AUIPC_taken;
 logic [OPERAND_WIDTH-1:0] id_ex_rs1_data, id_ex_rs2_data;
 logic [IMM_WIDTH-1:0] id_ex_imm;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] id_ex_pc;
+logic [PROGRAM_ADDRESS_WIDTH-1:0] id_ex_pc_next;
 
 
 instruction_format_type id_ex_opcode;
@@ -200,7 +213,7 @@ logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
-logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken;
+logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken,id_ex_ctrl_AUIPC_taken;
 logic id_ex_stall; // defined later
 logic [2:0] id_ex_ctrl_store_size;
 logic [2:0] id_ex_ctrl_load_size;
@@ -225,6 +238,8 @@ id_ex id_ex_reg(
         //pc signals
         .i_pc(if_id_pc),
         .o_pc(id_ex_pc),
+        .i_pc_next(if_id_pc_next),
+        .o_pc_next(id_ex_pc_next),
         
         //Controls
         .i_ctrl_mem_write(id_ctrl_mem_write),
@@ -279,6 +294,7 @@ execute ex_stage(
 
         .imm(id_ex_imm),
         .i_pc(id_ex_pc),
+        .i_pc_next(id_ex_pc_next),
 
         .rs1_data(id_ex_rs1_data),
         .rs2_data(id_ex_rs2_data),
