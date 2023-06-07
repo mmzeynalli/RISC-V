@@ -16,7 +16,7 @@ Here is the list of U-type and J-type commands and their decomposotion:
 
 | Implemented                | Instruction | Description               | imm20 (31:12) | rd (11:7) | opcode (6:0) |
 | -------------------------- | ----------- | ------------------------- | ------------- | --------- | ------------ |
-| <ul> <li>- [ ] </li> </ul> | `lui`       | Load upper immediate      | `imm[19:0]`   | `rd[4:0]` | `0110111`    |
+| <ul> <li>- [x] </li> </ul> | `lui`       | Load upper immediate      | `imm[19:0]`   | `rd[4:0]` | `0110111`    |
 | <ul> <li>- [ ] </li> </ul> | `auipc`     | Add upper immediate to PC | `imm[19:0]`   | `rd[4:0]` | `0010111`    |
 
 ### Jump

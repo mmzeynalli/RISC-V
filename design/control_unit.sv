@@ -7,6 +7,8 @@ module control_unit import common::*; (
         input [31:0] rs1_data,
         input [31:0] rs2_data,
 
+        output logic ctrl_prev_is_compressed,
+
         output logic ctrl_mem_write,
         output logic ctrl_mem2reg,
         output logic ctrl_reg_write,
@@ -34,6 +36,8 @@ always_comb begin : generate_signals
         ctrl_branch_taken = 0;
         ctrl_AUIPC_taken = 0;
         ctrl_word_size = 3'b0;
+
+        ctrl_prev_is_compressed = (opcode[1:0] != 2'b11) ? 1 : 0;
 
         case (optype)
                 R_TYPE:

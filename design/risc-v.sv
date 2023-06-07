@@ -44,6 +44,7 @@ logic if_ctrl_branch_taken;  // Defined later
 logic if_ctrl_AUIPC_taken;  // Defined later
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
 logic [INSTRUCTION_WIDTH-1:0] if_mem_instr;
+logic if_stall, if_prev_is_compressed; // Defined later
 
 instruction_fetch if_stage(
         // Input
@@ -51,8 +52,10 @@ instruction_fetch if_stage(
         .rst(rst),
 
         .mem_instruction(if_mem_instr),
-        .stall('0),
         .imm(if_imm),
+
+        .stall(if_stall),
+        .ctrl_prev_is_compressed(if_ctrl_prev_is_compressed),
         .ctrl_branch_taken(if_ctrl_branch_taken),
         .ctrl_AUIPC_taken(if_ctrl_AUIPC_taken),
 
@@ -86,10 +89,12 @@ logic [INSTRUCTION_WIDTH-1:0] if_id_instruction;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_id_pc;
 
 logic id_is_end_of_program;
+logic if_id_stall; // defined later
 
 if_id if_id_reg(
         .clk(clk),
         .rst(rst),
+        .stall(if_id_stall),
 
         .i_pc(if_pc),
         .o_pc(if_id_pc),
@@ -147,10 +152,9 @@ register_file register_file(
         .read2_data(id_rs2_data)
 );
 
-logic id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
+logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
 logic id_ctrl_AUIPC_taken;
-
 
 control_unit ctrl_unit(
 
@@ -159,6 +163,8 @@ control_unit ctrl_unit(
         .funct3(id_funct3),
         .rs1_data(id_rs1_data),
         .rs2_data(id_rs2_data),
+
+        .ctrl_prev_is_compressed(id_ctrl_prev_is_compressed),
 
         .ctrl_mem_write(id_ctrl_mem_write),
         .ctrl_mem2reg(id_ctrl_mem2reg),
@@ -172,6 +178,7 @@ control_unit ctrl_unit(
 );
 
 // Connection to IF stage
+assign if_ctrl_prev_is_compressed = id_ctrl_prev_is_compressed;
 assign if_ctrl_branch_taken = id_ctrl_branch_taken;
 assign if_ctrl_AUIPC_taken = id_ctrl_AUIPC_taken;
 
@@ -190,10 +197,12 @@ logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
 logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken;
+logic id_ex_stall; // defined later
 
 id_ex id_ex_reg(
         .clk(clk),
         .rst(rst),
+        .stall(id_ex_stall),
 
         // IN SIGNALS
         .i_rs1(id_rs1),
@@ -246,8 +255,11 @@ logic [OPERAND_WIDTH-1:0] ex_alu_result;
 logic [OPERAND_WIDTH-1:0] ex_from_mem, ex_from_wb;  // defined later
 logic [OPERAND_WIDTH-1:0] ex_write_data;
 forwarding_type ex_ctrl_forward_left_operand = NONE, ex_ctrl_forward_right_operand = NONE; // defined later
+logic ex_stall;
 
 execute ex_stage(
+        .clk(clk),
+        .rst(rst),
 
         // Input
         .opcode(id_ex_opcode),
@@ -269,8 +281,13 @@ execute ex_stage(
         .ctrl_forward_right_operand(ex_ctrl_forward_right_operand),
 
         .alu_result(ex_alu_result),
-        .write_data(ex_write_data)
+        .write_data(ex_write_data),
+        .stall(ex_stall)
 );
+
+assign if_id_stall = ex_stall;
+assign id_ex_stall = ex_stall;
+assign if_stall = ex_stall;
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END EX STAGE ///////////////////////

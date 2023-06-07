@@ -31,6 +31,7 @@ add wave -position end  sim:/risc_v_tb/dut/ex_stage/ctrl_alu_src
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/alu_result
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_A
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/operand_B
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu_op
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/write_data
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/from_mem
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/from_wb
@@ -62,10 +63,14 @@ add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/registers
 
-add wave -divider UART
-add wave -position end  sim:/risc_v_tb/dut/id_is_end_of_program
-add wave -position end  sim:/risc_v_tb/dut/tx_byte
-add wave -position end  sim:/risc_v_tb/dut/tx_done
-add wave -position end  sim:/risc_v_tb/dut/uart_tx/tx_uart_state
-add wave -position end  sim:/risc_v_tb/dut/uart_tx/cycle_count
-add wave -position end  sim:/risc_v_tb/dut/i
+add wave -divider DIV
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/start
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/busy
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/done
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/valid
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/res
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/rem
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/quo
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/acc
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/i
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/max_iter

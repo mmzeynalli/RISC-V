@@ -6,8 +6,10 @@ module instruction_fetch import common::*;
         input rst,
 
         input [INSTRUCTION_WIDTH-1:0] mem_instruction,
-        input stall,
         input [IMM_WIDTH-1:0] imm,
+
+        input stall,
+        input ctrl_prev_is_compressed,
         input ctrl_branch_taken,
         input ctrl_AUIPC_taken,
 
@@ -22,14 +24,9 @@ logic [INSTRUCTION_WIDTH-1:0] instr;
 
 always @(posedge clk) begin
         if (rst == RESET)
-        begin
                 pc <= '0;
-                // instruction <= NOOP;
-        end
         else
-        begin
                 pc <= pc_next;
-        end
 end
 
 always_comb begin : next_pc_selection
@@ -37,23 +34,17 @@ always_comb begin : next_pc_selection
         pc_next = pc + 4;
         instruction = mem_instruction;
 
-        if (mem_instruction[1:0] != 2'b11) // is compressed (16-bit) instruction
-                pc_next = pc + 2;
-        
-        if (ctrl_branch_taken) // conditional branch
-        begin
-                pc_next = pc - 4 + 32'(signed'(imm));
-                instruction = NOOP;
-        end
-        else if (ctrl_AUIPC_taken) // AUIPC
-        begin
-                pc_next = pc - 4 + signed'({imm, 12'b0});
-        end
-        else if (stall) // Stall condition
-        begin
+        if (stall) // Stall condition
                 pc_next = pc;
+        else if (ctrl_AUIPC_taken) // AUIPC
+                pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + signed'({imm, 12'b0});
+        else if (ctrl_branch_taken) // conditional branch
+        begin
+                pc_next = pc - ((ctrl_prev_is_compressed) ? 2 : 4) + 32'(signed'(imm));  // FIX THIS!!
                 instruction = NOOP;
         end
+        else if (mem_instruction[1:0] != 2'b11) // is compressed (16-bit) instruction
+                pc_next = pc + 2;  
 
 end
 

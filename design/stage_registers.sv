@@ -3,6 +3,7 @@ import common::*;
 module if_id (
     input clk,
     input rst,
+    input stall,
 
     input [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
     input [INSTRUCTION_WIDTH-1:0] i_instruction,
@@ -19,7 +20,7 @@ always_ff @(posedge clk) begin
         is_end_of_program <= 0;
         o_pc <= 0;
     end
-    else
+    else if (~stall)
     begin
         o_instruction = i_instruction;
         o_pc = i_pc;
@@ -34,6 +35,7 @@ endmodule
 module id_ex (
     input clk,
     input rst,
+    input stall,
 
     // IN SIGNALS
     input [OPERAND_WIDTH-1:0] i_rs1_data,
@@ -105,7 +107,7 @@ always_ff @(posedge clk) begin
 
 
     end
-    else
+    else if (~stall)
     begin
         o_rs1_data <= i_rs1_data;
         o_rs1 <= i_rs1;

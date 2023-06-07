@@ -1,6 +1,8 @@
 import common::*;
 
 module execute import common::*; (
+        input clk,
+        input rst,
         input instruction_format_type opcode,
         input  logic [PROGRAM_ADDRESS_WIDTH-1:0] i_pc,
         input [2:0] funct3,
@@ -20,7 +22,8 @@ module execute import common::*; (
         input forwarding_type ctrl_forward_right_operand,
 
         output logic [OPERAND_WIDTH-1:0] alu_result,
-        output logic [OPERAND_WIDTH-1:0] write_data
+        output logic [OPERAND_WIDTH-1:0] write_data,
+        output logic stall
 );
 
 logic [OPERAND_WIDTH-1:0] operand_A;
@@ -37,11 +40,14 @@ alu_ctrl alu_ctrl(
 );
 
 ALU alu(
+        .clk(clk),
+        .rst(rst),
         .A(operand_A),
         .B(operand_B),
         .operation(alu_op),
         .zero(is_zero),
-        .result(alu_result)
+        .result(alu_result),
+        .stall(stall)
 );
 
 always_comb begin : select_operands
