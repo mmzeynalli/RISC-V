@@ -2,6 +2,7 @@ import common::*;
 
 module memory (
         input clk,
+        input rst,
         input [OPERAND_WIDTH-1:0] alu_result,  // write/read address
         input logic [OPERAND_WIDTH-1:0] write_data,  // rs2, mem or wb forward data
 

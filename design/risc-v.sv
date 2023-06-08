@@ -371,6 +371,7 @@ logic [31:0] mem_mem_data;
 memory mem_stage(
         // Input
         .clk(clk),
+        .rst(rst),
         .alu_result(ex_mem_alu_result),
         .write_data(ex_mem_write_data),
 
