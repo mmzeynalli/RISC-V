@@ -51,12 +51,12 @@ always_comb begin : bytes_to_command
 
                 if (byte_data == 'h30)
                 begin
-                        data_next = {data[SHORT_INSTRUCTION_WIDTH-2:0], 1'b0};
+                        data_next = {1'b0, data[SHORT_INSTRUCTION_WIDTH-1:1]};
                         cnt_next = cnt + 1;
                 end
                 else if (byte_data == 'h31)
                 begin
-                        data_next = {data[SHORT_INSTRUCTION_WIDTH-2:0], 1'b1};
+                        data_next = {1'b1, data[SHORT_INSTRUCTION_WIDTH-1:1]};
                         cnt_next = cnt + 1;
                 end
         end

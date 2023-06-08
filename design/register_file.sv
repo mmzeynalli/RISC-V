@@ -22,10 +22,6 @@ localparam int REGISTER_FILE_SIZE = 1 << ADDRESS_WIDTH;
 typedef logic [DATA_WIDTH-1:0] register_array [REGISTER_FILE_SIZE-1:0];
 register_array registers;
 
-initial begin
-        for (int i = 0; i < REGISTER_FILE_SIZE; i++)
-                registers[i] = 0;
-end
 
 always @(posedge clk) begin
         if (rst == RESET)

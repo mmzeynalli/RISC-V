@@ -70,7 +70,7 @@ logic [PROGRAM_ADDRESS_WIDTH-1:0] im_address;
 
 always_comb begin : get_im_address
         if (uart_valid_data)
-                im_address = cmd_write_address ^ 8'b10;
+                im_address = cmd_write_address;
         else
                 im_address = if_pc;
 end
