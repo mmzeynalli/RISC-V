@@ -40,6 +40,7 @@ module id_ex (
     input clk,
     input rst,
     input stall,
+    input hazard,
 
     // IN SIGNALS
     input [OPERAND_WIDTH-1:0] i_rs1_data,
@@ -56,6 +57,7 @@ module id_ex (
 
     // Controls
     input i_ctrl_mem_write,
+    input i_ctrl_mem_read,
     input i_ctrl_mem2reg,
     input i_ctrl_reg_write,
     input i_ctrl_alu_src,
@@ -82,6 +84,7 @@ module id_ex (
 
     //Controls
     output logic o_ctrl_mem_write,
+    output logic o_ctrl_mem_read,
     output logic o_ctrl_mem2reg,
     output logic o_ctrl_reg_write,
     output logic o_ctrl_AUIPC_taken,
@@ -108,6 +111,7 @@ always_ff @(posedge clk) begin
 
         // Controls
         o_ctrl_mem_write <= '0;
+        o_ctrl_mem_read <= '0;
         o_ctrl_mem2reg <= '0;
         o_ctrl_reg_write <= '0;
         o_ctrl_alu_src <= '0;
@@ -115,7 +119,33 @@ always_ff @(posedge clk) begin
         o_ctrl_word_size <= '0;
 
     end
-    else if (~stall)
+    else if (~stall && hazard)
+    begin
+        // NOOP
+        o_rs1_data <= 0;
+        o_rs1 <= 0;
+        o_rs2_data <= 0;
+        o_rs2 <= 0;
+        o_imm <= 0;
+
+        o_opcode <= OP_IMM;
+        o_funct3 <= 0;
+        o_funct7 <= 0;
+        
+        o_rd_sel <= 0;
+        o_pc <= 0;
+        o_pc_next <= 0;
+
+        // Controls
+        o_ctrl_mem_write <= 0;
+        o_ctrl_mem_read <= 0;
+        o_ctrl_mem2reg <= 0;
+        o_ctrl_reg_write <= 1;
+        o_ctrl_alu_src <= 1;
+        o_ctrl_AUIPC_taken <= 0;
+        o_ctrl_word_size <= 0;
+    end
+    else if (~stall && ~hazard)
     begin
         o_rs1_data <= i_rs1_data;
         o_rs1 <= i_rs1;
@@ -134,6 +164,7 @@ always_ff @(posedge clk) begin
 
         // Controls
         o_ctrl_mem_write <= i_ctrl_mem_write;
+        o_ctrl_mem_read <= i_ctrl_mem_read;
         o_ctrl_mem2reg <= i_ctrl_mem2reg;
         o_ctrl_reg_write <= i_ctrl_reg_write;
         o_ctrl_alu_src <= i_ctrl_alu_src;

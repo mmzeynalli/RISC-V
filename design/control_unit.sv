@@ -10,6 +10,7 @@ module control_unit import common::*; (
         output logic ctrl_prev_is_compressed,
 
         output logic ctrl_mem_write,
+        output logic ctrl_mem_read,
         output logic ctrl_mem2reg,
         output logic ctrl_reg_write,
 
@@ -31,6 +32,7 @@ always_comb begin : generate_signals
         ctrl_gteu_flag = (unsigned'(rs1_data) >= unsigned'(rs2_data)) ? 1 : 0;
 
         ctrl_mem_write = 0;
+        ctrl_mem_read = 0;
         ctrl_mem2reg = 0;
         ctrl_reg_write = 0;
         ctrl_alu_src = 0;
@@ -53,6 +55,7 @@ always_comb begin : generate_signals
                         begin
                                 ctrl_mem2reg <= 1;
                                 ctrl_word_size = funct3;
+                                ctrl_mem_read <= 1;
                         end
                         else if (opcode == JALR)
                         begin

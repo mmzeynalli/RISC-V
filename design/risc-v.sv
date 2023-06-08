@@ -160,7 +160,7 @@ register_file register_file(
         .read2_data(id_rs2_data)
 );
 
-logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
+logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
 logic id_ctrl_branch_taken;
 logic id_ctrl_AUIPC_taken;
 logic id_ctrl_jump_taken;
@@ -177,6 +177,7 @@ control_unit ctrl_unit(
         .ctrl_prev_is_compressed(id_ctrl_prev_is_compressed),
 
         .ctrl_mem_write(id_ctrl_mem_write),
+        .ctrl_mem_read(id_ctrl_mem_read),
         .ctrl_mem2reg(id_ctrl_mem2reg),
         .ctrl_reg_write(id_ctrl_reg_write),
 
@@ -208,14 +209,15 @@ logic [2:0] id_ex_funct3;
 logic [6:0] id_ex_funct7;
 logic [4:0] id_ex_rs1, id_ex_rs2, id_ex_rd_sel;
 
-logic id_ex_ctrl_mem_write, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken,id_ex_ctrl_AUIPC_taken;
-logic id_ex_stall; // defined later
+logic id_ex_ctrl_mem_write, id_ex_ctrl_mem_read, id_ex_ctrl_mem2reg, id_ex_ctrl_reg_write, id_ex_ctrl_alu_src, id_ex_ctrl_branch_taken,id_ex_ctrl_AUIPC_taken;
+logic id_ex_stall, id_ex_hazard; // defined later
 logic [2:0] id_ex_ctrl_word_size;
 
 id_ex id_ex_reg(
         .clk(clk),
         .rst(rst),
         .stall(id_ex_stall),
+        .hazard(id_ex_hazard),
 
         // IN SIGNALS
         .i_rs1(id_rs1),
@@ -237,6 +239,7 @@ id_ex id_ex_reg(
         
         //Controls
         .i_ctrl_mem_write(id_ctrl_mem_write),
+        .i_ctrl_mem_read(id_ctrl_mem_read),
         .i_ctrl_mem2reg(id_ctrl_mem2reg),
         .i_ctrl_reg_write(id_ctrl_reg_write),
         .i_ctrl_alu_src(id_ctrl_alu_src),
@@ -257,6 +260,7 @@ id_ex id_ex_reg(
 
         //Controls
         .o_ctrl_mem_write(id_ex_ctrl_mem_write),
+        .o_ctrl_mem_read(id_ex_ctrl_mem_read),
         .o_ctrl_mem2reg(id_ex_ctrl_mem2reg),
         .o_ctrl_reg_write(id_ex_ctrl_reg_write),
         .o_ctrl_alu_src(id_ex_ctrl_alu_src),
@@ -304,9 +308,21 @@ execute ex_stage(
         .stall(ex_stall)
 );
 
-assign if_id_stall = ex_stall;
-assign id_ex_stall = ex_stall;
-assign if_stall = ex_stall;
+logic hazard_detected;
+
+always_comb begin : stall_and_hazard
+        id_ex_stall = ex_stall;
+
+        hazard_detected = 0;
+
+        if (id_ex_ctrl_mem_read)
+                if ((id_optype == R_TYPE || id_optype == I_TYPE) && (id_rs1 == id_ex_rd_sel || id_rs2 == id_ex_rd_sel))
+                        hazard_detected = 1;
+
+        id_ex_hazard = hazard_detected;
+        if_id_stall = ex_stall | hazard_detected;
+        if_stall = ex_stall | hazard_detected;
+end
 
 ////////////////////////////////////////////////////////////
 /////////////////////// END EX STAGE ///////////////////////
@@ -420,7 +436,7 @@ always_comb begin : forwarding
         ex_ctrl_forward_right_operand = NONE;
 
         // Forwarding from MEM
-        if (ex_mem_ctrl_reg_write)
+        if (ex_mem_ctrl_reg_write && (ex_mem_rd_sel != 0))
         begin
                 if (ex_mem_rd_sel == id_ex_rs1)
                         ex_ctrl_forward_left_operand = EX_MEM;
@@ -429,18 +445,19 @@ always_comb begin : forwarding
                         ex_ctrl_forward_right_operand = EX_MEM;
         end
 
-        ex_from_mem = (ex_mem_ctrl_mem2reg) ? mem_mem_data : ex_mem_alu_result;
 
         // Forwarding from WB
-        if (mem_wb_ctrl_reg_write)
+        if (mem_wb_ctrl_reg_write && (mem_wb_rd_sel != 0))
         begin
-                if (mem_wb_rd_sel == id_ex_rs1)
+                if ((mem_wb_rd_sel == id_ex_rs1) && mem_wb_rd_sel != 0)
                         ex_ctrl_forward_left_operand = MEM_WB;
                 
                 if (mem_wb_rd_sel == id_ex_rs2)
                         ex_ctrl_forward_right_operand = MEM_WB;
         end
 
+        
+        ex_from_mem = (ex_mem_ctrl_mem2reg) ? mem_mem_data : ex_mem_alu_result;
         ex_from_wb = id_register_file_wr_data;
 end
 

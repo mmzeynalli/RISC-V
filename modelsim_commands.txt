@@ -22,6 +22,7 @@ add wave -position end  sim:/risc_v_tb/dut/id_stage/funct7
 add wave -decimal -position end  sim:/risc_v_tb/dut/id_stage/imm
 
 add wave -divider EX
+add wave -position end  sim:/risc_v_tb/dut/hazard_detected
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/imm
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/rs1_data
 add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/rs2_data
@@ -68,7 +69,9 @@ add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/start
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/busy
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/done
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/valid
-add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/res
+add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/dividend
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/divisor
+add wave -decimal -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/res
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/rem
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/quo
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/acc
