@@ -17,6 +17,9 @@ always_comb begin : get_alu_op
                 case (funct3)
                         3'b001:
                                 op <= SLL;
+                                
+                                if (funct7 == M_TYPE)
+                                        op <= MULH;
                         3'b101: 
                         begin
                                 op <= SRA;
@@ -32,6 +35,8 @@ always_comb begin : get_alu_op
 
                                 if (funct7 == 7'b010_0000)
                                         op <= SUB;
+                                else if (funct7 == M_TYPE)
+                                        op <= MUL;
                         end
                         3'b100:
                         begin
