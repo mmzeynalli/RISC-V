@@ -7,6 +7,8 @@ module compressed (
     output logic [INSTRUCTION_WIDTH-1:0] instruction
 );
 
+logic [11: 0] load_imm;
+logic [11: 0] store_imm;
 always_comb begin : compressed_expand
 
         is_compressed = '1;
@@ -20,9 +22,11 @@ always_comb begin : compressed_expand
         2'b00:
         begin
                 if (mem_instruction[15:13] == 'b010) //C.LW
-                        instruction <= {5'b0, mem_instruction[5], mem_instruction[12:10], mem_instruction[6], 2'b0, 2'b01, mem_instruction[9:7], mem_instruction[15:13], 2'b01, mem_instruction[4:2], 7'b0000011};
+                        load_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6]})))*4;
+                        instruction <= {load_imm, 2'b01, mem_instruction[9:7], mem_instruction[15:13], 2'b01, mem_instruction[4:2], 7'b0000011};
                 else if (mem_instruction[15:13] == 'b110) //C.SW
-                        instruction <= {7'b0, mem_instruction[5], 2'b01, mem_instruction[4:2], 2'b01, mem_instruction[9:7], mem_instruction[15:13], mem_instruction[12:10],mem_instruction[6], 7'b0100011};
+                        load_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6]})))*4;
+                        instruction <= {laod_imm[11:5], 2'b01, mem_instruction[4:2], 2'b01, mem_instruction[9:7], mem_instruction[15:13], load_imm[4:0], 7'b0100011};
         end
         2'b10:
         begin
