@@ -10,6 +10,8 @@ module compressed (
 logic [11: 0] load_imm;
 logic [11: 0] store_imm;
 
+
+
 always_comb begin : compressed_expand
 
         is_compressed = '1;
