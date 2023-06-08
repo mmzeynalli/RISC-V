@@ -27,7 +27,7 @@ always_comb begin : compressed_expand
                 if (mem_instruction[15:13] == 'b010) //C.LW
                 begin
                         //load_imm = 12'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6],2'b0}));
-                        instruction <= {5'b0,mem_instruction[5],mem_instruction[12:10],mem_instruction[6],2'b0, mem_instruction[9:7], 3'b010, 2'b01, mem_instruction[4:2], 7'b0000011};
+                        instruction <= {5'b0,mem_instruction[5],mem_instruction[12:10],mem_instruction[6],2'b01, mem_instruction[9:7], 3'b010, 2'b01, mem_instruction[4:2], 7'b0000011};
                 end
                 else if (mem_instruction[15:13] == 'b110) //C.SW
                 begin 
