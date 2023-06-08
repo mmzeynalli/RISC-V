@@ -16,10 +16,12 @@ always_comb begin : get_alu_op
         if (opcode == OP || opcode == OP_IMM)
                 case (funct3)
                         3'b001:
+                        begin
                                 op <= SLL;
                                 
                                 if (funct7 == M_TYPE)
                                         op <= MULH;
+                        end
                         3'b101: 
                         begin
                                 op <= SRA;
