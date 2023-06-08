@@ -26,12 +26,12 @@ always_comb begin : compressed_expand
         begin
                 if (mem_instruction[15:13] == 'b010) //C.LW
                 begin
-                        load_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6]})))*4;
+                        load_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6],2'b0})));
                         instruction <= {load_imm, 2'b01, mem_instruction[9:7], mem_instruction[15:13], 2'b01, mem_instruction[4:2], 7'b0000011};
                 end
                 else if (mem_instruction[15:13] == 'b110) //C.SW
                 begin
-                        store_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6]})))*4;
+                        store_imm = (11'(signed'({mem_instruction[5],mem_instruction[12:10],mem_instruction[6],2'b0})));
                         instruction <= {store_imm[11:5], 2'b01, mem_instruction[4:2], 2'b01, mem_instruction[9:7], mem_instruction[15:13], store_imm[4:0], 7'b0100011};
                 end
         end
