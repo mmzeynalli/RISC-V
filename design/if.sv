@@ -12,7 +12,6 @@ module instruction_fetch import common::*;
         input stall,
         input ctrl_prev_is_compressed,
         input ctrl_branch_taken,
-        input ctrl_AUIPC_taken,
         input ctrl_jump_taken,
 
         output  logic [PROGRAM_ADDRESS_WIDTH-1:0] o_pc,

@@ -98,7 +98,6 @@ always_comb begin : generate_signals
                         ctrl_branch_taken <= 1;
                         ctrl_reg_write <= 1;
                         ctrl_alu_src <= 1;
-                        
                 end
         endcase
 end

@@ -46,6 +46,7 @@ logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc;
 logic [PROGRAM_ADDRESS_WIDTH-1:0] if_pc_next;
 logic [INSTRUCTION_WIDTH-1:0] if_mem_instr;
 logic if_stall, if_prev_is_compressed; // Defined later
+logic [31:0] if_pc_JALR; // define later
 
 instruction_fetch if_stage(
         // Input
@@ -54,6 +55,7 @@ instruction_fetch if_stage(
 
         .mem_instruction(if_mem_instr),
         .imm(if_imm),
+        .pc_JALR(if_pc_JALR),
 
         .stall(if_stall),
         .ctrl_prev_is_compressed(if_ctrl_prev_is_compressed),
@@ -121,6 +123,7 @@ logic [2:0] id_funct3;
 logic [6:0] id_funct7;
 logic [IMM_WIDTH-1:0] id_imm;
 logic [OPERAND_WIDTH-1:0] id_rs1_data; // defined later
+logic [31:0] id_pc_JALR;
 
 instruction_decode id_stage(
         // Input
@@ -135,11 +138,13 @@ instruction_decode id_stage(
         .rs2(id_rs2),
         .funct3(id_funct3),
         .funct7(id_funct7),
-        .imm(id_imm)
+        .imm(id_imm),
+        .pc_JALR(id_pc_JALR)
 );
 
 // Connection to IF stage
 assign if_imm = id_imm;
+assign if_pc_JALR = id_pc_JALR;
 
 logic id_register_file_wr_en;  // Defined later
 logic [31:0] id_register_file_wr_data;  // Defined later

@@ -36,24 +36,28 @@ logic [OPERAND_WIDTH-1:0] dividend, divisor;
 logic a_sign, b_sign;
 
 always_comb begin : handle_sign
-        a_sign = 0;
-        b_sign = 0;
-        dividend = a;
-        divisor = b;
 
-        if (is_signed)
+        if (start)
         begin
-                if (a[OPERAND_WIDTH-1])
-                begin
-                        dividend = -a;
-                        a_sign = 1;
-                end
+                a_sign = 0;
+                b_sign = 0;
+                dividend = a;
+                divisor = b;
 
-                if (b[OPERAND_WIDTH-1])
+                if (is_signed)
                 begin
-                        divisor = -b;
-                        b_sign = 1;
-                end     
+                        if (a[OPERAND_WIDTH-1])
+                        begin
+                                dividend = -a;
+                                a_sign = 1;
+                        end
+
+                        if (b[OPERAND_WIDTH-1])
+                        begin
+                                divisor = -b;
+                                b_sign = 1;
+                        end     
+                end
         end
 end
 
