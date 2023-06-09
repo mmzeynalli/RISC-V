@@ -6,7 +6,6 @@ module data_memory #(
         int DATA_WIDTH = 32
 ) (
         input clk,
-        input rst,
         input write_en,
         input [DATA_WIDTH-1:0] write_data,
         input [ADDRESS_WIDTH+1:0] address,
@@ -18,18 +17,19 @@ typedef logic [DATA_WIDTH-1:0] ram_type [MEMORY_DEPTH-1:0];
 
 ram_type ram;
 
+logic [ADDRESS_WIDTH-1:0] wr_addr;
+
 initial begin
-        
+        for (int i = 0; i < MEMORY_DEPTH; i++)
+                ram[i] = 0;
 end
 
-always @(posedge clk) 
-begin               
-        if (rst == RESET)
-                for (int i = 0; i < MEMORY_DEPTH; i++)
-                        ram[i] = '{default: '0};
-        else
-                if (write_en)
-                        ram[address >> 2] = write_data;
+always @(posedge clk) begin
+        if (write_en)
+        begin
+                wr_addr = address >> 2;
+                ram[wr_addr] = write_data;
+        end
 end
 
 always_comb begin : ram_read
