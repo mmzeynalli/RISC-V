@@ -19,7 +19,7 @@ always_comb begin : get_alu_op
                         begin
                                 op <= SLL;
                                 
-                                if (funct7 == M_TYPE)
+                                if (opcode == OP && funct7 == M_TYPE)
                                         op <= MULH;
                         end
                         3'b101: 
@@ -28,7 +28,7 @@ always_comb begin : get_alu_op
                                 
                                 if (funct7 == 7'b010_0000)
                                         op <= SRL;
-                                else if (funct7 == M_TYPE)
+                                else if (opcode == OP && funct7 == M_TYPE)
                                         op <= DIVU;
                         end
                         3'b000:
@@ -37,28 +37,28 @@ always_comb begin : get_alu_op
 
                                 if (funct7 == 7'b010_0000)
                                         op <= SUB;
-                                else if (funct7 == M_TYPE)
+                                else if (opcode == OP && funct7 == M_TYPE)
                                         op <= MUL;
                         end
                         3'b100:
                         begin
                                 op <= XOR;
                                 
-                                if (funct7 == M_TYPE)
+                                if (opcode == OP && funct7 == M_TYPE)
                                         op <= DIV;
                         end
                         3'b110:
                         begin
                                 op <= OR;
 
-                                if (funct7 == M_TYPE)
+                                if (opcode == OP && funct7 == M_TYPE)
                                         op <= REM;
                         end
                         3'b111:
                         begin
                                 op <= AND;
 
-                                if (funct7 == M_TYPE)
+                                if (opcode == OP && funct7 == M_TYPE)
                                         op <= REMU;
                         end
                         3'b010:
