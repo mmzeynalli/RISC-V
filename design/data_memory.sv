@@ -53,7 +53,8 @@ ila_mem ila_mem (
     .probe12(ram[12]),
     .probe13(ram[13]),
     .probe14(ram[14]),
-    .probe15(ram[15])
+    .probe15(ram[15]),
+    .probe16(write_en)
 );
 
         

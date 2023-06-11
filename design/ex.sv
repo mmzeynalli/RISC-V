@@ -82,7 +82,7 @@ always_comb begin : select_operands
                 operand_A = 32'(signed'(i_pc));
                 operand_B = 32'(signed'(imm));
         end
-        if ((opcode == J_JAL) && (opcode == JALR))
+        if ((opcode == J_JAL) || (opcode == JALR))
         begin
                 operand_A = 32'(signed'(i_pc_next));
                 operand_B = 0;

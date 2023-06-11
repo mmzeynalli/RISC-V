@@ -64,7 +64,8 @@ ila_mem ila_reg (
     .probe12(registers[12]),
     .probe13(registers[13]),
     .probe14(registers[14]),
-    .probe15(registers[15])
+    .probe15(registers[15]),
+    .probe16(write_en)
 );
 
         
