@@ -16,20 +16,31 @@ module memory (
 logic [OPERAND_WIDTH-1:0] data;
 logic [31:0] mem;
 
+logic [4:0] from_address, to_address;
+
+
+always_comb begin : calculate_bit_address
+        from_address = ((address[1:0] + 1) << 3) - 1;
+        to_address = (address[1:0] << 3) - 1;
+end
+
 // all the LOAD operations
 always_comb begin: store
 
         data = write_data;
-
+       
         if (ctrl_mem_write)
         begin
                 if(ctrl_word_size == 3'b000)
-                        data = {24'b0, write_data[7:0]};
+                        data = {24'b0, write_data[to_address:from_address]};
                 else if(ctrl_word_size == 3'b001)
                         data = {16'b0, write_data[15:0]};
-                else if(ctrl_word_size == 3'b100 )
-                        data = {write_data[7:0], 24'b0};
-                else if(ctrl_word_size == 3'b101 )
+                else if(ctrl_word_size == 3'b100)
+                begin
+                        bit_address = address[1:0]; 
+                        data = {write_data[to_address:from_address], 24'b0};
+                end
+                else if(ctrl_word_size == 3'b101)
                         data = {write_data[15:0], 16'b0};
         end
 end
@@ -50,7 +61,7 @@ always_comb begin: load
         if (~ctrl_mem_write)
         begin
                 if(ctrl_word_size == 3'b000)
-                        mem_data = {24'b0, mem[7:0]};
+                        mem_data = {24'b0, mem[from_address:to_address]};
                 else if(ctrl_word_size == 3'b001)
                         mem_data = {16'b0, mem[15:0]};     
         end
