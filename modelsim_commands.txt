@@ -63,6 +63,7 @@ add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/write_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read1_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/read2_data
 add wave -unsigned -position end  sim:/risc_v_tb/dut/register_file/registers
+add wave -position 66  sim:/risc_v_tb/dut/mem_stage/data_memory/ram
 
 add wave -divider DIV
 add wave -position end  sim:/risc_v_tb/dut/ex_stage/alu/divisor/start

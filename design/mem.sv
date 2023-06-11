@@ -27,11 +27,11 @@ always_comb begin: load
 
         mem_data = rdata;
        
-        if (ctrl_mem_write)
+        if (~ctrl_mem_write)
         begin
                 case (ctrl_word_size)
-                        3'b000: mem_data = {24'(rdata[from_address + 8]), rdata[from_address+:8]};
-                        3'b001: mem_data = {16'(rdata[15]), rdata[15:0]};
+                        3'b000: mem_data = {{24{rdata[from_address + 8]}}, rdata[from_address+:8]};
+                        3'b001: mem_data = {{16{rdata[15]}}, rdata[15:0]};
                         3'b100: mem_data = {24'b0, rdata[from_address+:8]};
                         3'b101: mem_data = {16'b0, rdata[15:0]};
                 endcase
@@ -43,7 +43,7 @@ always_comb begin: store
 
         wdata = write_data;
        
-        if (~ctrl_mem_write)
+        if (ctrl_mem_write)
         begin
                 case (ctrl_word_size)
                         3'b000: wdata = write_data << (alu_result[1:0]);
