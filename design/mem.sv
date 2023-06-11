@@ -13,58 +13,51 @@ module memory (
         output logic [31:0] mem_data
 );
 
-logic [OPERAND_WIDTH-1:0] data;
-logic [31:0] mem;
+logic [OPERAND_WIDTH-1:0] rdata, wdata;
 
-logic [4:0] from_address, to_address;
-
+logic [4:0] from_address;
+logic [7:0] byte_data;
 
 always_comb begin : calculate_bit_address
-        from_address = ((address[1:0] + 1) << 3) - 1;
-        to_address = (address[1:0] << 3) - 1;
+        from_address = (alu_result[1:0] << 3);
 end
 
 // all the LOAD operations
-always_comb begin: store
+always_comb begin: load
 
-        data = write_data;
+        mem_data = rdata;
        
         if (ctrl_mem_write)
         begin
-                if(ctrl_word_size == 3'b000)
-                        data = {24'b0, write_data[to_address:from_address]};
-                else if(ctrl_word_size == 3'b001)
-                        data = {16'b0, write_data[15:0]};
-                else if(ctrl_word_size == 3'b100)
-                begin
-                        bit_address = address[1:0]; 
-                        data = {write_data[to_address:from_address], 24'b0};
-                end
-                else if(ctrl_word_size == 3'b101)
-                        data = {write_data[15:0], 16'b0};
+                case (ctrl_word_size)
+                        3'b000: mem_data = {24'(rdata[from_address + 8]), rdata[from_address+:8]};
+                        3'b001: mem_data = {16'(rdata[15]), rdata[15:0]};
+                        3'b100: mem_data = {24'b0, rdata[from_address+:8]};
+                        3'b101: mem_data = {16'b0, rdata[15:0]};
+                endcase
+        end
+end
+
+//all the STORE instructions
+always_comb begin: store
+
+        wdata = write_data;
+       
+        if (~ctrl_mem_write)
+        begin
+                case (ctrl_word_size)
+                        3'b000: wdata = write_data << (alu_result[1:0]);
+                        3'b001: wdata = {16'b0, write_data[15:0]};
+                endcase
         end
 end
 
 data_memory data_memory(
         .clk(clk),
         .write_en(ctrl_mem_write),
-        .write_data(data),
+        .write_data(wdata),
         .address(alu_result[7:0]),
-        .read_data(mem)
+        .read_data(rdata)
 );
-
-//all the STORE instructions
-always_comb begin: load
-
-        mem_data = mem;
-
-        if (~ctrl_mem_write)
-        begin
-                if(ctrl_word_size == 3'b000)
-                        mem_data = {24'b0, mem[from_address:to_address]};
-                else if(ctrl_word_size == 3'b001)
-                        mem_data = {16'b0, mem[15:0]};     
-        end
-end
 
 endmodule
