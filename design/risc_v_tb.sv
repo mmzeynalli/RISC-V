@@ -74,6 +74,10 @@ end
 logic [31:0] expected_register_file [31:0];
 logic [31:0] expected_memory [63:0];
 
+// Flags to check register file and memory
+bit register_file_check_passed = 1;
+bit memory_check_passed = 1;
+
 // Wait for simulation to finish
 initial begin
         #2000;
@@ -82,18 +86,32 @@ initial begin
 
         for (int i = 0; i < 32; i++)
         begin
-                assert (expected_register_file[i] == dut.register_file.registers[i])
-                else
+                if (expected_register_file[i] != dut.register_file.registers[i]) begin
                         $display("Register %d: Expected %b, got %b", i, expected_register_file[i], dut.register_file.registers[i]);
+                        register_file_check_passed = 0;
+                end
         end
 
         $readmemb("expected_memory.txt", expected_memory);
 
         for (int i = 0; i < 64; i++)
         begin
-                assert (expected_memory[i] == dut.mem_stage.data_memory.ram[i])
-                else
+                if (expected_memory[i] != dut.mem_stage.data_memory.ram[i]) begin
                         $display("Memory %d: Expected %b, got %b", i, expected_memory[i], dut.mem_stage.data_memory.ram[i]);
+                        memory_check_passed = 0;
+                end
+        end
+
+        if (register_file_check_passed) begin
+                $display("Register file check passed!");
+        end else begin
+                $display("Register file check failed.");
+        end
+
+        if (memory_check_passed) begin
+                $display("Memory check passed!");
+        end else begin
+                $display("Memory check failed.");
         end
 
         $finish;
