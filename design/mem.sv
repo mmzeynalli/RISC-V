@@ -54,6 +54,7 @@ end
 
 data_memory data_memory(
         .clk(clk),
+        .rst(rst),
         .write_en(ctrl_mem_write),
         .write_data(wdata),
         .address(alu_result[7:0]),

@@ -1,7 +1,5 @@
 package common;
 
-`define ILA_ENABLED
-
 const logic       RESET                   = 1'b0;
 localparam int    IMM_WIDTH               = 21;
 localparam int    INSTRUCTION_WIDTH       = 32;
@@ -10,6 +8,17 @@ localparam int    OPERAND_WIDTH           = 32;
 localparam int    DATA_WIDTH              = 32;
 localparam int    PROGRAM_ADDRESS_WIDTH   = 8;  // 6 + 2
 
+// MEMORY RELATED
+localparam int REGISTER_ADDRESS_WIDTH = 5;
+localparam int REGISTER_FILE_SIZE = 1 << REGISTER_ADDRESS_WIDTH;
+typedef logic [DATA_WIDTH-1:0] register_array [REGISTER_FILE_SIZE-1:0];
+
+localparam int MEMORY_ADDRESS_WIDTH = 6;
+localparam int MEMORY_FILE_SIZE = 1 << MEMORY_ADDRESS_WIDTH;
+typedef logic [DATA_WIDTH-1:0] memory_array [MEMORY_ADDRESS_WIDTH-1:0];
+
+
+// UART RELATED
 parameter  BAUD = 115200;
 localparam FREQUENCY_IN_HZ = 100_000_000;
 localparam BAUD_COUNT_CHECK = FREQUENCY_IN_HZ / BAUD;
@@ -18,9 +27,10 @@ localparam NUM_DATA_BITS = 8;
 localparam [INSTRUCTION_WIDTH-1:0] NOOP         = 'h13;
 localparam [INSTRUCTION_WIDTH-1:0] INF_LOOP     = 'h63;
 
+
+// RISC-V related
 typedef enum bit[4:0] 
 { SLL, SRL, SRA, ADD, SUB, LUI, AUIPC, XOR, OR, AND, SLT, SLTU, LW, SW, MUL, MULH, DIV, DIVU, REM, REMU} alu_operation_type;
-
 
 typedef enum bit [1:0] { NONE, EX_MEM, MEM_WB } forwarding_type;
 
