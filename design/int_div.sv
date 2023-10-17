@@ -120,13 +120,13 @@ always_ff @(posedge clk) begin
                 end
                 else if (busy)
                 begin
-                        if (i == max_iter + 2) // we're done, one extra cycle to set acc, quo
+                        if (i == max_iter + 1) // we're done, one extra cycle to set acc, quo
                         begin  
                                 busy <= 0;
                                 done <= 1;
                                 valid <= 1;
-                                res <= (a_sign ^ b_sign) ? -quo[OPERAND_WIDTH-1:1] : quo[OPERAND_WIDTH-1:1];
-                                rem <= (a_sign) ? -acc[OPERAND_WIDTH-1:1] : acc[OPERAND_WIDTH-1:1];                        end 
+                                res <= (a_sign ^ b_sign) ? -quo : quo;
+                                rem <= (a_sign) ? -acc[OPERAND_WIDTH-1:0] : acc[OPERAND_WIDTH-1:0];                        end 
                         else 
                         begin  // next iteration
                                 i <= i + 1;
