@@ -9,8 +9,8 @@ module RISC_V_ILA (
     output logic flag_memory_match       // Flag indicating matching memory contents
 );
 
-reg flag_registers_match_internal;
-reg flag_memory_match_internal;
+logic flag_registers_match_internal;
+logic flag_memory_match_internal;
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
