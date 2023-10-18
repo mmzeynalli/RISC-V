@@ -8,7 +8,9 @@ module risc_v #(
         input clk,
         input rst,
         input rx,
-        output tx
+        output tx,
+        output register_ok,
+        output memory_ok
 );
 
 ////////////////////////////////////////////////////////////
@@ -163,6 +165,7 @@ register_file register_file(
 
         .read1_data(id_rs1_data),
         .read2_data(id_rs2_data)
+        .register_ok(register_ok)
 );
 
 logic id_ctrl_prev_is_compressed, id_ctrl_mem_write, id_ctrl_mem_read, id_ctrl_mem2reg, id_ctrl_reg_write, id_ctrl_alu_src;
@@ -386,6 +389,7 @@ memory mem_stage(
 
         // Output
         .mem_data(mem_mem_data)
+        .memory_ok(memory_ok)
 );
 
 ////////////////////////////////////////////////////////////

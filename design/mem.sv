@@ -11,6 +11,7 @@ module memory (
         input [2:0] ctrl_word_size,
 
         output logic [31:0] mem_data
+        output logic memory_ok
 );
 
 logic [OPERAND_WIDTH-1:0] rdata, wdata;
@@ -59,6 +60,7 @@ data_memory data_memory(
         .write_data(wdata),
         .address(alu_result[7:0]),
         .read_data(rdata)
+        .memory_ok(memory_ok)
 );
 
 endmodule

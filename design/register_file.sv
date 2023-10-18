@@ -14,7 +14,7 @@ module register_file import common::*;
         output logic [DATA_WIDTH-1:0] read1_data,
         output logic [DATA_WIDTH-1:0] read2_data,
 
-        output logic check_ok
+        output logic register_ok
 );
 
 register_array registers;
@@ -47,7 +47,7 @@ end
 ila_rm ila_rm (
         .rst(rst),
         .register_file(registers),
-        .ok(check_ok)
+        .ok(register_ok)
 );
 
 // ila_mem ila_reg (

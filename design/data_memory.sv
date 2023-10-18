@@ -8,7 +8,7 @@ module data_memory import common::*;
         input [DATA_WIDTH-1:0] write_data,
         input [MEMORY_ADDRESS_WIDTH+1:0] address,
         output logic [DATA_WIDTH-1:0] read_data,
-        output logic check_ok
+        output logic memory_ok
 );
 
 memory_array ram;
@@ -35,7 +35,7 @@ end
 ila_dm ila_dm (
         .rst(rst),
         .memory_file(ram),
-        .ok(check_ok)
+        .ok(memory_ok)
 );
 
 // ila_mem ila_mem (
