@@ -164,7 +164,7 @@ register_file register_file(
         .write_data(id_register_file_wr_data),
 
         .read1_data(id_rs1_data),
-        .read2_data(id_rs2_data)
+        .read2_data(id_rs2_data),
         .register_ok(register_ok)
 );
 
@@ -388,7 +388,7 @@ memory mem_stage(
         .ctrl_word_size(ex_mem_ctrl_word_size),
 
         // Output
-        .mem_data(mem_mem_data)
+        .mem_data(mem_mem_data),
         .memory_ok(memory_ok)
 );
 

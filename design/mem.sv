@@ -10,7 +10,7 @@ module memory (
         input ctrl_mem_write,
         input [2:0] ctrl_word_size,
 
-        output logic [31:0] mem_data
+        output logic [31:0] mem_data,
         output logic memory_ok
 );
 
@@ -59,7 +59,7 @@ data_memory data_memory(
         .write_en(ctrl_mem_write),
         .write_data(wdata),
         .address(alu_result[7:0]),
-        .read_data(rdata)
+        .read_data(rdata),
         .memory_ok(memory_ok)
 );
 

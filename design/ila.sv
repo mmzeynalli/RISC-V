@@ -27,24 +27,17 @@ register_array expected_values;
 
 always_comb begin: rst_exp_regs
     if (rst == RESET)
-    begin
-        for (int i = 0; i < $size(expected_values); i++)
+    begin        
+        expected_values[1] = 32'h00000014;  // R1
+        expected_values[2] = 32'h00000003;  // R2
+        expected_values[3] = 32'h00000002;  // R3
+        expected_values[4] = 32'h00000006;  // R4
+
+        for (int i = 5; i < $size(expected_values); i++)
             expected_values[i] = '{default: '0};  // hard code here
-        
         // ok = 0;
     end
 end
-
-
-// Store the expected register values after instruction execution
-    initial begin
-        // Initialize the expected_values array with 32-bit values for registers
-        expected_values[0] = 32'h00000014;  // R1
-        expected_values[1] = 32'h00000003;  // R2
-        expected_values[3] = 32'h00000002;  // R3
-        expected_values[4] = 32'h00000006;  // R4
-    end
-
 
 always_comb begin : check_regs
     ok = 1;
@@ -79,22 +72,17 @@ memory_array expected_values;
 always_comb begin : rst_exp_mem
     if (rst == RESET)
     begin
-        for (int i = 0; i < $size(expected_values); i++)
+        expected_values[0] = 32'h00000014;  // Memory value at address 0 (R1)
+        expected_values[1] = 32'h00000003;  // Memory value at address 4 (R2)
+        expected_values[2] = 32'h00000002;  // Memory value at address 8 (R3)
+        expected_values[3] = 32'h00000006;  // Memory value at address 12 (R4)
+
+        for (int i = 4; i < $size(expected_values); i++)
             expected_values[i] = '{default: '0};  // hard code here
         
         // ok = 0;
     end
 end
-
-// Store the expected memory values after instruction execution
-    initial begin
-        // Initialize the expected_values array with 32-bit values for memory
-        expected_values[0] = 32'h00000014;  // Memory value at address 0 (R1)
-        expected_values[1] = 32'h00000003;  // Memory value at address 4 (R2)
-        expected_values[2] = 32'h00000002;  // Memory value at address 8 (R3)
-        expected_values[3] = 32'h00000006;  // Memory value at address 12 (R4)
-    end
-
 
 always_comb begin : check_mem
     ok = 1;

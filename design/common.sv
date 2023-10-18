@@ -15,7 +15,7 @@ typedef logic [DATA_WIDTH-1:0] register_array [REGISTER_FILE_SIZE-1:0];
 
 localparam int MEMORY_ADDRESS_WIDTH = 6;
 localparam int MEMORY_FILE_SIZE = 1 << MEMORY_ADDRESS_WIDTH;
-typedef logic [DATA_WIDTH-1:0] memory_array [MEMORY_ADDRESS_WIDTH-1:0];
+typedef logic [DATA_WIDTH-1:0] memory_array [MEMORY_FILE_SIZE-1:0];
 
 
 // UART RELATED
