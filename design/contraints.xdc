@@ -209,12 +209,12 @@ set_property PACKAGE_PIN C12 [get_ports rst]
 
 
 ##Pmod Header JA
-##Bank = 15, Pin name = IO_L1N_T0_AD0N_15,					Sch name = JA1
-#set_property PACKAGE_PIN B13 [get_ports {JA[0]}]					
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JA[0]}]
-##Bank = 15, Pin name = IO_L5N_T0_AD9N_15,					Sch name = JA2
-#set_property PACKAGE_PIN F14 [get_ports {JA[1]}]					
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JA[1]}]
+Bank = 15, Pin name = IO_L1N_T0_AD0N_15,					Sch name = JA1
+set_property PACKAGE_PIN B13 [get_ports register_ok]					
+	set_property IOSTANDARD LVCMOS33 [get_ports register_ok]
+Bank = 15, Pin name = IO_L5N_T0_AD9N_15,					Sch name = JA2
+set_property PACKAGE_PIN F14 [get_ports memory_ok]					
+	set_property IOSTANDARD LVCMOS33 [get_ports memory_ok]
 ##Bank = 15, Pin name = IO_L16N_T2_A27_15,					Sch name = JA3
 #set_property PACKAGE_PIN D17 [get_ports {JA[2]}]					
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JA[2]}]
