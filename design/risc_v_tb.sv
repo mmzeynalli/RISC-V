@@ -120,7 +120,6 @@ initial begin
         else
                 $display("Memories are not matched!");
 
-        $finish;
 end
 
 endmodule

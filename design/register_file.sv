@@ -45,31 +45,21 @@ end
 
 
 ila_rm ila_rm (
+        .clk(clk),
         .rst(rst),
         .register_file(registers),
         .ok(register_ok)
 );
 
-// ila_mem ila_reg (
-//     .clk(clk),
-//     .probe0(registers[0]),
-//     .probe1(registers[1]),
-//     .probe2(registers[2]),
-//     .probe3(registers[3]),
-//     .probe4(registers[4]),
-//     .probe5(registers[5]),
-//     .probe6(registers[6]),
-//     .probe7(registers[7]),
-//     .probe8(registers[8]),
-//     .probe9(registers[9]),
-//     .probe10(registers[10]),
-//     .probe11(registers[11]),
-//     .probe12(registers[12]),
-//     .probe13(registers[13]),
-//     .probe14(registers[14]),
-//     .probe15(registers[15]),
-//     .probe16(write_en)
-// );
+ila_0 ila_reg (
+     .clk(clk),
+     .probe0(registers[0]),
+     .probe1(registers[1]),
+     .probe2(registers[2]),
+     .probe3(registers[3]),
+     .probe4(registers[4]),
+     .probe5(register_ok)
+ );
 
         
 endmodule

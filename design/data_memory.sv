@@ -33,30 +33,20 @@ end
 
 
 ila_dm ila_dm (
+        .clk(clk),
         .rst(rst),
         .memory_file(ram),
         .ok(memory_ok)
 );
 
-// ila_mem ila_mem (
-//     .clk(clk),
-//     .probe0(ram[0]),
-//     .probe1(ram[1]),
-//     .probe2(ram[2]),
-//     .probe3(ram[3]),
-//     .probe4(ram[4]),
-//     .probe5(ram[5]),
-//     .probe6(ram[6]),
-//     .probe7(ram[7]),
-//     .probe8(ram[8]),
-//     .probe9(ram[9]),
-//     .probe10(ram[10]),
-//     .probe11(ram[11]),
-//     .probe12(ram[12]),
-//     .probe13(ram[13]),
-//     .probe14(ram[14]),
-//     .probe15(ram[15]),
-//     .probe16(write_en)
-// );
+ila_0 ila_mem (
+     .clk(clk),
+     .probe0(ram[0]),
+     .probe1(ram[1]),
+     .probe2(ram[2]),
+     .probe3(ram[3]),
+     .probe4(ram[4]),
+     .probe5(memory_ok)
+ );
     
 endmodule

@@ -32,7 +32,7 @@ always_comb begin : calculate
                 ADD  :  alu_result = A + B;
                 SUB  :  alu_result = A - B;
                 MUL  :  alu_result = A * B;
-                MULH  :  alu_result = (A * B) >> 32;
+                MULH :  alu_result = (A * B) >> 32;
                 LUI  :  alu_result = {B[19:0], 12'h0};
                 AUIPC:  alu_result = A + {B[19:0], 12'h0};
                 XOR  :  alu_result = A ^ B;

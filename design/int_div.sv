@@ -126,7 +126,8 @@ always_ff @(posedge clk) begin
                                 done <= 1;
                                 valid <= 1;
                                 res <= (a_sign ^ b_sign) ? -quo[OPERAND_WIDTH-1:1] : quo[OPERAND_WIDTH-1:1];
-                                rem <= (a_sign) ? -acc[OPERAND_WIDTH-1:1] : acc[OPERAND_WIDTH-1:1];                        end 
+                                rem <= (a_sign) ? -acc[OPERAND_WIDTH-1:1] : acc[OPERAND_WIDTH-1:1];
+                        end 
                         else 
                         begin  // next iteration
                                 i <= i + 1;
